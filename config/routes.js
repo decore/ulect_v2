@@ -24,6 +24,7 @@ module.exports.routes = {
 'get /about': 'HomeController.index',
 'get /home': 'HomeController.index',
 'get /users': 'HomeController.index',
+'get /lectures': 'HomeController.index',
   /***************************************************************************
   *                                                                          *
   * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *

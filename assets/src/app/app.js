@@ -16,7 +16,8 @@ angular.module( 'sailng', [
     'sailng.header',
     'sailng.home',
     'sailng.about',
-    'sailng.users'
+    'sailng.users',
+    'sailng.lectures'
 
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function myAppConfig ( $stateProvider, $urlRouterProvider, $locationProvider ) {

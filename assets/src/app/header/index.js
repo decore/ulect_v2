@@ -7,7 +7,7 @@ angular.module( 'sailng.header', [
     $scope.currentUser = config.currentUser;
 
     var navItems = [{
-        title: 'About',
+        title: 'About!!!',
         translationKey: 'navigation:about',
         url: '/about',
         cssClass: 'fa fa-tasks fa-lg'
