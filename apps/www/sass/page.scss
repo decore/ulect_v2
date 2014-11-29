@@ -1,0 +1,337 @@
+@import "fonts";
+
+@mixin circle($d) {
+    width: $d;
+    height: $d;
+    border-radius: 50%;
+}
+
+@mixin centered-circle($d) {
+    @include circle($d);
+    position: absolute;
+    top: -$d / 2;
+    left: -$d / 2;
+}
+
+@mixin border-box {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+@mixin clearfix {
+    &:before, &:after {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+    *zoom: 1;
+}
+
+$highlightBcgrColor: #a91842;
+$highlightHeaderColor: #D34F8E;
+$highlightTextColor: #96104B;
+
+body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    background-color: #eaeaea;
+    font-family: "Helvetica Neue", Arial, Tahoma;
+    font-size: 16px;
+}
+
+a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+%unselectable {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#loading {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: #ffffff;
+    z-index: 1000;
+    text-align: center;
+
+    &:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -0.25em;
+    }
+
+    span {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
+#header {
+  padding: 10px 0 15px 0;
+
+  .logo, .path {
+    display: table-cell;
+    vertical-align: middle;
+    height: 40px;
+  }
+
+  .logo > img {
+    display: block;
+    margin: 0 15px 0 5px;
+  }
+
+  .path > .base, .path > .base > a {
+    color: $highlightHeaderColor;
+  }
+}
+
+$colWidth: 500px;
+$docPadding: 15px;
+$docWidth: 2 * $colWidth + 10px;
+
+%column {
+  width: $colWidth;
+  margin: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+}
+
+.doc {
+  width: $docWidth;
+  padding: 10px $docPadding 0 $docPadding;
+  margin: 0 auto;
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    background-color: #fff;
+    top: -10px;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    z-index: -1;
+  }
+}
+
+#cols {
+  @include clearfix();
+}
+
+#videoplayer-container {
+    @extend %column;
+    float: left;
+}
+
+#pdf-container {
+    @extend %column;
+    float: right;
+    text-align: center;
+    background-color: #ffffff;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
+
+    &:before {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      margin-right: -0.25em; /* Adjusts for spacing */
+    }
+
+    canvas {
+      display: inline-block;
+      vertical-align: middle;
+    }
+}
+
+$sliderHeight: 8px;
+$volSliderWidth: 100px;
+$interSlidersMargin: 30px;
+
+#sliders {
+  @include clearfix();
+  padding: 0 $sliderHeight;
+}
+
+%slider {
+  @extend %unselectable;
+
+  height: $sliderHeight;
+  margin-top: 10px;
+  overflow: visible;
+  position: relative;
+  background-color: #666;
+
+  & > .viewed {
+    position: absolute;
+    height: 100%;
+    background-color: $highlightBcgrColor;
+  }
+
+  & > .handle {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    cursor: pointer;
+
+    & > .c1 {
+      @include centered-circle(2 * $sliderHeight);
+      background-color: #fff;
+      box-shadow: 0 0 3px 0;
+    }
+
+    & > .c2 {
+      @include centered-circle(0.9 * $sliderHeight);
+      background-color: #666;
+    }
+  }
+}
+
+#slider {
+    @extend %slider;
+
+    width: $docWidth - 2 * $sliderHeight - $volSliderWidth - $interSlidersMargin;
+    float: left;
+
+    .marks > .mark {
+        position: absolute;
+        height: $sliderHeight;
+        border-left: 1px solid #ffffff;
+        z-index: 1;
+    }
+}
+
+#vol-slider {
+  @extend %unselectable;
+  @extend %slider;
+  float: right;
+  width: $volSliderWidth;
+}
+
+#vol-icon {
+  float: right;
+  margin-right: 5px;
+  margin-top: 6px;
+  color: #555;
+}
+
+$slidesMarginTop: 15px;
+$slidesColGap: 10px;
+$controlsWidth: 150px;
+$slidesColWidth: ($docWidth - 2 * $slidesColGap - $controlsWidth) / 2;
+
+#controls {
+  width: $controlsWidth;
+  float: left;
+  text-align: center;
+
+  margin-right: $slidesColGap;
+  margin-top: $slidesMarginTop;
+
+  .btns {
+      margin-top: 10px;
+
+      & > .btn {
+          display: inline-block;
+          vertical-align: middle;
+          cursor: pointer;
+          @extend %unselectable;
+
+          &.prev, &.next {
+              font-size: 20px;
+          }
+
+          &.playpause {
+            font-size: 30px;
+            margin: 0 5px;
+          }
+      }
+  }
+
+  .info {
+      margin-top: 15px;
+
+      & > .slide {
+          color: #888;
+
+          & > .desc {
+              font-size: 10px;
+          }
+      }
+  }
+}
+
+#slides {
+    position: relative;
+    overflow: scroll;
+    margin-top: $slidesMarginTop;
+
+    -webkit-column-width: $slidesColWidth;
+       -moz-column-width: $slidesColWidth;
+
+    -webkit-column-gap: $slidesColGap;
+       -moz-column-gap: $slidesColGap;
+
+    font-size: 14px;
+
+    .slide {
+        width: $slidesColWidth;
+
+        @include border-box;
+
+        display: block;
+        text-decoration: none;
+        color: black;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        padding: 3px;
+
+        .time {
+            display: inline-block;
+            text-align: right;
+            padding-right: 8px;
+            color: #666;
+        }
+
+        &:hover, &:hover .time {
+            color: $highlightTextColor;
+            background-color: #ddd;
+        }
+
+        &.selected {
+            background-color: $highlightBcgrColor;
+            color: #fff;
+            cursor: default;
+
+            .time {
+                color: #dae1d9;
+                background-color: $highlightBcgrColor;
+            }
+        }
+    }
+}
+
+.clear {
+    clear: both;
+}

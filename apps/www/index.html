@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <title>ULect demo</title>
+  <link href="css/page.css" rel="stylesheet" type="text/css">
+
+  <script type="text/javascript" src="js/libs/require.js"></script>
+  <script type="text/javascript">
+    requirejs.config({
+      baseUrl: 'js',
+      config: {
+        page: {
+          // the resulting URL is data/lecture2.json
+          baseUrl: 'data',
+          lecture: 'lecture1'
+        }
+      }
+    });
+    require( ['page'] );
+  </script>
+  <style>
+   #iframe .toolbar_wrapper{
+    display: none;
+    
+}</style>
+</head>
+<body ondragstart="return false;" ondrop="return false;">
+
+<!--  <div id="loading">
+    <span>loading...</span>
+  </div>-->
+  <div class="doc">
+    <div id="header">
+      <a href="#" class="logo"><img src="images/logo.png" alt="YouLect"></a>
+      <div class="path">
+        <span class="base"><a href="#">Курс GenS</a> // <a href="#">Маркетинг для стартапа</a> // </span>Продвижение приложений. Елена Масолова
+      </div>
+    </div>
+    <div id="cols">
+      <div id="videoplayer-container">
+        <div id="videoplayer"></div>
+      </div>
+      <div id="pdf-container">
+<!--       <iframe src="//www.slideshare.net/slideshow/embed_code/41957874?jsapi=true" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>-->
+     <div id="pdf-canvas"></div>
+<!--        <canvas id="pdf-canvas"></canvas>-->
+      </div>
+    </div>
+    <div id="sliders" class="clear">
+      <div id="slider" class="clear">
+        <div class="viewed"></div>
+        <div class="handle">
+          <div class="c1"></div>
+          <div class="c2"></div>
+        </div>
+        <div class="marks"></div>
+      </div>
+      <div id="vol-slider">
+        <div class="viewed"></div>
+        <div class="handle">
+          <div class="c1"></div>
+          <div class="c2"></div>
+        </div>
+      </div>
+      <div id="vol-icon" class="icon-volume"></div>
+    </div>
+    <div id="controls">
+      <div class="btns">
+        <span class="btn prev icon-first"></span>
+        <span class="btn playpause icon-play"></span>
+        <span class="btn next icon-last"></span>
+      </div>
+      <div class="info">
+        <span class="time">00:00</span>
+        <div class="slide">
+          <div class="desc">слайд</div>
+          <span class="current">--</span>/<span class="total">YY</span>
+        </div>
+      </div>
+    </div>
+    <div id="slides"></div>
+  </div>
+
+  <script type="text/javascript">
+    function onYouTubeIframeAPIReady() {
+      require( ['page'], function (page) {
+        page.onYouTubeReady();
+      });
+    }
+  </script>
+
+  <script type="text/javascript">
+    var tag = document.createElement('script');
+    tag.src = "http://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  </script>
+</body>
+</html>
