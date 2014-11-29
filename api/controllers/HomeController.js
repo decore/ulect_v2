@@ -9,16 +9,17 @@
  */
 
 module.exports = {
+    
     index: function (req, res) {
 
         var navItems = [
             {url: '/about', cssClass: 'fa fa-comments', title: 'About'},
-            {url: '/about', cssClass: 'fa fa-comments', title: 'About2'}
+            {url: '/home', cssClass: 'fa fa-comments', title: 'About2'}
 
         ];
 
         res.view({
-            title: 'Home',
+            title: 'Главна',
             navItems: navItems,
             currentUser: req.user,
             locales: sails.config.i18n.locales,

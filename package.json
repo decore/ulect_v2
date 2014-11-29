@@ -48,5 +48,8 @@
     "url": "git://github.com/anonymous node/sails user/ulect_v2.git"
   },
   "author": "anonymous node/sails user",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "coffee-script": "^1.8.0"
+  }
 }

@@ -30,19 +30,44 @@ module.exports.routes = {
      * `assets` directory)                                                      *
      *                                                                          *
      ***************************************************************************/
-    '/': 'HomeController.index',
+    '/': {
+        controller: 'PagesController',
+        action: 'index',
+        locals: {layout: 'layouts/layout_pages'}
+    },
+    '/home': {
+        controller: 'HomeController',
+        action: 'index',
+        locals: {layout: 'layouts/layout_pages'}
+    },
+    '/courses': {
+        controller: 'PagesController', //TODO: create CoursesController 
+        action: 'courses_index',
+        locals: {layout: 'layouts/layout_pages'}
+    },
+    '/lectures': {
+        controller: 'PagesController', //TODO: create LecturesController 
+        action: 'lectures_index',
+        locals: {layout: 'layouts/layout_pages'}
+    },
+    '/lectures/:slug?': {
+        controller: 'PagesController', //TODO: create LecturesController 
+        action: 'lectures_play',
+        locals: {layout: 'layouts/layout_pages'}
+    },    
+    
     'get /about': 'HomeController.index',
-    'get /home': 'HomeController.index',
-    'get /users': 'HomeController.index',
-    'get /lectures': 'HomeController.index',
-    /***************************************************************************
-     *                                                                          *
-     * Custom routes here...                                                    *
-     *                                                                          *
-     *  If a request to a URL doesn't match any of the custom routes above, it  *
-     * is matched against Sails route blueprints. See `config/blueprints.js`    *
-     * for configuration options and examples.                                  *
-     *                                                                          *
-     ***************************************************************************/
+    'get /users': 'HomeController.index', 
+    'get /lectures/add': 'LecturesController.getLecture'
+
+            /***************************************************************************
+             *                                                                          *
+             * Custom routes here...                                                    *
+             *                                                                          *
+             *  If a request to a URL doesn't match any of the custom routes above, it  *
+             * is matched against Sails route blueprints. See `config/blueprints.js`    *
+             * for configuration options and examples.                                  *
+             *                                                                          *
+             ***************************************************************************/
 
 };

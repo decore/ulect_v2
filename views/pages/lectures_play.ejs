@@ -1,0 +1,81 @@
+<% if (lecture !== undefined) { %>
+
+<h2 class="text text-center"><%= lecture.title %></h2>
+<section class="row">
+    <div class="col-sm-6">
+
+    </div>
+    <div class="col-sm-6">
+
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            asdf
+        </div>
+    </div>
+</section>
+<section class="row">
+    
+    <div id="cols">
+      <div id="videoplayer-container">
+        <div id="videoplayer"></div>
+      </div>
+      <div id="pdf-container">
+<!--       <iframe src="//www.slideshare.net/slideshow/embed_code/41957874?jsapi=true" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>-->
+     <div id="pdf-canvas"></div>
+<!--        <canvas id="pdf-canvas"></canvas>-->
+      </div>
+    </div>
+    <div id="sliders" class="clear">
+      <div id="slider" class="clear">
+        <div class="viewed"></div>
+        <div class="handle">
+          <div class="c1"></div>
+          <div class="c2"></div>
+        </div>
+        <div class="marks"></div>
+      </div>
+      <div id="vol-slider">
+        <div class="viewed"></div>
+        <div class="handle">
+          <div class="c1"></div>
+          <div class="c2"></div>
+        </div>
+      </div>
+      <div id="vol-icon" class="icon-volume"></div>
+    </div>
+    <div id="controls">
+      <div class="btns">
+        <span class="btn prev icon-first"></span>
+        <span class="btn playpause icon-play"></span>
+        <span class="btn next icon-last"></span>
+      </div>
+      <div class="info">
+        <span class="time">00:00</span>
+        <div class="slide">
+          <div class="desc">слайд</div>
+          <span class="current">--</span>/<span class="total">YY</span>
+        </div>
+      </div>
+    </div>
+    <div id="slides"></div>
+    
+</section>
+<script type="text/javascript">
+    var lectureId = <%= lecture.id %>
+    function onYouTubeIframeAPIReady() { 
+      require( ['page'], function (page) {
+        page.onYouTubeReady();
+      });
+    }
+  </script>
+
+  <script type="text/javascript">
+    var tag = document.createElement('script');
+    tag.src = "http://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  </script>
+
+
+<%  } %>

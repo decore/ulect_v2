@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html ng-app="sailng" ng-controller="AppCtrl">
+    <head>
+        <base href="/">
+        <title>Ulect</title>
+
+        <!-- Viewport mobile tag for sensible mobile support -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+         <!-- CSS (load bootstrap from a CDN) -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/latest/flatly/bootstrap.min.css"> 
+        <% include ../partials/head %>
+
+        <!--
+            Stylesheets and Preprocessors
+            ==============================
+    
+            You can always bring in CSS files manually with `<link>` tags, or asynchronously
+            using a solution like AMD (RequireJS).  Or, if you like, you can take advantage
+            of Sails' conventional asset pipeline (boilerplate Gruntfile).
+    
+            By default, stylesheets from your `assets/styles` folder are included
+            here automatically (between STYLES and STYLES END). Both CSS (.css) and LESS (.less)
+            are supported. In production, your styles will be minified and concatenated into
+            a single file.
+    
+            To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
+            For example, here are a few things you could do:
+    
+                + Change the order of your CSS files
+                + Import stylesheets from other directories
+                + Use a different or additional preprocessor, like SASS, SCSS or Stylus
+        -->
+
+        <!--ST-YLES-->
+        <link rel="stylesheet" href="/vendor/angular-rx-data-table/dist/styles/rx-data-table.min.css">
+        <link rel="stylesheet" href="/vendor/angular-xeditable/dist/css/xeditable.css">
+        <link rel="stylesheet" href="/vendor/angular/angular-csp.css"> 
+        <link rel="stylesheet" href="/vendor/fontawesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/vendor/ng-table/ng-table.css">
+        <link rel="stylesheet" href="/styles/importer.css">
+
+        <!--ST-YLES END-->
+    </head>
+
+    <body  class="container-fluid">
+        <header>
+            <% include ../partials/header %>
+        </header>
+        <%- body %> 
+        <footer>
+            <% include ../partials/footer %>
+        </footer>
+         <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js" datamain="/js/main"></script>
+    </body>
+</html>

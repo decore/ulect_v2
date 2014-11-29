@@ -1,0 +1,18 @@
+<h2 class="text text-center">Лекции (выступления)</h2>
+
+
+
+<% if (lectures !== undefined) { %>
+<div class="list-group row"> 
+    <% lectures.forEach(function(item){  %>
+    <a href="/lectures/<%= item.title %>?videoId=<%= item.videoId %>" class="list-group-item col-xs-12 col-sm-4  col-lg-3 "> 
+        <!--<h4 class="list-group-item-heading"><%= item.author %></h4>--> 
+        <div class="embed-responsive embed-responsive-4by3">  
+            <!--<iframe  class="embed-responsive-item" src="//www.youtube.com/embed/<%= item.videoId %>" allowfullscreen></iframe>-->
+            <img src="http://img.youtube.com/vi/<%= item.videoId %>/hqdefault.jpg" alt="<%= item.videoId %>" class="img-responsive center-block"> 
+        </div>
+        <h5 class="list-group-item-heading" style="white-space: nowrap;overflow: hidden;"><%= item.title %></h5> 
+    </a>
+    <% }); %>
+</div>    
+<%  } %>
