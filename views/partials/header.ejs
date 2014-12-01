@@ -9,10 +9,11 @@
         </div>
 
         <ul class="nav navbar-nav">
-            <li><a href="/">Главная</a></li>
-            <li><a href="/lectures">Лекции</a></li>
-            <li><a href="/kusres">Курсы</a></li>
-            <li><a href="/about">О сайте</a></li>
+             <li class="<% if (navItems !== undefined && navItems.url == '/'){%> active <% } %>"><a href="/">Главная</a></li>
+ 
+            <li class="<% if (navItems !== undefined && navItems.url == '/lectures'){%> active <% } %>"><a href="/lectures">Лекции</a></li>
+            <li class="<% if (navItems !== undefined && navItems.url == '/courses'){%> active <% } %>"><a href="/courses">Курсы</a></li>
+            <li class="<% if (navItems !== undefined && navItems.url == '/about'){%> active <% } %>"><a href="/about">О сайте</a></li>
 
         </ul>
 

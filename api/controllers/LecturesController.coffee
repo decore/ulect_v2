@@ -2,20 +2,7 @@
 ###
 navItems =   {url: '/about', cssClass: 'fa fa-comments', title: 'About'}
 dataMigrate = require './data_ulect_migrate'
-data = [
-
-    author: "Бизнес-инкубатор ВШЭ"
-    title: "Лекции Бизнес Инкубатора ВШЭ - Кейсы предпринимателей - Михаил Зарин, Антон Смирнов"
-    slideId: "42151845"
-    slideshareUrl: "//www.slideshare.net/slideshow/embed_code/42151845"
-    videoId: "IXqGHBHCbV4"
-,
-    author: "Бизнес-инкубатор ВШЭ"
-    title: "Лекции Бизнес Инкубатора ВШЭ - Лекция Юлии Молчановой"
-    slideId: "42152411"
-    slideshareUrl: "//www.slideshare.net/slideshow/embed_code/42152411"
-    videoId: "AlKQcphwUQM"
-]
+dataMigrateCourses = require './data_ulect_courses'
 
 LecturesController = {
     ###
@@ -32,14 +19,42 @@ LecturesController = {
     ###
     ###
     migrate: (req,res)->
-        Lecture.destroy().exec(
-         (err,entities)->
-            Lecture.create(dataMigrate,
-                (err, enities)->
-                    if err
-                        return res.serverError(err)
-                    return res.json enities
-            )
+        #dataMigrateCourses
+        AllEnities = []
+        Course.destroy().exec(
+            (err, courses)->
+                console.log 'destroy',courses
+                Course.create(dataMigrateCourses).exec(
+                    (err, courses)->
+                        if err
+                            return res.serverError(err)
+                        _.each dataMigrate, (data)->
+                                    courses[1].lectures.add data.id
+                                    #_.extend data , course:courses[1].id
+                        #                                    Lecture.create(data,
+                        #                                        (err, enities)->
+                        #                                            if err
+                        #                                                return res.serverError(err)
+                        #                                            AllEnities.push enities
+                        courses[1].save()
+                        #return  res.json courses
+                        Lecture.destroy().exec(
+                            (err,entities)->
+
+                                _.each dataMigrate, (data)->
+                                    data.course=courses[1].id
+                                    #_.extend data , course:courses[1].id
+                                    Lecture.create(data,
+                                        (err, enities)->
+                                            if err
+                                                return res.serverError(err)
+                                            AllEnities.push enities
+
+                                    )
+
+                                return  res.json AllEnities
+                        )
+                )
         )
 
 }

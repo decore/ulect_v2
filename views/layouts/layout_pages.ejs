@@ -2,7 +2,7 @@
 <html ng-app="sailng" ng-controller="AppCtrl">
     <head>
         <base href="/">
-        <title>Ulect</title>
+        <title><% if (navItems !== undefined && navItems.title !==  undefined ){%><%= navItems.title %>| Ulect <% }else{ %> Ulect <%}%> </title>
 
         <!-- Viewport mobile tag for sensible mobile support -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -33,8 +33,8 @@
         -->
 
         <!--ST-YLES-->
-        <link rel="stylesheet" href="/vendor/angular-rx-data-table/dist/styles/rx-data-table.min.css">
-        <link rel="stylesheet" href="/vendor/angular-xeditable/dist/css/xeditable.css">
+        <!--<link rel="stylesheet" href="/vendor/angular-rx-data-table/dist/styles/rx-data-table.min.css">-->
+        <!--<link rel="stylesheet" href="/vendor/angular-xeditable/dist/css/xeditable.css">-->
         <link rel="stylesheet" href="/vendor/angular/angular-csp.css"> 
         <link rel="stylesheet" href="/vendor/fontawesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="/vendor/ng-table/ng-table.css">

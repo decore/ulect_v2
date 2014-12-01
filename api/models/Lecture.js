@@ -10,6 +10,10 @@ module.exports = {
         author: {
             type: "string",
         },
+        slideshareId: {
+            type: "string",
+            defaultsTo: "42152411"
+        },        
         slideshareUrl: {
             type: "string",
             defaultsTo: "//www.slideshare.net/slideshow/embed_code/42152411"
@@ -20,7 +24,12 @@ module.exports = {
         slides: {
             type: "array"
         }
-
+        ,
+        course:{ 
+            model: 'Course',
+            //required: true,
+            //defaultsTo: 0
+        }
     }
 };
 

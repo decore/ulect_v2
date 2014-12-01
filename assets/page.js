@@ -938,7 +938,7 @@
                 this.model.bind('change', this.render);
             };
             SlidView.prototype.el = $('#pdf-container');
-            SlidView.prototype.template = _.template('<iframe src="<%= slideshareUrl %>?jsapi=true" src3="//www.slideshare.net/slideshow/embed_code/42038461?jsapi=true" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>');
+            SlidView.prototype.template = _.template('<iframe src2="<%= slideshareUrl %>?jsapi=true" src="//www.slideshare.net/slideshow/embed_code/<%= slideshareId %>?jsapi=true" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>');
             SlidView.prototype.render = function () {
                 $(this.el).html(this.template(this.model.toJSON()));
                 return this;

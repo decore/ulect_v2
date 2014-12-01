@@ -40,9 +40,19 @@ module.exports.routes = {
         action: 'index',
         locals: {layout: 'layouts/layout_pages'}
     },
+    '/about': {
+        controller: 'HomeController',
+        action: 'about_index',
+        locals: {layout: 'layouts/layout_pages'}
+    },
     '/courses': {
         controller: 'PagesController', //TODO: create CoursesController 
         action: 'courses_index',
+        locals: {layout: 'layouts/layout_pages'}
+    },
+    '/courses/:name?': {
+        controller: 'PagesController', //TODO: create CoursesController 
+        action: 'courses_lectures_list',
         locals: {layout: 'layouts/layout_pages'}
     },
     '/lectures': {
@@ -54,10 +64,8 @@ module.exports.routes = {
         controller: 'PagesController', //TODO: create LecturesController 
         action: 'lectures_play',
         locals: {layout: 'layouts/layout_pages'}
-    },    
-    
-    'get /about': 'HomeController.index',
-    'get /users': 'HomeController.index', 
+    },
+    'get /users': 'HomeController.index',
     'get /lectures/add': 'LecturesController.getLecture'
 
             /***************************************************************************

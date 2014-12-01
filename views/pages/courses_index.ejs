@@ -1,1 +1,10 @@
-<h2 class="text text-center">Учебные курсы</h2>
+<h2 class="text text-center">Курсы</h2>
+<% if(courses !== undefined){ %>
+<ul class="list-group">
+    <% courses.forEach(function(item){%>
+    <% if (item.id != '1'){ %>
+    <li  class="list-group-item"><a href="/courses/<%= item.name %>"> <%= item.name %></a> <span class="badge"> <%= item.lectures.length %> лекций </span></li>
+    <% }%>
+    <% });%>
+</ul>  
+<% }%>
