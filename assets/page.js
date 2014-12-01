@@ -350,7 +350,6 @@
             function SliderShareView($el) {
                 this.$el = $el;
                 this._renderPage = __bind(this._renderPage, this);
-                this._onPDFReady = __bind(this._onPDFReady, this);
                 this.load = __bind(this.load, this);
                 this.ready = false;
                 this.iframe = $el.find('iframe')[0];
@@ -363,23 +362,6 @@
                 this.url = url;
                 console.debug('ser slaid share url', this.url);
                 return this.ready = true;
-            };
-            SliderShareView.prototype._onPDFReady = function (pdfDoc) {
-                this.pdfDoc = pdfDoc;
-                this.ready = true;
-                if (this.pageNum == null) {
-                    return this.displayPage(1);
-                }
-            };
-            SliderShareView.prototype.displayPage = function (pageNum) {
-                if (this.pageNum === pageNum) {
-                    return;
-                }
-                this.pageNum = pageNum;
-                if (!this.ready) {
-                    return;
-                }
-                return this.pdfDoc.getPage(pageNum).then(this._renderPage);
             };
             SliderShareView.prototype._renderPage = function (page) {
                 var scale, scaleX, scaleY, viewport;
@@ -727,7 +709,7 @@
             SlidesView.prototype.events = { 'click .slide': '_onSlideClicked' };
             SlidesView.prototype.initialize = function () {
                 this.timeline = this.model.get('timeline');
-                this.slideshare = this.model.get('slideshare');
+                this.slideshare = this.model.get('slideshareUrl');
                 console.debug(this.slideshare);
                 this.listenTo(this.timeline, 'change:slide', this._onSlideChanged);
                 return $(window).resize(_.debounce(this.updateSize, 300));
@@ -743,7 +725,7 @@
                 maxTimeLabelW = 0;
                 for (_i = 0, _len = slides.length; _i < _len; _i++) {
                     slide = slides[_i];
-                    html = '<a title="' + slide.title + '" href="javascript:void(0);" class="slide" data-index="' + slide.index + '"><span class="time">' + slide.getTimeString() + '</span>' + slide.title + '</div>';
+                    html = '<a title="' + slide.title + '" href="javascript:void(0);" class="slide col-xs-12 col-sm-12 col-lg-12" data-index="' + slide.index + '"><span class="time">' + slide.getTimeString() + '</span>' + slide.title + '</div>';
                     $slide = $(html);
                     $slides[slide.index] = $slide;
                     this.$el.append($slide);
@@ -763,7 +745,7 @@
             };
             SlidesView.prototype.updateSize = function () {
                 var $colTimeLabels, $slide, $timeLabels, colLeft, h, i, l, maxColTimeLabelW, timeLabelsWidths, updateColTimeLabels, w, _i, _len, _ref;
-                h = $(window).height() - this.$el.offset().top - 5;
+                h = $(window).height() - this.$el.offset().top - 5 - 60;
                 this.$el.height(Math.max(0, h));
                 $timeLabels = this.$timeLabels;
                 timeLabelsWidths = this.timeLabelsWidths;
@@ -889,10 +871,14 @@
             };
             ControlsView.prototype.setIsPlaying = function (isPlaying) {
                 if (isPlaying) {
+                    this.$playPause.removeClass('fa-play');
                     this.$playPause.removeClass('icon-play');
+                    this.$playPause.addClass('fa-pause');
                     return this.$playPause.addClass('icon-pause');
                 } else {
+                    this.$playPause.removeClass('fa-pause');
                     this.$playPause.removeClass('icon-pause');
+                    this.$playPause.addClass('fa-play');
                     return this.$playPause.addClass('icon-play');
                 }
             };
@@ -1027,8 +1013,7 @@
                 this.slider.render();
                 this.slides.render();
                 this.controls.render();
-                this.sliderShareView.setMaxHeight(this.player.height());
-                this.sliderShareView.load(this.model.get('slideshareUrl'));
+                this.sliderShareView.load(this.model);
                 this.listenTo(this.timeline, 'change:slide', this._onSlideChanged);
                 this.listenTo(this.player, 'sync', this._onPlayerSync);
                 this.listenTo(this.slider, 'change', function (p) {
@@ -1066,10 +1051,16 @@
                     storeVol(vol);
                     return this.player.volume(vol);
                 });
-                return showUI = function () {
+                showUI = function () {
                     log('actually showing UI');
                     return $('#loading').hide();
                 };
+                this.sliderShareView.once('rendered', function () {
+                    alert('');
+                    log('sliderShareView rendered, showing UI after delay');
+                    return setTimeout(showUI, 100);
+                });
+                setTimeout(showUI, 100);
             };
             LectureView.prototype._onSlideChanged = function (slide, isJump) {
                 console.debug('lecture-view:_onSlideChanged', slide, isJump);

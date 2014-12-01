@@ -13,18 +13,17 @@
             return child;
         };
     define('lecture', ['backbone'], function (Backbone) {
-        var Lecture;
+        var Lecture, lectureId;
+        lectureId = window.lectureId;
+        console.log(lectureId);
         return Lecture = function (_super) {
             __extends(Lecture, _super);
             function Lecture() {
                 return Lecture.__super__.constructor.apply(this, arguments);
             }
-            Lecture.baseUrl = '/api/v1';
+            Lecture.baseUrl = '/api/v1/';
             Lecture.prototype.urlRoot = function () {
-                return Lecture.baseUrl;
-            };
-            Lecture.prototype.url = function () {
-                return '/lecture';
+                return Lecture.baseUrl + '/api/v1/lecture';
             };
             return Lecture;
         }(Backbone.Model);
@@ -744,7 +743,7 @@
                 maxTimeLabelW = 0;
                 for (_i = 0, _len = slides.length; _i < _len; _i++) {
                     slide = slides[_i];
-                    html = '<a title="' + slide.title + '" href="javascript:void(0);" class="slide" data-index="' + slide.index + '"><span class="time">' + slide.getTimeString() + '</span>' + slide.title + '</div>';
+                    html = '<a title="' + slide.title + '" href="javascript:void(0);" class2="slide" class="col-sm-3" data-index="' + slide.index + '"><span class="time">' + slide.getTimeString() + '</span>' + slide.title + '</div>';
                     $slide = $(html);
                     $slides[slide.index] = $slide;
                     this.$el.append($slide);
@@ -890,10 +889,14 @@
             };
             ControlsView.prototype.setIsPlaying = function (isPlaying) {
                 if (isPlaying) {
+                    this.$playPause.removeClass('fa-play');
                     this.$playPause.removeClass('icon-play');
+                    this.$playPause.addClass('fa-pause');
                     return this.$playPause.addClass('icon-pause');
                 } else {
+                    this.$playPause.removeClass('fa-pause');
                     this.$playPause.removeClass('icon-pause');
+                    this.$playPause.addClass('fa-play');
                     return this.$playPause.addClass('icon-play');
                 }
             };
@@ -1028,7 +1031,6 @@
                 this.slider.render();
                 this.slides.render();
                 this.controls.render();
-                this.sliderShareView.setMaxHeight(this.player.height());
                 this.sliderShareView.load(this.model.get('slideshareUrl'));
                 this.listenTo(this.timeline, 'change:slide', this._onSlideChanged);
                 this.listenTo(this.player, 'sync', this._onPlayerSync);
@@ -1117,9 +1119,9 @@
     ], function (module, $, Lecture, LectureView, log) {
         var config, lecture, onYouTubeReady, view;
         config = module.config();
-        Lecture.baseUrl = config.baseUrl;
-        lecture = new Lecture({ id: config.lecture });
-        lecture.fetch();
+        Lecture.baseUrl = location.origin;
+        lecture = new Lecture({ id: window.lectureId });
+        lecture.fetch({ id: window.lectureId });
         view = new LectureView({ model: lecture });
         onYouTubeReady = function () {
             log('YouTube API initialized');

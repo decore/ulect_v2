@@ -1,7 +1,8 @@
 ###
 ###
 navItems =   {url: '/about', cssClass: 'fa fa-comments', title: 'About'}
-dataMigrate = [
+dataMigrate = require './data_ulect_migrate'
+data = [
 
     author: "Бизнес-инкубатор ВШЭ"
     title: "Лекции Бизнес Инкубатора ВШЭ - Кейсы предпринимателей - Михаил Зарин, Антон Смирнов"

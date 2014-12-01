@@ -6,7 +6,7 @@
 
         <!-- Viewport mobile tag for sensible mobile support -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-         <!-- CSS (load bootstrap from a CDN) -->
+        <!-- CSS (load bootstrap from a CDN) -->
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/latest/flatly/bootstrap.min.css"> 
         <% include ../partials/head %>
@@ -41,16 +41,51 @@
         <link rel="stylesheet" href="/styles/importer.css">
 
         <!--ST-YLES END-->
+        <style>
+            html {
+                position: relative;
+                min-height: 100%;
+            }
+            body {
+                /* Margin bottom by footer height */
+                margin-bottom: 60px;
+            }
+            .footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                /* Set the fixed height of the footer here */
+                height: 60px;
+                background-color: #f5f5f5;
+            }
+
+
+            /* Custom page CSS
+            -------------------------------------------------- */
+            /* Not required for template or sticky footer method. */
+
+            /*.container {
+              width: auto;
+              max-width: 680px;
+              padding: 0 15px;
+            }*/
+            .container .text-muted {
+                margin: 20px 0;
+            }
+        </style>    
     </head>
 
-    <body  class="container-fluid">
-        <header>
+    <body ondragstart="return false;" ondrop="return false;"> 
+
+        <header class="container-fluid">
             <% include ../partials/header %>
         </header>
-        <%- body %> 
-        <footer>
+        <div   class="container"> 
+            <%- body %> 
+        </div>
+        <footer class="footer">
             <% include ../partials/footer %>
         </footer>
-         <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js" datamain="/js/main"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js" datamain="/js/main"></script>
     </body>
 </html>

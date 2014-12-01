@@ -33,7 +33,6 @@ define [
 
         render: ->
             $(@el).html @.template(@.model.toJSON())
-
             #@listenTo @timeline, 'change:slide', @_onSlideChanged
             return @
         _onSlideChanged: (slide) =>
@@ -54,7 +53,6 @@ define [
         _onModelLoaded: =>
             log 'model loaded:', @model.attributes
             @modelLoaded = yes
-
             @_tryInitVideo()
 
         initVideo: ->
@@ -107,8 +105,8 @@ define [
 
             #@pdfView.setMaxHeight @player.height()
             #@pdfView.load @model.get 'pdf'
-            @sliderShareView.setMaxHeight @player.height()
-            @sliderShareView.load @model.get 'slideshareUrl'
+            #@sliderShareView.setMaxHeight @player.height()
+            @sliderShareView.load @model#.get 'slideshareUrl'
 
             @listenTo @timeline, 'change:slide', @_onSlideChanged
             @listenTo @player, 'sync', @_onPlayerSync
@@ -149,7 +147,12 @@ define [
         #      @pdfView.once 'rendered', ->
         #        log 'PDF rendered, showing UI after delay'
         #        setTimeout showUI, 100
-
+            @sliderShareView.once 'rendered', ->
+                alert ''
+                log 'sliderShareView rendered, showing UI after delay'
+                setTimeout showUI, 100
+            setTimeout showUI, 100
+            return
         _onSlideChanged: (slide, isJump) ->
             console.debug "lecture-view:_onSlideChanged", slide, isJump
             #console.debug '#pdf-container iframe', @iframe

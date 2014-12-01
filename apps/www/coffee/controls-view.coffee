@@ -24,11 +24,17 @@ define [ 'jquery', 'backbone', 'log' ], ($, Backbone, log) ->
 
     setIsPlaying: (isPlaying) ->
       if isPlaying
-        @$playPause.removeClass 'icon-play'
-        @$playPause.addClass 'icon-pause'
+        @$playPause.removeClass 'fa-play'
+        @$playPause.removeClass 'icon-play'##TODO:delete
+        @$playPause.addClass 'fa-pause'
+        @$playPause.addClass 'icon-pause'##TODO:delete
       else
-        @$playPause.removeClass 'icon-pause'
-        @$playPause.addClass 'icon-play'
+        @$playPause.removeClass 'fa-pause'
+        @$playPause.removeClass 'icon-pause'##TODO:delete
+        @$playPause.addClass 'fa-play'
+        @$playPause.addClass 'icon-play'##TODO:delete
+
+
 
     setTimeString: (ts) ->
       return if ts is @ts

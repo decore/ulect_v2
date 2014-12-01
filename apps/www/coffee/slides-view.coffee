@@ -7,7 +7,7 @@ define [ 'underscore', 'jquery', 'backbone', 'log' ], (_, $, Backbone, log) ->
 
     initialize: ->
       @timeline = @model.get 'timeline'
-      @slideshare = @model.get 'slideshare' ##NOTE: url to slideshare
+      @slideshare = @model.get 'slideshareUrl' ##NOTE: url to slideshareslideshareUrl
       console.debug @slideshare
       @listenTo @timeline, 'change:slide', @_onSlideChanged
       $(window).resize _.debounce @updateSize, 300
@@ -25,7 +25,7 @@ define [ 'underscore', 'jquery', 'backbone', 'log' ], (_, $, Backbone, log) ->
       maxTimeLabelW = 0
 
       for slide in slides
-        html = "<a title=\"#{ slide.title }\" href=\"javascript:void(0);\" class=\"slide\" data-index=\"#{ slide.index }\"><span class=\"time\">#{slide.getTimeString()}</span>#{ slide.title }</div>"
+        html = "<a title=\"#{ slide.title }\" href=\"javascript:void(0);\" class=\"slide col-xs-12 col-sm-12 col-lg-12\" data-index=\"#{ slide.index }\"><span class=\"time\">#{slide.getTimeString()}</span>#{ slide.title }</div>"
         $slide = $ html
         $slides[slide.index] = $slide
         @$el.append $slide
@@ -43,7 +43,7 @@ define [ 'underscore', 'jquery', 'backbone', 'log' ], (_, $, Backbone, log) ->
       @updateSize()
 
     updateSize: =>
-      h = $(window).height() - @$el.offset().top - 5
+      h = $(window).height() - @$el.offset().top - 5 -60 #NOTE: fix -footer heigth
       @$el.height Math.max 0, h
 
       $timeLabels = @$timeLabels

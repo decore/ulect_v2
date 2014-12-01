@@ -17,15 +17,15 @@ define [ 'underscore', 'backbone',  'log' ], (_, Backbone, log) ->
 
         #  PDFJS.getDocument(url).then @_onPDFReady
 
-        _onPDFReady: (@pdfDoc) =>
-            @ready = yes
-            @displayPage 1 unless @pageNum?
-
-        displayPage: (pageNum) ->
-            return if @pageNum is pageNum
-            @pageNum = pageNum
-            return unless @ready
-            @pdfDoc.getPage(pageNum).then @_renderPage
+        #        _onPDFReady: (@pdfDoc) =>
+        #            @ready = yes
+        #            @displayPage 1 unless @pageNum?
+        #
+        #        displayPage: (pageNum) ->
+        #            return if @pageNum is pageNum
+        #            @pageNum = pageNum
+        #            return unless @ready
+        #            @pdfDoc.getPage(pageNum).then @_renderPage
 
         _renderPage: (page) =>
             log "displaying page", page
@@ -40,8 +40,7 @@ define [ 'underscore', 'backbone',  'log' ], (_, Backbone, log) ->
             #      @canvas.width = viewport.width
             #      @canvas.height = viewport.height
 
-            page.render
-
+            page.render 
                 canvasContext: @ctx
                 viewport: viewport
             .then do => @trigger 'rendered'
