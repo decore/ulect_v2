@@ -1,142 +1,14 @@
 <% if (lecture == undefined) { %>
 <h4 class="text text-center text-muted">Извините, лекция не найдена </h4>
 <%} %> 
+<link href="/styles/player.css" rel="stylesheet" type="text/css"/>
 <% if (lecture !== undefined) { %>
-<style> 
-
-#loading {
-  position: absolute;
-  top: 66px;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background-color: #ffffff;
-  z-index: 1000;
-  text-align: center; }
-  #loading:before {
-    content: '';
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-    margin-right: -0.25em; }
-  #loading span {
-    display: inline-block;
-    vertical-align: middle; }
-  
-   #controls .btns > .btn:hover {
-color: #2C3E50;
-   }
-    #slider, #controls .btns > .btn {
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none; }
-
-    #slides {
-        position: relative;
-        overflow: auto;
-        margin-top: 15px;
-        /*-webkit-column-width: 420px;*/
-        /*-moz-column-width: 420px;*/
-        /*-webkit-column-gap: 10px;*/
-        /*-moz-column-gap: 10px;*/
-        font-size: 14px; }
-    #slides .slide {
-        /*width: 420px;*/
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        display: block;
-        text-decoration: none;
-        color: black;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding: 3px; }
-    #slides .slide .time {
-        display: inline-block;
-        text-align: right;
-        padding-right: 8px;
-        color: #666; }
-    #slides .slide:hover, #slides .slide:hover .time {
-        color: #96104b;
-        background-color: #ddd; }
-    #slides .slide.selected {
-        background-color: #a91842;
-        color: #fff;
-        cursor: default; }
-    #slides .slide.selected .time {
-        color: #dae1d9;
-        background-color: #a91842; }
-
-    .clear {
-        clear: both; }
-#slider {
-  margin-top: 10px;
-  margin-left: 8px;
-  margin-right: 8px;
-  height: 8px;
-  background-color: #666;
-  overflow: visible;
-  position: relative; }
-  #slider .viewed {
-    position: absolute;
-    background-color: #a91842;
-    height: 100%; }
-  #slider .handle {
-    position: absolute;
-    top: 50%;
-    z-index: 2;
-    cursor: pointer; }
-    #slider .handle > .c1 {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      position: absolute;
-      top: -8px;
-      left: -8px;
-      background-color: #fff;
-      box-shadow: 0 0 3px 0; }
-    #slider .handle > .c2 {
-      width: 7.2px;
-      height: 7.2px;
-      border-radius: 50%;
-      position: absolute;
-      top: -3.6px;
-      left: -3.6px;
-      background-color: #666; }
-  #slider .marks > .mark {
-    position: absolute;
-    height: 8px;
-    border-left: 1px solid white;
-    z-index: 1; }    
- 
-  #controls .btns {
-    margin-top: 10px; }
-    #controls .btns > .btn {
-      display: inline-block;
-      vertical-align: middle;
-      cursor: pointer; }
-      #controls .btns > .btn.prev, #controls .btns > .btn.next {
-        font-size: 20px; }
-      #controls .btns > .btn.playpause {
-        font-size: 30px;
-        margin: 0 5px; }
-  #controls .info {
-    margin-top: 15px; }
-    #controls .info > .slide {
-      color: #888; }
-      #controls .info > .slide > .desc {
-        font-size: 10px; } 
-
-</style> 
-  <div id="loading">
-      <span class="label label-warning"><i class="fa fa-spinner fa-spin"> </i> Загрузка данных...</span>
-  </div>
+<div id="loading">
+    <span class="label label-warning"><i class="fa fa-spinner fa-spin"> </i> Загрузка данных...</span>
+</div>
 <h4 class="text text-center"><%= lecture.title %></h4>
 <section class="row">
-    
+
     <div class="col-sm-6">
         <div id="videoplayer-container" class="embed-responsive embed-responsive-4by3">
             <div id="videoplayer"></div>
@@ -150,40 +22,40 @@ color: #2C3E50;
         </div>
     </div>
     <aside class="row">
-       
-     <div id="sliders" class="col-sm-12 clear">
-        <div id="slider" class="clear">
-            <div class="viewed"></div>
-            <div class="handle">
-                <div class="c1"></div>
-                <div class="c2"></div>
+
+        <div id="sliders" class="col-sm-12 clear">
+            <div id="slider" class="clear">
+                <div class="viewed"></div>
+                <div class="handle">
+                    <div class="c1"></div>
+                    <div class="c2"></div>
+                </div>
+                <div class="marks"></div>
             </div>
-            <div class="marks"></div>
-        </div>
-        <div id="vol-slider">
-            <div class="viewed"></div>
-            <div class="handle">
-                <div class="c1"></div>
-                <div class="c2"></div>
+            <div id="vol-slider">
+                <div class="viewed"></div>
+                <div class="handle">
+                    <div class="c1"></div>
+                    <div class="c2"></div>
+                </div>
             </div>
+            <!--<div id="vol-icon" class="icon-volume fa fa-volume-off"></div>-->
         </div>
-        <!--<div id="vol-icon" class="icon-volume fa fa-volume-off"></div>-->
-    </div>
     </aside>    
     <div class="row col-sm-12 col-lg-12" id="controls">
         <div class="col-sm-4 col-lg-3  text-center">   
-        <div class="btns col-sm-12">
-            <span class="btn prev icon-first fa fa-fast-backward "></span>
-            <span class="btn playpause icon-play fa fa-play"></span>
-            <span class="btn next icon-last fa fa-fast-forward"></span>
-        </div>
-        <div class="info col-sm-12 col-lg-11">
-            <span class="time">00:00</span>
-            <div class="slide">
-                <div class="desc">слайд</div>
-                <span class="current">--</span>/<span class="total">YY</span>
+            <div class="btns col-sm-12">
+                <span class="btn prev icon-first fa fa-fast-backward "></span>
+                <span class="btn playpause icon-play fa fa-play"></span>
+                <span class="btn next icon-last fa fa-fast-forward"></span>
             </div>
-        </div>
+            <div class="info col-sm-12 col-lg-11">
+                <span class="time">00:00</span>
+                <div class="slide">
+                    <div class="desc">слайд</div>
+                    <span class="current">--</span>/<span class="total">YY</span>
+                </div>
+            </div>
         </div>
         <div class="col-sm-8 col-lg-9">
             <div id="slides"></div>
@@ -211,5 +83,5 @@ color: #2C3E50;
 </script>
 
 
- 
+
 <%  } %>

@@ -15,7 +15,6 @@
     define('lecture', ['backbone'], function (Backbone) {
         var Lecture, lectureId;
         lectureId = window.lectureId;
-        console.log(lectureId);
         return Lecture = function (_super) {
             __extends(Lecture, _super);
             function Lecture() {
@@ -360,7 +359,6 @@
             };
             SliderShareView.prototype.load = function (url) {
                 this.url = url;
-                console.debug('ser slaid share url', this.url);
                 return this.ready = true;
             };
             SliderShareView.prototype._renderPage = function (page) {
@@ -1057,7 +1055,6 @@
                 setTimeout(showUI, 100);
             };
             LectureView.prototype._onSlideChanged = function (slide, isJump) {
-                console.debug('lecture-view:_onSlideChanged', slide, isJump);
                 this.sliderView._onSlideChanged(slide);
                 this.slider.setPosition(slide.timePercent);
                 if (isJump) {
