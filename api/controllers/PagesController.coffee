@@ -43,7 +43,7 @@ PagesController = {
             (err,entities)->
                 if err
                     return res.serverError(err)
-                console.log  entities
+                #console.log  entities
                 res.view(
                     title: 'Курсы'
                     navItems: navItems
@@ -54,7 +54,7 @@ PagesController = {
         )
     courses_lectures_list :(req, res)->
         navItems =  {url: '/courses', cssClass: 'fa fa-comments', title: 'Курс'}
-        console.log  'name course', req.param("name")
+        #console.log  'name course', req.param("name")
         _criteria =
             where:
                 or: [
@@ -65,7 +65,7 @@ PagesController = {
             (err,entity)->
                 if err
                     return res.serverError()
-                console.log  entity
+                #console.log  entity
                 res.view(
                     title: 'Курс'
                     navItems: navItems
@@ -115,7 +115,7 @@ PagesController = {
             (err,entity)->
                 if err
                     return res.serverError()
-                console.log entity 
+                #console.log entity
                 res.view(
                     title: 'Лекция'
                     navItems: navItems

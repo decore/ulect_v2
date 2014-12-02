@@ -68,7 +68,7 @@ LecturesController = {
 
                                             Lecture.create(data,
                                                 (err, enities)->
-                                                    console.log enities
+                                                    #console.log enities
                                                     if err
                                                         return res.json err#serverError(err)
                                                     AllEnities.push enities
