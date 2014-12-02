@@ -99,8 +99,8 @@ PagesController = {
     ###
     lectures_play:(req, res)->
         navItems =  {url: '/lectures', cssClass: 'fa fa-comments', title: 'Лекция'}
-        console.log 'videoId play', req.param("videoId")
-        console.log 'slideshareId play', req.param("slideshareId")
+        #console.log 'videoId play', req.param("videoId")
+        #console.log 'slideshareId play', req.param("slideshareId")
         _criteria =
             where:
                 or: [
@@ -115,8 +115,7 @@ PagesController = {
             (err,entity)->
                 if err
                     return res.serverError()
-                console.log entity
-
+                console.log entity 
                 res.view(
                     title: 'Лекция'
                     navItems: navItems

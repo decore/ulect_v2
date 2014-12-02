@@ -1,3 +1,6 @@
+<% if (lecture == undefined) { %>
+<h4 class="text text-center text-muted">Извините, лекция не найдена </h4>
+<%} %> 
 <% if (lecture !== undefined) { %>
 <style> 
 
@@ -129,7 +132,7 @@ color: #2C3E50;
 
 </style> 
   <div id="loading">
-    <span>Загрузка данных...</span>
+      <span class="label label-warning"><i class="fa fa-spinner fa-spin"> </i> Загрузка данных...</span>
   </div>
 <h4 class="text text-center"><%= lecture.title %></h4>
 <section class="row">
@@ -188,15 +191,8 @@ color: #2C3E50;
     </div>
 </section>
 <!--<section class="row">
-
     <div id="cols">
-
-
-    </div>
-    
-   
-
-
+    </div>    
 </section>-->
 <script type="text/javascript">
     var lectureId = <%= lecture.id %>
