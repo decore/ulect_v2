@@ -2,8 +2,10 @@
 <% if(courses !== undefined){ %>
 <ul class="list-group">
     <% courses.forEach(function(item){%>
-    <% if (item.id != '1'){ %>
-    <li  class="list-group-item"><a href="/courses/<%= item.name %>"> <%= item.name %></a> <span class="badge"> <%= item.lectures.length %> лекций </span></li>
+    <% if (item.name != 'Все'){ %>
+    <li  class="list-group-item"><a href="/courses/<%= item.name %>"> <%= item.name %></a>
+        <!--        <span class="badge"> <%= item.lectures %> лекций </span>-->
+    </li>
     <% }%>
     <% });%>
 </ul>  

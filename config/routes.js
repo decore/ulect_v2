@@ -41,8 +41,8 @@ module.exports.routes = {
         locals: {layout: 'layouts/layout_pages'}
     },
     '/about': {
-        controller: 'HomeController',
-        action: 'about_index',
+        controller: 'PagesController',
+        action: 'about',
         locals: {layout: 'layouts/layout_pages'}
     },
     '/courses': {

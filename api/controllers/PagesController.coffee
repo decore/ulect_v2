@@ -5,16 +5,27 @@ PagesController = {
     ###
     index:(req, res)->
         navItems =  {url: '/', cssClass: 'fa fa-comments', title: 'Главная'}
-        res.view(
-            title: 'Главная'
-            navItems: navItems
-            currentUser: req.user
-            locales: sails.config.i18n.locales
+        queryCiteria =
+            limit: 5
+            sort : 'createdAt desc'
+            where: {}
+        Lecture.find(queryCiteria).exec(
+            (err,entities)->
+                if err
+                    return res.serverError(err)
+                res.view(
+                    title: 'Главная'
+                    navItems: navItems
+                    currentUser: req.user
+                    locales: sails.config.i18n.locales
+                    lastLectures: entities
+                )
         )
+
     ###
     About application
     ###
-    index:(req, res)->
+    about:(req, res)->
         navItems =  {url: '/about', cssClass: 'fa fa-comments', title: 'О сайте'}
         res.view(
             title: 'О сайте'
@@ -32,6 +43,7 @@ PagesController = {
             (err,entities)->
                 if err
                     return res.serverError(err)
+                console.log  entities
                 res.view(
                     title: 'Курсы'
                     navItems: navItems

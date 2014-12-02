@@ -22,10 +22,12 @@ LecturesController = {
     saveLecture:(req, res)->
         _params = req.params.all()
 
-        #Lecture.create _params
-        return res.json req.params.all()
-
-
+        Lecture.create( _params, (err, data)->
+            if err
+                res.status 406
+                return res.json err
+            return res.json data
+        )
     ###
     Migrate
     ###
@@ -39,31 +41,42 @@ LecturesController = {
                     (err, courses)->
                         if err
                             return res.serverError(err)
+                        x =0
                         _.each dataMigrate, (data)->
-                                    courses[1].lectures.add data.id
+                                    if x < 5
+                                       x = x+1
+                                       courses[1].lectures.add data.id
                                     #_.extend data , course:courses[1].id
                         #                                    Lecture.create(data,
                         #                                        (err, enities)->
                         #                                            if err
                         #                                                return res.serverError(err)
                         #                                            AllEnities.push enities
-                        courses[1].save()
-                        #return  res.json courses
-                        Lecture.destroy().exec(
-                            (err,entities)->
+                        courses[1].save(
+                            (err,ok)->
+                                if err
+                                    return res.json err
 
-                                _.each dataMigrate, (data)->
-                                    data.course=courses[1].id
-                                    #_.extend data , course:courses[1].id
-                                    Lecture.create(data,
-                                        (err, enities)->
-                                            if err
-                                                return res.serverError(err)
-                                            AllEnities.push enities
+                                #return  res.json courses
+                                Lecture.destroy().exec(
+                                    (err,entities)->
+                                        if err
+                                            return res.json err
+                                        _.each dataMigrate, (data)->
+                                            data.course=courses[1].id
+                                            #_.extend data , course:courses[1].id
 
-                                    )
+                                            Lecture.create(data,
+                                                (err, enities)->
+                                                    console.log enities
+                                                    if err
+                                                        return res.json err#serverError(err)
+                                                    AllEnities.push enities
 
-                                return  res.json AllEnities
+                                            )
+
+                                        return  res.json AllEnities
+                                )
                         )
                 )
         )

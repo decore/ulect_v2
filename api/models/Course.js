@@ -12,7 +12,8 @@ module.exports = {
             required: true
         }, 
         description: {
-            type: "string"
+            type: "string",
+            defaultsTo:"Оисание курса не добавлено"
         },
         lectures:{
             collection: 'Lecture',

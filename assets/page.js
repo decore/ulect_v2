@@ -709,8 +709,6 @@
             SlidesView.prototype.events = { 'click .slide': '_onSlideClicked' };
             SlidesView.prototype.initialize = function () {
                 this.timeline = this.model.get('timeline');
-                this.slideshare = this.model.get('slideshareUrl');
-                console.debug(this.slideshare);
                 this.listenTo(this.timeline, 'change:slide', this._onSlideChanged);
                 return $(window).resize(_.debounce(this.updateSize, 300));
             };
@@ -932,19 +930,16 @@
                 return SlidView.__super__.constructor.apply(this, arguments);
             }
             SlidView.prototype.initialize = function () {
-                console.debug('SlidView init');
                 _.bindAll(this, 'render', '_onSlideChanged');
-                console.debug('asdf!!!  :)  !!!!asdf', this.model.toJSON());
                 this.model.bind('change', this.render);
             };
             SlidView.prototype.el = $('#pdf-container');
-            SlidView.prototype.template = _.template('<iframe src2="<%= slideshareUrl %>?jsapi=true" src="//www.slideshare.net/slideshow/embed_code/<%= slideshareId %>?jsapi=true" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>');
+            SlidView.prototype.template = _.template('<iframe src="//www.slideshare.net/slideshow/embed_code/<%= slideshareId %>?jsapi=true" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" > </iframe>');
             SlidView.prototype.render = function () {
                 $(this.el).html(this.template(this.model.toJSON()));
                 return this;
             };
             SlidView.prototype._onSlideChanged = function (slide) {
-                console.debug('!!!!_onSlideChanged', slide, this.$el.find('iframe'));
                 this.$el.find('iframe')[0].contentWindow.postMessage('jumpTo_' + slide.page, '*');
             };
             return SlidView;
@@ -959,10 +954,9 @@
                 this.sliderView = new SlidView({ model: this.model });
                 this.sliderShareView = new SliderShareView($('#pdf-container'));
                 this.listenTo(this.model, 'sync', this._onModelLoaded);
-                this.listenTo(this.model, 'error', function () {
+                return this.listenTo(this.model, 'error', function () {
                     return log('model error:', arguments);
                 });
-                return console.debug('@listenTo', this.listenTo);
             };
             LectureView.prototype._onModelLoaded = function () {
                 log('model loaded:', this.model.attributes);

@@ -13,17 +13,12 @@ module.exports = {
         },
         author: {
             type: "string",
-            required: true,
+            //required: true
         },
         videoId: {
             type: "string",
             required: true
-        },
-        slideId: {
-            type: "string",
-            defaultsTo: "42152411",
-            required: true
-        },
+        }, 
         slideshareId: {//TODO: discouse name
             type: "string",
             defaultsTo: "42152411"
