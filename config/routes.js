@@ -65,8 +65,7 @@ module.exports.routes = {
         action: 'lectures_play',
         locals: {layout: 'layouts/layout_pages'}
     },
-    'get /users': 'HomeController.index',
-    'get /lectures/add': 'LecturesController.getLecture',
+    'get /users': 'HomeController.index', 
 
             /***************************************************************************
              *                                                                          *
