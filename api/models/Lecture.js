@@ -7,25 +7,36 @@
 
 module.exports = {
     attributes: {
+        title: {
+            type: "string",
+            required: true,
+        },
         author: {
             type: "string",
+            required: true,
         },
-        slideshareId: {
+        videoId: {
+            type: "string",
+            required: true
+        },
+        slideId: {
+            type: "string",
+            defaultsTo: "42152411",
+            required: true
+        },
+        slideshareId: {//TODO: discouse name
             type: "string",
             defaultsTo: "42152411"
-        },        
+        },
         slideshareUrl: {
             type: "string",
             defaultsTo: "//www.slideshare.net/slideshow/embed_code/42152411"
-        },
-        slideId: {
-            type: "string"
         },
         slides: {
             type: "array"
         }
         ,
-        course:{ 
+        course: {
             model: 'Course',
             //required: true,
             //defaultsTo: 0
