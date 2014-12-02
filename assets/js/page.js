@@ -15,7 +15,6 @@
     define('lecture', ['backbone'], function (Backbone) {
         var Lecture, lectureId;
         lectureId = window.lectureId;
-        console.log(lectureId);
         return Lecture = function (_super) {
             __extends(Lecture, _super);
             function Lecture() {
@@ -350,7 +349,6 @@
             function SliderShareView($el) {
                 this.$el = $el;
                 this._renderPage = __bind(this._renderPage, this);
-                this._onPDFReady = __bind(this._onPDFReady, this);
                 this.load = __bind(this.load, this);
                 this.ready = false;
                 this.iframe = $el.find('iframe')[0];
@@ -361,25 +359,7 @@
             };
             SliderShareView.prototype.load = function (url) {
                 this.url = url;
-                console.debug('ser slaid share url', this.url);
                 return this.ready = true;
-            };
-            SliderShareView.prototype._onPDFReady = function (pdfDoc) {
-                this.pdfDoc = pdfDoc;
-                this.ready = true;
-                if (this.pageNum == null) {
-                    return this.displayPage(1);
-                }
-            };
-            SliderShareView.prototype.displayPage = function (pageNum) {
-                if (this.pageNum === pageNum) {
-                    return;
-                }
-                this.pageNum = pageNum;
-                if (!this.ready) {
-                    return;
-                }
-                return this.pdfDoc.getPage(pageNum).then(this._renderPage);
             };
             SliderShareView.prototype._renderPage = function (page) {
                 var scale, scaleX, scaleY, viewport;
@@ -727,8 +707,6 @@
             SlidesView.prototype.events = { 'click .slide': '_onSlideClicked' };
             SlidesView.prototype.initialize = function () {
                 this.timeline = this.model.get('timeline');
-                this.slideshare = this.model.get('slideshare');
-                console.debug(this.slideshare);
                 this.listenTo(this.timeline, 'change:slide', this._onSlideChanged);
                 return $(window).resize(_.debounce(this.updateSize, 300));
             };
@@ -743,7 +721,7 @@
                 maxTimeLabelW = 0;
                 for (_i = 0, _len = slides.length; _i < _len; _i++) {
                     slide = slides[_i];
-                    html = '<a title="' + slide.title + '" href="javascript:void(0);" class2="slide" class="col-sm-3" data-index="' + slide.index + '"><span class="time">' + slide.getTimeString() + '</span>' + slide.title + '</div>';
+                    html = '<a title="' + slide.title + '" href="javascript:void(0);" class="slide col-xs-12 col-sm-12 col-lg-12" data-index="' + slide.index + '"><span class="time">' + slide.getTimeString() + '</span>' + slide.title + '</div>';
                     $slide = $(html);
                     $slides[slide.index] = $slide;
                     this.$el.append($slide);
@@ -763,7 +741,7 @@
             };
             SlidesView.prototype.updateSize = function () {
                 var $colTimeLabels, $slide, $timeLabels, colLeft, h, i, l, maxColTimeLabelW, timeLabelsWidths, updateColTimeLabels, w, _i, _len, _ref;
-                h = $(window).height() - this.$el.offset().top - 5;
+                h = $(window).height() - this.$el.offset().top - 5 - 60;
                 this.$el.height(Math.max(0, h));
                 $timeLabels = this.$timeLabels;
                 timeLabelsWidths = this.timeLabelsWidths;
@@ -950,19 +928,16 @@
                 return SlidView.__super__.constructor.apply(this, arguments);
             }
             SlidView.prototype.initialize = function () {
-                console.debug('SlidView init');
                 _.bindAll(this, 'render', '_onSlideChanged');
-                console.debug('asdf!!!  :)  !!!!asdf', this.model.toJSON());
                 this.model.bind('change', this.render);
             };
             SlidView.prototype.el = $('#pdf-container');
-            SlidView.prototype.template = _.template('<iframe src="<%= slideshareUrl %>?jsapi=true" src3="//www.slideshare.net/slideshow/embed_code/42038461?jsapi=true" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>');
+            SlidView.prototype.template = _.template('<iframe src="//www.slideshare.net/slideshow/embed_code/<%= slideshareId %>?jsapi=true" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" > </iframe>');
             SlidView.prototype.render = function () {
                 $(this.el).html(this.template(this.model.toJSON()));
                 return this;
             };
             SlidView.prototype._onSlideChanged = function (slide) {
-                console.debug('!!!!_onSlideChanged', slide, this.$el.find('iframe'));
                 this.$el.find('iframe')[0].contentWindow.postMessage('jumpTo_' + slide.page, '*');
             };
             return SlidView;
@@ -977,10 +952,9 @@
                 this.sliderView = new SlidView({ model: this.model });
                 this.sliderShareView = new SliderShareView($('#pdf-container'));
                 this.listenTo(this.model, 'sync', this._onModelLoaded);
-                this.listenTo(this.model, 'error', function () {
+                return this.listenTo(this.model, 'error', function () {
                     return log('model error:', arguments);
                 });
-                return console.debug('@listenTo', this.listenTo);
             };
             LectureView.prototype._onModelLoaded = function () {
                 log('model loaded:', this.model.attributes);
@@ -1031,7 +1005,7 @@
                 this.slider.render();
                 this.slides.render();
                 this.controls.render();
-                this.sliderShareView.load(this.model.get('slideshareUrl'));
+                this.sliderShareView.load(this.model);
                 this.listenTo(this.timeline, 'change:slide', this._onSlideChanged);
                 this.listenTo(this.player, 'sync', this._onPlayerSync);
                 this.listenTo(this.slider, 'change', function (p) {
@@ -1069,13 +1043,18 @@
                     storeVol(vol);
                     return this.player.volume(vol);
                 });
-                return showUI = function () {
+                showUI = function () {
                     log('actually showing UI');
                     return $('#loading').hide();
                 };
+                this.sliderShareView.once('rendered', function () {
+                    alert('');
+                    log('sliderShareView rendered, showing UI after delay');
+                    return setTimeout(showUI, 100);
+                });
+                setTimeout(showUI, 100);
             };
             LectureView.prototype._onSlideChanged = function (slide, isJump) {
-                console.debug('lecture-view:_onSlideChanged', slide, isJump);
                 this.sliderView._onSlideChanged(slide);
                 this.slider.setPosition(slide.timePercent);
                 if (isJump) {

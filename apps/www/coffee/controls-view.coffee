@@ -33,9 +33,7 @@ define [ 'jquery', 'backbone', 'log' ], ($, Backbone, log) ->
         @$playPause.removeClass 'icon-pause'##TODO:delete
         @$playPause.addClass 'fa-play'
         @$playPause.addClass 'icon-play'##TODO:delete
-
-
-
+ 
     setTimeString: (ts) ->
       return if ts is @ts
       @$time.html ts

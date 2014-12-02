@@ -17,29 +17,29 @@ define [
     Timeline
     SliderShareView#NOTE: change PDFView
     VideoPlayer, BaseSlider, Slider, SlidesView, ControlsView, log) ->
+
+    ###
+    Slide shaer view
+    ###
     class SlidView extends Backbone.View
         initialize: ->
             #@listenTo @model, 'sync', @_onModelLoaded
-            console.debug 'SlidView init'
             _.bindAll @, 'render','_onSlideChanged'
-
-            #@timeline = @model.get 'timeline'
-            console.debug 'asdf!!!  :)  !!!!asdf',@model.toJSON()
             @.model.bind 'change', @render
             #@.model.bind 'change:slide', @_onSlideChanged
             return
         el: $("#pdf-container")
-        template: _.template '<iframe src="<%= slideshareUrl %>?jsapi=true" src3="//www.slideshare.net/slideshow/embed_code/42038461?jsapi=true" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>'
+        template: _.template '<iframe src="//www.slideshare.net/slideshow/embed_code/<%= slideshareId %>?jsapi=true" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" > </iframe>'
 
         render: ->
             $(@el).html @.template(@.model.toJSON())
             #@listenTo @timeline, 'change:slide', @_onSlideChanged
             return @
         _onSlideChanged: (slide) =>
-            console.debug '!!!!_onSlideChanged',slide,(@$el.find 'iframe')
-            #@$currentSlide.html slide.index + 1
             (@$el.find 'iframe')[0].contentWindow.postMessage('jumpTo_'+slide.page,'*') #if !isJump
             return
+
+
     class LectureView extends Backbone.View
 
         initialize: ->
@@ -49,7 +49,7 @@ define [
             @sliderShareView = new SliderShareView $('#pdf-container')
             @listenTo @model, 'sync', @_onModelLoaded
             @listenTo @model, 'error', -> log 'model error:', arguments
-            console.debug '@listenTo', @listenTo
+            #console.debug '@listenTo', @listenTo
         _onModelLoaded: =>
             log 'model loaded:', @model.attributes
             @modelLoaded = yes
@@ -144,9 +144,9 @@ define [
                 log 'actually showing UI'
                 $('#loading').hide()
 
-        #      @pdfView.once 'rendered', ->
-        #        log 'PDF rendered, showing UI after delay'
-        #        setTimeout showUI, 100
+            #      @pdfView.once 'rendered', ->
+            #        log 'PDF rendered, showing UI after delay'
+            #        setTimeout showUI, 100
             @sliderShareView.once 'rendered', ->
                 alert ''
                 log 'sliderShareView rendered, showing UI after delay'
@@ -154,7 +154,7 @@ define [
             setTimeout showUI, 100
             return
         _onSlideChanged: (slide, isJump) ->
-            console.debug "lecture-view:_onSlideChanged", slide, isJump
+            #console.debug "lecture-view:_onSlideChanged", slide, isJump
             #console.debug '#pdf-container iframe', @iframe
             @sliderView._onSlideChanged(slide)
             #$('iframe').get(0).contentWindow.postMessage('jumpTo_'+slide.page,'*') #if !isJump

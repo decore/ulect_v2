@@ -9,10 +9,7 @@ define [ 'underscore', 'backbone',  'log' ], (_, Backbone, log) ->
 
         setMaxHeight: (@maxHeight) -> @$el.height maxHeight
 
-        load: (@url) =>
-            console.debug "ser slaid share url", @url
-            #@iframe.src = "#{@url}?jsapi=true"
-            #$(@iframe).attr('src',"#{@url}?jsapi=true")
+        load: (@url) =>  
             @ready = yes
 
         #  PDFJS.getDocument(url).then @_onPDFReady
@@ -40,7 +37,7 @@ define [ 'underscore', 'backbone',  'log' ], (_, Backbone, log) ->
             #      @canvas.width = viewport.width
             #      @canvas.height = viewport.height
 
-            page.render 
+            page.render
                 canvasContext: @ctx
                 viewport: viewport
             .then do => @trigger 'rendered'

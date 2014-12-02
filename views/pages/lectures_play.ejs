@@ -10,12 +10,12 @@
 <section class="row">
 
     <div class="col-sm-6">
-        <div id="videoplayer-container" class="embed-responsive embed-responsive-4by3">
+        <div id="videoplayer-container" class="embed-responsive embed-responsive-16by9">
             <div id="videoplayer"></div>
         </div>
     </div>
     <div class="col-sm-6">
-        <div id="pdf-container" class="embed-responsive embed-responsive-4by3">
+        <div id="pdf-container" class="embed-responsive embed-responsive-16by9">
             <!--       <iframe src="//www.slideshare.net/slideshow/embed_code/41957874?jsapi=true" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>-->
             <div id="pdf-canvas"></div>
             <!--        <canvas id="pdf-canvas"></canvas>-->
@@ -69,7 +69,7 @@
 <script type="text/javascript">
     var lectureId = <%= lecture.id %>
             function onYouTubeIframeAPIReady() {
-                require(['page'], function (page) {
+                require(['js/page'], function (page) {
                     page.onYouTubeReady();
                 });
             }

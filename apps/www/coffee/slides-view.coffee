@@ -6,9 +6,7 @@ define [ 'underscore', 'jquery', 'backbone', 'log' ], (_, $, Backbone, log) ->
       'click .slide': '_onSlideClicked'
 
     initialize: ->
-      @timeline = @model.get 'timeline'
-      @slideshare = @model.get 'slideshareUrl' ##NOTE: url to slideshareslideshareUrl
-      console.debug @slideshare
+      @timeline = @model.get 'timeline' 
       @listenTo @timeline, 'change:slide', @_onSlideChanged
       $(window).resize _.debounce @updateSize, 300
 

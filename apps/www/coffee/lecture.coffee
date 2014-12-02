@@ -1,9 +1,6 @@
 define [ 'backbone' ], (Backbone) ->
   lectureId = window.lectureId
-  console.log lectureId
-  class Lecture extends Backbone.Model
-    #initialize: (@id)->
-    #    console.log @id
+  class Lecture extends Backbone.Model 
 
     @baseUrl: '/api/v1/'
 
