@@ -67,9 +67,9 @@
     </div>    
 </section>-->
 <script type="text/javascript">
-    var lectureId = <%= lecture.id %>
+    var lectureId = <%= lecture.id %>;
             function onYouTubeIframeAPIReady() {
-                require(['js/page'], function (page) {
+                require(['page'], function (page) {
                     page.onYouTubeReady();
                 });
             }
