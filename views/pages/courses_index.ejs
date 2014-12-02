@@ -3,7 +3,7 @@
 <ul class="list-group">
     <% courses.forEach(function(item){%>
     <% if (item.name != 'Все'){ %>
-    <li  class="list-group-item"><a href="/courses/<%= item.name %>"> <%= item.name %></a>
+    <li  class="list-group-item"><a href="/courses/<%= item.name %>?slideshareId=<%= item.slideshareId %>"> <%= item.name %></a>
         <!--        <span class="badge"> <%= item.lectures %> лекций </span>-->
     </li>
     <% }%>

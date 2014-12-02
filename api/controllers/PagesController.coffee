@@ -108,14 +108,13 @@ PagesController = {
                 ,
                     slideshareId: req.param("slideshareId")
                 ,
-                    title: req.param("slug")
+                    title: if (req.param("videoId")or req.param("slideshareId")) then  null else req.param("slug")
                 ]
 
         Lecture.findOne(_criteria).exec(
             (err,entity)->
                 if err
                     return res.serverError()
-                #console.log entity
                 res.view(
                     title: 'Лекция'
                     navItems: navItems

@@ -8,7 +8,7 @@
 <ul class="list-group">
     <% course.lectures.forEach(function(item){%>
    
-    <li  class="list-group-item"><a href="/lectures/<%= item.title %>"> <%= item.title %></a> <span class="badge"> <%= item.slides.length %> слайд(ов) </span></li>
+    <li  class="list-group-item"><a href="/lectures/<%= item.title %>?slideshareId=<%= item.slideshareId %>"> <%= item.title %></a> <span class="badge"> <%= item.slides.length %> слайд(ов) </span></li>
    
     <% });%>
 </ul>  
