@@ -17,6 +17,17 @@ LecturesController = {
             locales: sails.config.i18n.locales
         )
     ###
+    POST API
+    ###
+    saveLecture:(req, res)->
+        _params = req.params.all()
+
+        #Lecture.create _params
+        return res.json req.params.all()
+
+
+    ###
+    Migrate
     ###
     migrate: (req,res)->
         #dataMigrateCourses

@@ -66,7 +66,7 @@ module.exports.routes = {
         locals: {layout: 'layouts/layout_pages'}
     },
     'get /users': 'HomeController.index',
-    'get /lectures/add': 'LecturesController.getLecture'
+    'get /lectures/add': 'LecturesController.getLecture',
 
             /***************************************************************************
              *                                                                          *
@@ -77,5 +77,8 @@ module.exports.routes = {
              * for configuration options and examples.                                  *
              *                                                                          *
              ***************************************************************************/
-
+    'post /api/v1/lectures':{
+        controller: 'LecturesController',
+        action: 'saveLecture'
+    }        
 };
