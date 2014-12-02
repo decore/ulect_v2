@@ -19,22 +19,16 @@ module.exports = {
             type: "string",
             required: true
         }, 
-        slideshareId: {//TODO: discouse name
+        slideshareId: { 
             type: "string",
             defaultsTo: "42152411"
-        },
-        slideshareUrl: {
-            type: "string",
-            defaultsTo: "//www.slideshare.net/slideshow/embed_code/42152411"
-        },
+        }, 
         slides: {
             type: "array"
         }
         ,
         course: {
-            model: 'Course',
-            //required: true,
-            //defaultsTo: 0
+            model: 'Course' 
         }
     }
 };
