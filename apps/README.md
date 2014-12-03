@@ -1,3 +1,11 @@
-#Apps - application used a REST API from this server 
+#Скрипты - приложения для сайта ulect.ru
 
-## SPI for native client pages
+## Подготовка к работе
+
+> выполнить в директории /apps установку  npm пакетов
+    
+    $npm install
+
+> запустить сборщик файлов-модулей из coffeescript и javascript и перемещение файла в директорию assets
+
+    $gulp

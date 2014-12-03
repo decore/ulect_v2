@@ -39,8 +39,7 @@
   "description": "a Sails application",
   "keywords": [],
   "scripts": {
-    "start": "node app.js",
-    "debug": "node debug app.js"
+    "start": "webpack --config ./apps/www/webpack.config.js & node server.js"
   },
   "main": "app.js",
   "repository": {
@@ -49,13 +48,15 @@
   },
   "author": "anonymous node/sails user",
   "license": "",
-  "devDependencies": { 
+  "devDependencies": {
     "coffee-script": "^1.8.0",
     "gulp": "^3.8.10",
     "requirejs": "^2.1.15",
     "gulp-requirejs": "^0.1.3",
     "amd-optimize": "^0.3.1",
     "gulp-coffee": "^2.2.0",
-    "gulp-concat": "^2.4.2"
+    "gulp-concat": "^2.4.2",
+    "coffee-loader": "^0.7.2",
+    "sass-loader": "^0.3.1"
   }
 }
