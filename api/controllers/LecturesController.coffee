@@ -21,9 +21,12 @@ LecturesController = {
     ###
     saveLecture:(req, res)->
         _params = req.params.all()
+
+        console.log '_params = ', _params
         ##NOTE: hack for addon
         if !!_params['lecture']
             _params = JSON.parse(_params['lecture'])
+
         Lecture.create( _params, (err, data)->
             if err
                 res.status 406
