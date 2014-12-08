@@ -25,13 +25,14 @@ LecturesController = {
         console.log '_params = ', _params
         ##NOTE: hack for addon
         if !!_params['lecture']
-            _params = JSON.parse(_params['lecture'])
-
-        Lecture.create( _params, (err, data)->
+            _params_save = JSON.parse(_params['lecture'])
+        else
+            _params_save = _params
+        Lecture.create( _params_save, (err, data)->
             if err
                 res.status 406
                 console.log 'err', _params, err
-                return res.json err
+                return res.json err:err , params: _params
             if !data
                 res.status 418
                 return res.json params: _params
