@@ -31,8 +31,9 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
-    '/': 'PagesController.index',
+    '/': 'PagesController.chatroom',
     '/home': 'PagesController.index',
+    '/chatroom': 'PagesController.chatroom',
     /***************************************************************************
      *                                                                          *
      * Custom routes here...                                                    *

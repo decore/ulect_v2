@@ -1,0 +1,47 @@
+{
+  "name": "spa_angular_sails",
+  "version": "0.0.0",
+  "authors": [
+    "Nikolay Gerzhan <nikolay.gerzhan@gmail.com>"
+  ],
+  "main": "bootstarp.js",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "js/vendors",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "requirejs": "~2.1.15",
+    "require-cs": "~0.5.0",
+    "requirejs-text": "~2.0.12",
+    "requirejs-tpl": "*", 
+    "domReady": "~2.0.1",
+    "r.js": "~2.1.15",
+    "angular-bootstrap": "~0.10.0",
+    "angular": "~1.2.26",
+    "angular-resource": "~1.2.26",
+    "angular-sanitize": "~1.2.26",
+    "angular-animate": "~1.2.26",
+    "angular-ui-router": "*",
+    "bootstrap": "~3.1.1",
+    "font-awesome": "*",
+    "jquery": ">=1.9.0", 
+    "lodash": "*",  
+    "ng-table": "~0.3.3",
+    "angularjs-toaster": "~0.4.8",
+    "angular-translate": "~2.4.2",
+    "angular-dialog-service": "~5.2.5", 
+    "angular-sails": "~1.0.4",
+    "angularSails": "~0.10.0-pre",
+    "sails.io.js": "~0.10.3",
+    "angular-socket-io": "*"     
+  }
+}

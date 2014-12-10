@@ -1,0 +1,19 @@
+<!-- chatroom --> 
+<style>
+    #page_chatroom {
+        height: 100%;
+    }
+    #page_chatroom > div{
+        height: 100%;
+        overflow-y: auto;
+    }
+</style>
+<div id="page_chatroom" class="container-fluid" ui-view ng-include="'templates/chatroom/index.tpl.html'"  style="position: absolute;
+     width: 100%;
+     height: 100%;
+     padding-top: 60px;
+     padding-bottom: 164px;
+     overflow-y: auto;">
+    <div class="label label-warning"><i class="fa fa-spinner"> </i> Loading...</div>
+</div>
+
