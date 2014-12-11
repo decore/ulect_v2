@@ -48,6 +48,19 @@ module.exports.routes = {
         action: 'migrate',
         locals: {layout: 'layout'}
     },
+    /***
+     * API routes
+     * 
+     */
+    /**
+     * Operators 
+     */
+    'get /api/v1/operators': {
+        controller: 'OperatorsController',
+        action: 'find',
+        locals: {layout: 'layout'}
+    },
+    
     // calback for send messages
     'post /api/v1/messages': {
         controller: 'MessagesController',
@@ -55,12 +68,18 @@ module.exports.routes = {
         locals: {layout: 'layout'}
         //TODO: add API keys controll 
     },
-        // calback for send messages
+    // calback for send messages
     'post /api/v1/messages/status': {
         controller: 'MessagesController',
         action: 'statusMessage',
         locals: {layout: 'layout'}
         //TODO: add API keys controll 
     },
-    
+    // messages from client
+    'post /api/v1/messages/client': {
+        controller: 'MessagesController',
+        action: 'clientMessage',
+        locals: {layout: 'layout'}
+        //TODO: add API keys controll 
+    },
 };

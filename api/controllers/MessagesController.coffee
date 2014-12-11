@@ -62,4 +62,9 @@ module.exports = {
                 )
 
         )
+    ## client messages registration
+    clientMessage: (req,res)->
+        _params = rq.params.all()
+        console.log 'client messages',_params
+        return res.json req.params.all()
 }
