@@ -39,8 +39,12 @@
 //            };
 //            console.warn = function () {
 //            };
-//            var user = <% - JSON.stringify(user) %> ;
-//                    console.log(user);
+        <% if( user!='undefine'){ %>
+            var user = <%- JSON.stringify(user) %> ; 
+        <% }else{%>     
+            var user = {} ;
+        <% } %>     
+            console.log('init user',user);
             window.name = 'NG_DEFER_BOOTSTRAP!'; //SEE: https://docs.angularjs.org/guide/bootstrap
             var ng_spa_name = '<%= ng_spa_name %>';
 
