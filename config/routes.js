@@ -43,5 +43,24 @@ module.exports.routes = {
      * for configuration options and examples.                                  *
      *                                                                          *
      ***************************************************************************/
-
+    'get /messages/migrate': {
+        controller: 'MessagesController',
+        action: 'migrate',
+        locals: {layout: 'layout'}
+    },
+    // calback for send messages
+    'post /api/v1/messages': {
+        controller: 'MessagesController',
+        action: 'newMessage',
+        locals: {layout: 'layout'}
+        //TODO: add API keys controll 
+    },
+        // calback for send messages
+    'post /api/v1/messages/status': {
+        controller: 'MessagesController',
+        action: 'statusMessage',
+        locals: {layout: 'layout'}
+        //TODO: add API keys controll 
+    },
+    
 };
