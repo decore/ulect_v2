@@ -2,7 +2,7 @@
 Main Entety for work
 ###
 define [],->
-    Entity_API_Url = "/api/v1/operator/chatroom"
+    Entity_API_Url = "/api/v1/messages"
     RefEntity_N1_API_Url = "/api/v1/fastanswers" ##TODO: change
     EntityClass = ($resource,$http, ngTableParams)->
         APIService = new $resource "#{Entity_API_Url}/:chatroom/:action/:id", id:"@id",
@@ -16,7 +16,17 @@ define [],->
                 params:
                     action: "message"
                     chatroom: "@chatroom"
-
+        APIService = new $resource "#{Entity_API_Url}/:chatroom/:action/:id", id:"@id",
+            'query':
+                method:'GET'
+                isArray:true
+            'update':
+                method: 'PUT'
+            'delete':
+                method: 'DELETE'
+                params:
+                    action: "message"
+                    chatroom: "@chatroom"
         ## Table Params
         _tableParams  = new ngTableParams
             page: 1
@@ -62,6 +72,8 @@ define [],->
             tableParams: _tableParams
             getEntity: (_id)->
                 return APIService.get(id:_id)
+            query: (_options=null)->
+                return APIService.query(_options)
             saveEntity: (data  = null)->
                 console.log data
                 if data.id

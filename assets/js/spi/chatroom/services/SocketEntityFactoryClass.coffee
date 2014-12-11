@@ -6,7 +6,7 @@ define ['sails.io'],->
                 return _.contains(values, item[property])
     )
 
-    Entity_API_Url = "/api/v1/operator/chatroom"
+    Entity_API_Url = "/api/v1/messages"
 
     SocketEntityFactoryClass = ($sailsSocket,$http)->
         _dataList = []
@@ -50,7 +50,7 @@ define ['sails.io'],->
             )
         #_loadMessages()
         _sendMessage = (roomId,msg)->
-            return $http.post(Entity_API_Url+'/'+roomId+'/message', text:msg).then(
+            return $http.post(Entity_API_Url, body:msg).then(
                 (data)->
                     console.log 'data send ok', data
                 (reason)->

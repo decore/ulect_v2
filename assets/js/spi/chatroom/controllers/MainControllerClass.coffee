@@ -2,11 +2,15 @@ define ['cs!./../namespaces'],(namespaces)->
     ClassController = ($scope,EntityFactory,SocketEntityFactory, DialogService)->
 
 
-        SocketEntityFactory.load()
-        EntityFactory.getRefEntity_N1().$promise.then(
+        #SocketEntityFactory.load()
+        EntityFactory.query().$promise.then(
             (data)->
-               $scope.fastanswersList = data
+                $scope.fastanswersList = data
         )
+        #        EntityFactory.getRefEntity_N1().$promise.then(
+        #            (data)->
+        #               $scope.fastanswersList = data
+        #        )
         $scope.entitiesList= SocketEntityFactory.data
         $scope.tableParams = EntityFactory.tableParams
         $scope.currentChatRoom = []
