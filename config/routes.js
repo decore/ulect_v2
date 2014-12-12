@@ -60,7 +60,6 @@ module.exports.routes = {
         action: 'find',
         locals: {layout: 'layout'}
     },
-    
     // calback for send messages
     'post /api/v1/messages': {
         controller: 'MessagesController',
@@ -82,4 +81,12 @@ module.exports.routes = {
         locals: {layout: 'layout'}
         //TODO: add API keys controll 
     },
+    // save fatal error send as messages
+    'post /api/v1/messages/client/fallback': {
+        controller: 'FallbackMessageController',
+        action: 'create',
+        locals: {layout: 'layout'}
+        //TODO: add API keys controll 
+    }
+
 };
