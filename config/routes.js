@@ -60,7 +60,7 @@ module.exports.routes = {
         action: 'find',
         locals: {layout: 'layout'}
     },
-    // calback for send messages
+    //  send messages
     'post /api/v1/messages': {
         controller: 'MessagesController',
         action: 'newMessage',

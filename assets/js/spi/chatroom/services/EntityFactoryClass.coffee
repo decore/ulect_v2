@@ -4,6 +4,7 @@ Main Entety for work
 define [],->
     Entity_API_Url = "/api/v1/messages"
     RefEntity_N1_API_Url = "/api/v1/fastanswers" ##TODO: change
+
     EntityClass = ($resource,$http, ngTableParams)->
         APIService = new $resource "#{Entity_API_Url}/:chatroom/:action/:id", id:"@id",
             'query':
@@ -81,10 +82,7 @@ define [],->
                 else
                     _action = 'save'
                 return  APIService[_action] data
-                #else
-                #    return  APIService.save data
-            #            saveEntity: (data  = null)->
-            #                console.log data
-            #                return  APIService.save data
+            getConversation : $http('/api/v1/conversations').get
+
         }
     return ['$resource','$http','ngTableParams',EntityClass]

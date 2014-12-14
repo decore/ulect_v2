@@ -25,7 +25,8 @@ exports.sendSMS =  (options,cb)->
         console.log 'TwilioSrvice:sendSMS(',options,')'
         if options.body
             ##NOTE: hook for debug
-            options.to = '+79832877503'#'+79504328892'#
+            #options.to = '+79832877503'#'+79504328892'#
+            console.log 'sms for client ', options.to
         else
             error = message: "is EMPTY message"
             cb(error,null)
