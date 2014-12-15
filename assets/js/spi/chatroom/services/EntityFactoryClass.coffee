@@ -55,21 +55,12 @@ define [],->
                     )
                 #$scope: $scope.$new()
 
-        _resource = new $resource "#{RefEntity_N1_API_Url}/:id", id:"@id",
-            'query':
-                method:'GET'
-                isArray:true
+        #        _resource = new $resource "#{RefEntity_N1_API_Url}/:id", id:"@id",
+        #            'query':
+        #                method:'GET'
+        #                isArray:true
 
-        _refEntity_N1 = _resource.query(
-            (data)->
-                _refEntity_N1.length = 0
-                _refEntity_N1 = data
-                console.log _refEntity_N1
-                return
-        )
         return {
-            getRefEntity_N1: ->
-                return _resource.query()
             tableParams: _tableParams
             getEntity: (_id)->
                 return APIService.get(id:_id)

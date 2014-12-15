@@ -39,7 +39,7 @@
 //            };
 //            console.warn = function () {
 //            };
-        <% if( user!='undefine'){ %>
+        <% if( user!='undefine' && !!user){ %>
             var user = <%- JSON.stringify(user) %> ; 
         <% }else{%>     
             var user = {} ;

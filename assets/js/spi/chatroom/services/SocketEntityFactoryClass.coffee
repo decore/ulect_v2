@@ -44,7 +44,7 @@ define ['sails.io'],->
         _loadMessages = ()->
             return $sailsSocket.get(Entity_API_Url).then( (res)->
                 _dataList.length = 0
-                console.log res.data.chatrooms
+
                 angular.forEach(res.data.chatrooms,(item)->
                     item.msgs = _.sortBy item.msgs, 'createdAt'
                     _dataList.push(item)
@@ -67,7 +67,7 @@ define ['sails.io'],->
 
         return {
             data: _dataList
-            load: _loadMessages
+            #load: _loadMessages
             sendData: _sendMessage
         }
     return ['$sailsSocket','$http',SocketEntityFactoryClass]
