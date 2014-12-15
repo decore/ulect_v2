@@ -31,8 +31,9 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
-    '/': 'PagesController.auth',
+    '/': 'PagesController.index',
     '/home': 'PagesController.index',
+    'get /login':  'PagesController.index',
     '/chatroom': 'PagesController.chatroom',
     /***************************************************************************
      *                                                                          *
@@ -43,10 +44,10 @@ module.exports.routes = {
      * for configuration options and examples.                                  *
      *                                                                          *
      ***************************************************************************/
-    'post /login': 'AuthController.authenticate',
-    'get /login': 'AuthController.login',
+     
+    // 'get /login': 'AuthController.login',
     'get /logout': 'AuthController.logout',
-    'get /user/create':'AuthController.register'
+    'get /user/create':'AuthController.register',
     'get /messages/migrate': {
         controller: 'MessagesController',
         action: 'migrate',
@@ -91,6 +92,9 @@ module.exports.routes = {
         action: 'create',
         locals: {layout: 'layout'}
         //TODO: add API keys controll 
-    }
-
+    },
+    /***
+     * Auth API
+     */
+    'POST /api/v1/auth/authenticate': 'AuthController.authenticate'
 };

@@ -26,9 +26,10 @@
             }
             #pages_body{
                 height: 100%;
+                z-index: -100;
             }
         </style>
-        <div class="container-fluid" id="pages_body">
+        <div class="container-fluid" id="pages_body" ui-view>
             <%- body %>
         </div>
         <% include ./../parts/footer %>
@@ -55,7 +56,7 @@
                 //This callback is optional.
                 config.urlArgs = 'bust=v0.0.0.'+(new Date()).getDay();//+Math.random(); // установка версии для кэшеривания
                 config.baseUrl = '/js/spi';//'/src/';
-                config.paths['app'] = ng_spa_name;
+                config.paths['page'] = ng_spa_name;
                 window.require.config(config);// update global require config
                 window.require.config({
                     locale: window.localStorage.getItem("locale") || (typeof (vhistory) !== "undefined" ? app.language : navigator.language)

@@ -43,7 +43,7 @@ module.exports = {
             message: "logoutSuccessful"
 
         return
-
+    ## API call
     authenticate :(req, res) ->
         email = req.param("email")
         password = req.param("password")
@@ -71,10 +71,9 @@ module.exports = {
                         token: sailsTokenAuth.issueToken(sid: user.id)
 
                 return
-
             return
-
         return
+    ## API call
     register : (req, res) ->
         console.log _params = req.params.all()
 
@@ -86,6 +85,7 @@ module.exports = {
         User.create(
             email: _params.email
             password: _params.password
+            
         ).exec (err, user) ->
             if err
                 res.json err.status,

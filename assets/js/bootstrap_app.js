@@ -2,9 +2,10 @@
  * bootstraps angular onto the window.document node
  * 
  */
-define(['domReady!', 'angular', 'app', 'angularjs-toaster', 'angular-resource', 'sails.io'], function (document, ng, app) {
+define(['domReady!', 'angular', 'core','page', 'angularjs-toaster', 'angular-resource' ], function (document, ng, core, page) {
     'use strict';
-    var app_init = ng.module('spaApp', [app['name'], 'ngAnimate', 'toaster', 'ngResource', 'sails.io']); 
+    console.log(core["name"]);
+    var app_init = ng.module('spaApp', [core["name"],page['name'], 'toaster' ]); 
     app_init.factory('NotificationService', [
         'toaster', function (toaster) {
             return {
@@ -106,9 +107,8 @@ define(['domReady!', 'angular', 'app', 'angularjs-toaster', 'angular-resource', 
                 }
             ]);
         }]);
-    app_init.config(['$locationProvider', function ($locationProvider) {
-            $locationProvider.html5Mode(true);
-        }]); 
+    
+   
     /***
      * 
      */

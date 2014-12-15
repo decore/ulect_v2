@@ -16,6 +16,7 @@ define({
         'tpl':'../../vendors/requirejs-tpl/tpl',
         'angular': '../../vendors/angular/angular', //"https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min",
         'angular-animate': '../../vendors/angular-animate/angular-animate',
+        "angular-messages":'../../vendors/angular-messages/angular-messages',
         //'angular': '//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular',
         'angular-resource': '../../vendors/angular-resource/angular-resource',
         'angular-sails': '../../vendors/angular-sails/dist/angular-sails',
@@ -54,6 +55,9 @@ define({
         'angular-animate': {
             deps: ['angular']
         },
+        "angular-messages": {
+            deps: ['angular']
+        },       
         'angular-sails': {
             deps: ['sails.io', 'angular']
         },
@@ -114,6 +118,6 @@ define({
             deps: ['angular', 'sails.io']
         }, 
     }
-   ,deps:[ 'sails.io','ngsails.io', 'angular-bootstrap','angular-ui-router','angular-animate' ]//http://www.startersquad.com/angularjs-requirejs/
+   ,deps:[ 'sails.io','ngsails.io', 'angular-bootstrap','angular-ui-router','angular-animate', 'angular-sails' ,"angular-messages"]//http://www.startersquad.com/angularjs-requirejs/
 });
 
