@@ -42,5 +42,8 @@ module.exports.routes = {
      * for configuration options and examples.                                  *
      *                                                                          *
      ***************************************************************************/
-
+    'post /login': 'AuthController.authenticate',
+    'get /login': 'AuthController.login',
+    'get /logout': 'AuthController.logout',
+    'get /user/create':'AuthController.register'
 };
