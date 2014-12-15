@@ -31,7 +31,7 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
-    '/': 'PagesController.chatroom',
+    '/': 'PagesController.auth',
     '/home': 'PagesController.index',
     '/chatroom': 'PagesController.chatroom',
     /***************************************************************************
@@ -43,6 +43,10 @@ module.exports.routes = {
      * for configuration options and examples.                                  *
      *                                                                          *
      ***************************************************************************/
+    'post /login': 'AuthController.authenticate',
+    'get /login': 'AuthController.login',
+    'get /logout': 'AuthController.logout',
+    'get /user/create':'AuthController.register'
     'get /messages/migrate': {
         controller: 'MessagesController',
         action: 'migrate',
