@@ -9,6 +9,21 @@ define(['cs!./common/index'], function (module) {
             });
 
         }]);
+    
+    module.run(['$rootScope','$location','$window',function($rootScope,$location,$window){
+    // somewhere else
+        $rootScope.$on('$stateNotFound', 
+        function(event, unfoundState, fromState, fromParams){ 
+            console.log(unfoundState.to,unfoundState.to.replace(/\.+/g, "/"));  
+            console.log(unfoundState.toParams);  
+            console.log(unfoundState.options); // {inherit:false} + default options
+            event.preventDefault(); 
+            
+            $window.location = unfoundState.to.replace(/\.+/g, "/");
+           
+        });
+    }]);
+
     module.factory('LocalService', [function () {
             return {
                 get: function (key) {
@@ -46,24 +61,34 @@ define(['cs!./common/index'], function (module) {
         }]);
 
 
-    module.controller('LoginController', function ($scope, $state, Auth) {
+    module.controller('LoginController',[ "$scope", "$state", "Auth", function ($scope, $state, Auth) {
         $scope.errors = [];
 
         $scope.login = function () {
             $scope.errors = [];
             Auth.login($scope.user).success(function (result) {
-                $state.go('user.messages');
+                //$state.go('user.home');
+                $state.go('chatroom');
             }).error(function (err) {
                 $scope.errors.push(err);
             });
         }
-    });
+    }]);
+    
+    module.controller('RegisterController',[ "$scope", "$state", "Auth",function ($scope, $state, Auth) {
+        $scope.register = function () {
+            Auth.register($scope.user).then(function (data) {
+                console.log(data);
+                $state.go('anon.home');
+            });
+        }
+    }]);
     //
     module.constant('AccessLevels', {
         anon: 0,
         user: 1
     });
-  
+
     module.factory('Auth', function ($http, LocalService, AccessLevels) {
         return {
             authorize: function (access) {
@@ -89,7 +114,7 @@ define(['cs!./common/index'], function (module) {
             },
             register: function (formData) {
                 LocalService.unset('auth_token');
-                var register = $http.post('/auth/register', formData);
+                var register = $http.post('/api/v1/auth/register', formData);
                 register.success(function (result) {
                     LocalService.set('auth_token', JSON.stringify(result));
                 });

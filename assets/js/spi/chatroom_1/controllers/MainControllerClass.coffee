@@ -113,7 +113,7 @@ define ['cs!./../namespaces'],(namespaces)->
                 $http.post('/api/v1/conversations/update/'+dailogId, {id:dailogId, isactive: true ; operator: 1}).then(
                     (data)->
                         console.log  data
-                        $scope.currentChatRoom.operator =  data.data.operator #$scope.operatorsList[0]
+                        $scope.currentChatRoom.operator =   data.data.operator #$scope.operatorsList[0]
                 )
                 #                   SocketEntityFactory.sendData(roomId,message).then(
                 #                       (data)->
@@ -127,7 +127,7 @@ define ['cs!./../namespaces'],(namespaces)->
             console.log 'onStartDialog',dailogId
             if $scope.currentChatRoom?
                 ##TODO: make request like RESTfull
-                $http.get(url:'/api/v1/conversations/update/'+dailogId,params:{isactive:false}).then(
+                $http.get( '/api/v1/conversations/update/'+dailogId+"?isactive=false", {id:dailogId, isactive: false }).then(
                     (data)->
                         $scope.currentChatRoom.isactive = false
                         $scope.currentChatRoom = null

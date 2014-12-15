@@ -29,15 +29,30 @@ define _dependencies ,(
 
 )->
 
-    module =  angular.module namespaces.name,[dialogService,'ngTable','ngResource','ui.bootstrap']
-    console.log "Edit_#{namespaces.module.name.replace /\.+/g, "_"}_Controller","Main_#{namespaces.module.name.replace /\.+/g, "_"}_Controller"
-    module.controller "Edit_#{namespaces.module.name.replace /\.+/g, "_"}_Controller", EditEntityControllerClass
-    module.controller "Main_#{namespaces.module.name.replace /\.+/g, "_"}_Controller", MainControllerClass
-
-
+    module =  angular.module namespaces.name,[dialogService,'ngTable','ngResource','ui.bootstrap','sails.io']
+    #    console.log "Edit_#{namespaces.module.name.replace /\.+/g, "_"}_Controller","Main_#{namespaces.module.name.replace /\.+/g, "_"}_Controller"
+    #    module.controller "Edit_#{namespaces.module.name.replace /\.+/g, "_"}_Controller", EditEntityControllerClass
+    #module.controller "Main_#{namespaces.module.name.replace /\.+/g, "_"}_Controller", MainControllerClass
+    #
+    #
     module.factory "#{namespaces.name}EntityFactory", EntityFactoryClass
     module.factory "#{namespaces.name}SocketEntityFactoryClass", SocketEntityFactoryClass
+    module.config ["$stateProvider", "$urlRouterProvider", "AccessLevels", ($stateProvider, $urlRouterProvider, AccessLevels) ->
 
+
+        $stateProvider.state("user",
+            abstract: true
+            template: "<ui-view/>"
+            data:
+                access: AccessLevels.user
+        ).state "user.chatroom",
+            url: "/chatroom"
+            templateUrl:"templates/#{module.name.replace /\.+/g, "/"}/index.tpl.html" # "user/profile.tpl.html"
+            controller:MainControllerClass# "Main_#{namespaces.module.name.replace /\.+/g, "_"}_Controller"#"MessagesController"
+
+        $urlRouterProvider.otherwise "/"
+        return
+    ]
 
     ###
     Directive for autoscroll list of messages

@@ -33,15 +33,15 @@ define _dependencies ,(
             templateUrl: "templates/#{module.name.replace /\.+/g, "/"}/auth/register.tpl.html"#"auth/register.html"
             controller: "RegisterController"
 
-    #        $stateProvider.state("user",
-    #            abstract: true
-    #            template: "<ui-view/>"
-    #            data:
-    #                access: AccessLevels.user
-    #        ).state "user.profile",
-    #            url: "/profile"
-    #            templateUrl: "user/profile.tpl.html"
-    #            controller: "MessagesController"
+        #            $stateProvider.state("user",
+        #                abstract: true
+        #                template: "<ui-view/>"
+        #                data:
+        #                    access: AccessLevels.user
+        #            ).state "user.profile",
+        #                url: "/profile"
+        #                templateUrl: "user/profile.tpl.html"
+        #                controller: "MessagesController"
 
         $urlRouterProvider.otherwise "/"
         return

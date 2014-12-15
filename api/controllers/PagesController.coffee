@@ -8,6 +8,11 @@ module.exports = {
         res.view 'pages/home',
             user: req.user
             ng_spa_name: 'debug'
+    ## SPI 
+    spi: (req,res)->
+        res.view 'pages/home',
+            user: req.user
+            ng_spa_name: 'debug'
     auth: (req,res)->
         res.view 'pages/auth',
             user: req.user

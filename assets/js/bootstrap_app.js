@@ -74,6 +74,7 @@ define(['domReady!', 'angular', 'core','page', 'angularjs-toaster', 'angular-res
                 '$q', '$window', 'NotificationService', function ($q, $window, NotificationService) {
                     return {
                         response: function (response) {
+                            // console.log(response);   
                             if (response.status === 500) {
                                 NotificationService.error("Server error", response.data.message);
                                 
@@ -82,7 +83,7 @@ define(['domReady!', 'angular', 'core','page', 'angularjs-toaster', 'angular-res
                         },
                         responseError: function (rejection) {
                             var _ref, _ref1, _ref2;
-                               
+                            //console.log(rejection);   
                             if (rejection.statusText === "Internal Server Error"){
                                   NotificationService.error("Server error", "Сбой в работе сервера");
                             }
@@ -94,11 +95,14 @@ define(['domReady!', 'angular', 'core','page', 'angularjs-toaster', 'angular-res
                                 if (((_ref1 = rejection.data) != null ? _ref1.error : void 0) != null) {
                                     NotificationService.error("Server error", rejection.data.error);
                                 }
+                                   if (((_ref1 = rejection.data) != null ? _ref1.err : void 0) != null) {
+                                    NotificationService.error("Server error", rejection.data.err.summary);
+                                }
                                 if (((_ref2 = rejection.data) != null ? _ref2.msg : void 0) != null) {
                                     NotificationService.error("Server error", rejection.data.msg);
                                     //$location.path('/login');
                                     //$window.location.reload(); // redirect to login page
-                                    $window.location = '/login/';
+                                    $window.location = '/login';
                                 }
                             }
                             return $q.reject(rejection);

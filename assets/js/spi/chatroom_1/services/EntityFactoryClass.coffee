@@ -73,7 +73,7 @@ define [],->
                 else
                     _action = 'save'
                 return  APIService[_action] data
-            #getConversation : $http('/api/v1/conversations').get
+            getConversation : $http('/api/v1/conversations').get
 
         }
     return ['$resource','$http','ngTableParams',EntityClass]

@@ -13,7 +13,7 @@ Blue color - user replied operator (not initial message) that was not answere
         background-color: blue;
     }
 </style>
-<section class="row-fluid"  ng-init="status = {open:true}; status2 = {open:true}; currentChatRoom = null;"
+<section class="row-fluid"  ng-controller="<%= 'Main_' + namespace + '_Controller' %> as main" ng-init="status = {open:true}; status2 = {open:true}; currentChatRoom = null;"
          style="height: 100%; 
          "> 
     <style>

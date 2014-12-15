@@ -85,14 +85,14 @@ module.exports = {
         User.create(
             email: _params.email
             password: _params.password
-            
+
         ).exec (err, user) ->
             if err
                 res.json err.status,
-                    err: err
-
+                    err: err 
                 return
             if user
+                delete user.password
                 res.json
                     user: user
                     token: sailsTokenAuth.issueToken(sid: user.id)

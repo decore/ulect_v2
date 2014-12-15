@@ -32,8 +32,11 @@ module.exports.routes = {
      ***************************************************************************/
 
     '/': 'PagesController.index',
+
     '/home': 'PagesController.index',
-    'get /login':  'PagesController.index',
+    
+    'get /register': 'PagesController.spi',
+    'get /login':  'PagesController.spi',
     '/chatroom': 'PagesController.chatroom',
     /***************************************************************************
      *                                                                          *
