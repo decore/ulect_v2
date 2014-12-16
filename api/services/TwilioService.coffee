@@ -3,15 +3,19 @@ twilio = require('twilio');
 ##
 config =
     # Account twilio.crosslinksms@gmail.com
-    TWILIO_ACCOUNT_SID: 'AC220dd9ec0df20b77d7cdd306ee34f43a'
-    TWILIO_AUTH_TOKEN :'f702406810816dab63eb2fe7e5001961'
-    TWILIO_NUMBER:'+16505675330'
-    StatusCallback: 'http://73eafd5e.ngrok.com/api/v1/messages/status'
+    #    TWILIO_ACCOUNT_SID: 'AC220dd9ec0df20b77d7cdd306ee34f43a'
+    #    TWILIO_AUTH_TOKEN :'f702406810816dab63eb2fe7e5001961'
+    #    TWILIO_NUMBER:'+16505675330'
+    #    StatusCallback: 'http://73eafd5e.ngrok.com/api/v1/messages/status'
     # TEST Account
-#        TWILIO_ACCOUNT_SID: 'ACf05f511ddc69d343935861aedb799742',
-#        TWILIO_AUTH_TOKEN :'9df8a9b345ded148b21f48e9852ef37e',
-#        TWILIO_NUMBER:'+15005550006'
-
+    #        TWILIO_ACCOUNT_SID: 'ACf05f511ddc69d343935861aedb799742',
+    #        TWILIO_AUTH_TOKEN :'9df8a9b345ded148b21f48e9852ef37e',
+    #        TWILIO_NUMBER:'+15005550006'
+    ## DEMO Settings for deploy in  http://crosslinkmedia.tk:8080 - account Brad
+    TWILIO_ACCOUNT_SID: 'ACc0d344677835c0a303c92d59cfa1b9d8'
+    TWILIO_AUTH_TOKEN :'e6dc7e7cceed05eedf5e644975cab642'
+    TWILIO_NUMBER:'+18303550804'
+    StatusCallback: 'http://crosslinkmedia.tk:8080/api/v1/messages/status'
 # Create a new REST API client to make authenticated requests against the
 #twilio back end
 client = new twilio.RestClient(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)

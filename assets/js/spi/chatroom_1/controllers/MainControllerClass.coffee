@@ -3,7 +3,7 @@ define ['cs!./../namespaces'],(namespaces)->
 
         ##
         $sailsSocket.subscribe 'messages',(msg)->
-            console.log '  get on controller AC220dd9ec0df20b77d7cdd306ee34f43a',msg
+            console.log ' get on controller',msg
             if msg.verb == "create"
                 (_.find($scope.conversationList, id: msg.data.dialog)).msgs.push msg.data
             else

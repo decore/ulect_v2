@@ -31,10 +31,10 @@ define ['sails.io'],->
                     _room.msgs.push msg.data.data
 
         console.warn 'start .subscribe user'
-        $sailsSocket.subscribe 'messages',(msg)->
-            console.log 'is get socket msgs on subscribe AC220dd9ec0df20b77d7cdd306ee34f43a',msg
-
-            return
+        #        $sailsSocket.subscribe 'messages',(msg)->
+        #            console.log 'is get socket msgs on subscribe ',msg
+        #
+        #            return
 
         $sailsSocket.subscribe 'chatrooms',(msg)->
             console.log 'is get socket msgs',msg
