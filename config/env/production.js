@@ -34,5 +34,7 @@ module.exports = {
   // log: {
   //   level: "silent"
   // }
-
+//    MANDRILL_KEY: 'qr94w8FY5Nk4jUrTYcAP9g',
+//    MANDRILL_FROM_NAME: "CrossLinkMedia",
+//    MANDRILL_FROM_EMAIL: 'nikolay.gerzhan@gmail.com'
 };
