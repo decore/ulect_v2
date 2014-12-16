@@ -24,7 +24,10 @@ module.exports.sockets = {
   onConnect: function(session, socket) {
 
     // By default, do nothing.
-
+    
+    sails.sockets.subscribeToFirehose(socket);
+    sails.sockets.join(socket, "AC220dd9ec0df20b77d7cdd306ee34f43a");
+    console.log('on connection ',socket.id, 'join "AC220dd9ec0df20b77d7cdd306ee34f43a"');
   },
 
 

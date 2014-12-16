@@ -32,7 +32,12 @@ module.exports.routes = {
      ***************************************************************************/
 
     '/': 'PagesController.index',
+
     '/home': 'PagesController.index',
+    
+    'get /register': 'PagesController.spi',
+    'get /login':  'PagesController.spi',
+    '/chatroom': 'PagesController.chatroom',
     /***************************************************************************
      *                                                                          *
      * Custom routes here...                                                    *
@@ -42,5 +47,65 @@ module.exports.routes = {
      * for configuration options and examples.                                  *
      *                                                                          *
      ***************************************************************************/
-
+     
+    // 'get /login': 'AuthController.login',
+    'get /logout': 'AuthController.logout',
+    'get /user/create':'AuthController.register',
+    'get /messages/migrate': {
+        controller: 'MessagesController',
+        action: 'migrate',
+        locals: {layout: 'layout'}
+    },
+    /***
+     * API routes
+     * 
+     */
+    /**
+     * Operators 
+     */
+    'get /api/v1/operators': {
+        controller: 'OperatorsController',
+        action: 'find',
+        locals: {layout: 'layout'}
+    },
+    //  send messages
+    'post /api/v1/messages': {
+        controller: 'MessagesController',
+        action: 'newMessage',
+        locals: {layout: 'layout'}
+        //TODO: add API keys controll 
+    },
+    // calback for send messages
+    'post /api/v1/messages/status': {
+        controller: 'MessagesController',
+        action: 'statusMessage',
+        locals: {layout: 'layout'}
+        //TODO: add API keys controll 
+    },
+    // messages from client
+    'post /api/v1/messages/client': {
+        controller: 'MessagesController',
+        action: 'clientMessage',
+        locals: {layout: 'layout'}
+        //TODO: add API keys controll 
+    },
+    // save fatal error send as messages
+    'post /api/v1/messages/client/fallback': {
+        controller: 'FallbackMessageController',
+        action: 'create',
+        locals: {layout: 'layout'}
+        //TODO: add API keys controll 
+    },
+    /***
+     * Auth API
+     */
+    'POST /api/v1/auth/authenticate': 'AuthController.authenticate',
+    'POST /api/v1/auth/logout' : 'AuthController.logout',
+    
+    /**
+     * API Conversations
+     */
+    'POST /api/v1/conversations/:id/operator': 'ConversationsController.setOperator',
+    'get /api/v1/conversations': 'ConversationsController.find',
+    'get /api/v1/conversations/:id': 'ConversationsController.find',
 };

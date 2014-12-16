@@ -5,6 +5,10 @@
 
         <!-- Viewport mobile tag for sensible mobile support -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+           <link href="/vendors/angularjs-toaster/toaster.css" rel="stylesheet" type="text/css"/> 
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"> 
+        <link href="/styles/importer.css" rel="stylesheet" type="text/css"/> 
+        <link href="/vendors/angular/angular-csp.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/latest/cosmo/bootstrap.min.css" type="text/css"> 
         <% include ./../parts/head.ejs %>
     </head>
@@ -22,11 +26,53 @@
             }
             #pages_body{
                 height: 100%;
+                z-index: -100;
             }
         </style>
-        <div class="container-fluid" id="pages_body">
+        <div class="container-fluid" id="pages_body" ui-view>
             <%- body %>
         </div>
         <% include ./../parts/footer %>
+        <script>
+//            console.log = function () {
+//            };
+//            console.info = function () {
+//            };
+//            console.warn = function () {
+//            };
+        <% if( user!='undefine' && !!user){ %>
+            var user = <%- JSON.stringify(user) %> ; 
+        <% }else{%>     
+            var user = {} ;
+        <% } %>     
+            console.log('init user',user);
+            window.name = 'NG_DEFER_BOOTSTRAP!'; //SEE: https://docs.angularjs.org/guide/bootstrap
+            var ng_spa_name = '<%= ng_spa_name %>';
+
+            var spi_cb = function (require, config) {
+                //This function will be called when all the dependencies
+                //listed above in deps are loaded. Note that this
+                //function could be called before the page is loaded.
+                //This callback is optional.
+                config.urlArgs = 'bust=v0.0.0.'+(new Date()).getDay();//+Math.random(); // установка версии для кэшеривания
+                config.baseUrl = '/js/spi';//'/src/';
+                config.paths['page'] = ng_spa_name;
+                window.require.config(config);// update global require config
+                window.require.config({
+                    locale: window.localStorage.getItem("locale") || (typeof (vhistory) !== "undefined" ? app.language : navigator.language)
+                });
+                require(['../bootstrap_app']);// load app(spi)
+
+            };
+        </script>
+        <script>
+            var require = {
+                deps: ['require', '/js/debug.config-require.js'],
+                callback: function (require, config) {
+                    spi_cb(require, config);
+                }
+            };
+        </script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js" datamain="/js/main"></script>
     </body>
 </html>

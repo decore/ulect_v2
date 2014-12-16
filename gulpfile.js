@@ -41,7 +41,7 @@ var gulp = require('gulp'),
 			console.error();
 
 			gulp.task('default', []);
-			return;
+			//return;
 		}
 	}
 
