@@ -7,9 +7,7 @@ define(['cs!./common/index'], function (module) {
                 enabled: true,
                 requireBase: false
             });
-
         }]);
-
     module.run(['$rootScope', '$location', '$window', function ($rootScope, $location, $window) {
             // somewhere else
             $rootScope.$on('$stateNotFound',
@@ -18,12 +16,9 @@ define(['cs!./common/index'], function (module) {
                         console.log(unfoundState.toParams);
                         console.log(unfoundState.options); // {inherit:false} + default options
                         event.preventDefault();
-
                         $window.location = unfoundState.to.replace(/\.+/g, "/");
-
                     });
         }]);
-
     module.factory('LocalService', [function () {
             return {
                 get: function (key) {
@@ -37,7 +32,6 @@ define(['cs!./common/index'], function (module) {
                 }
             }
         }]);
-
     module.factory('CurrentUserService', ["LocalService", function (LocalService) {
             return {
                 user: function () {
@@ -54,18 +48,14 @@ define(['cs!./common/index'], function (module) {
             $scope.isCollapsed = true;
             $scope.auth = Auth;
             $scope.user = CurrentUser.user;
-
             $scope.logout = function () {
                 Auth.logout().success(function (result) {
                     $location.url('');
                 });
             };
         }]);
-
-
     module.controller('LoginController', ["$scope", "$state", "Auth", function ($scope, $state, Auth) {
             $scope.errors = [];
-
             $scope.login = function () {
                 $scope.errors = [];
                 Auth.login($scope.user).success(function (result) {
@@ -76,12 +66,21 @@ define(['cs!./common/index'], function (module) {
                 });
             }
         }]);
-
     module.controller('RegisterController', ["$scope", "$state", "Auth", function ($scope, $state, Auth) {
+            //TODO: delete on production
+            $scope.user = {
+                companyname: "Demo Company (at " + (new Date()).toISOString()+")",
+                email: 'demo@demo.com',
+                country: "US",
+                firstname: "Demo First Name (at " + (new Date()).toISOString()+")",
+                lastname: "Demo Last Name (at " + (new Date()).toISOString()+")",
+                password: "demo123456",
+                confirmPassword: "demo123456",
+                phone: "+19999999"
+            }
             $scope.register = function () {
-                Auth.register($scope.user).then(function (data) {
-                    console.log(data);
-                    $state.go('anon.home');
+                Auth.register($scope.user).then(function (data) { 
+                    $state.go('anon.home'); 
                 });
             }
         }]);
@@ -90,7 +89,6 @@ define(['cs!./common/index'], function (module) {
         anon: 0,
         user: 1
     });
-
     module.factory('Auth', function ($http, LocalService, AccessLevels) {
         return {
             authorize: function (access) {
@@ -100,9 +98,7 @@ define(['cs!./common/index'], function (module) {
                     return true;
                 }
             },
-            isAuthenticated: function () {
-                    
-            console.log(LocalService.get('auth_token'));
+            isAuthenticated: function () { 
                 return LocalService.get('auth_token');
             },
             login: function (credentials) {
@@ -114,8 +110,8 @@ define(['cs!./common/index'], function (module) {
             },
             logout: function () {
                 // We must inform server 
-                   console.log(this.isAuthenticated());
-                var register = $http.post('/api/v1/auth/logout',  angular.fromJson(LocalService.get('auth_token')).user);
+                console.log(this.isAuthenticated());
+                var register = $http.post('/api/v1/auth/logout', angular.fromJson(LocalService.get('auth_token')).user);
                 register.success(function (result) {
                     LocalService.unset('auth_token');
                 });
@@ -133,7 +129,6 @@ define(['cs!./common/index'], function (module) {
     })
             .factory('AuthInterceptor', function ($q, $injector) {
                 var LocalService = $injector.get('LocalService');
-
                 return {
                     request: function (config) {
                         var token;
@@ -157,7 +152,6 @@ define(['cs!./common/index'], function (module) {
             .config(function ($httpProvider) {
                 $httpProvider.interceptors.push('AuthInterceptor');
             });
-
     //======================Controllers
 
 

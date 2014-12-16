@@ -1,7 +1,7 @@
 /**
- * UserProfileController
+ * CountryController
  *
- * @description :: Server-side logic for managing Userprofiles
+ * @description :: Server-side logic for managing Countries
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 

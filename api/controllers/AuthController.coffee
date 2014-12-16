@@ -82,7 +82,7 @@ module.exports = {
                 return
             return
         return
-    ## API call
+    ## API call - Customer Registration
     register : (req, res) ->
         console.log _params = req.params.all()
 
@@ -102,6 +102,8 @@ module.exports = {
                 return
             if user
                 delete user.password
+                Profile.create()
+
                 res.json
                     user: user
                     token: sailsTokenAuth.issueToken(sid: user.id)
