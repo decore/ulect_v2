@@ -8,7 +8,6 @@ module.exports = {
         TwilioService.messagesList({PageSize:350},(err,data)->
             console.log  err,data.messages
             _.forEach data.messages, (message)->
-
                 Messages.create(message).exec(
                     (err,data)->
                         return res.json data

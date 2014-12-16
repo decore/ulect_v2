@@ -16,7 +16,7 @@ module.exports = {
             required: true
         },
         operator: {
-            model: 'Users',
+            model: 'User',
             defaultsTo: null
         }
         ,

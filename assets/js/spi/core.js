@@ -9,20 +9,20 @@ define(['cs!./common/index'], function (module) {
             });
 
         }]);
-    
-    module.run(['$rootScope','$location','$window',function($rootScope,$location,$window){
-    // somewhere else
-        $rootScope.$on('$stateNotFound', 
-        function(event, unfoundState, fromState, fromParams){ 
-            console.log(unfoundState.to,unfoundState.to.replace(/\.+/g, "/"));  
-            console.log(unfoundState.toParams);  
-            console.log(unfoundState.options); // {inherit:false} + default options
-            event.preventDefault(); 
-            
-            $window.location = unfoundState.to.replace(/\.+/g, "/");
-           
-        });
-    }]);
+
+    module.run(['$rootScope', '$location', '$window', function ($rootScope, $location, $window) {
+            // somewhere else
+            $rootScope.$on('$stateNotFound',
+                    function (event, unfoundState, fromState, fromParams) {
+                        console.log(unfoundState.to, unfoundState.to.replace(/\.+/g, "/"));
+                        console.log(unfoundState.toParams);
+                        console.log(unfoundState.options); // {inherit:false} + default options
+                        event.preventDefault();
+
+                        $window.location = unfoundState.to.replace(/\.+/g, "/");
+
+                    });
+        }]);
 
     module.factory('LocalService', [function () {
             return {
@@ -49,40 +49,42 @@ define(['cs!./common/index'], function (module) {
                 }
             }
         }]);
-    module.controller('NavController', ["$scope", "Auth", "CurrentUserService", function ($scope, Auth, CurrentUser) {
+    module.controller('NavController', ["$scope", "Auth", "CurrentUserService", "$location", function ($scope, Auth, CurrentUser, $location) {
 
             $scope.isCollapsed = true;
             $scope.auth = Auth;
             $scope.user = CurrentUser.user;
 
             $scope.logout = function () {
-                Auth.logout();
+                Auth.logout().success(function (result) {
+                    $location.url('');
+                });
             };
         }]);
 
 
-    module.controller('LoginController',[ "$scope", "$state", "Auth", function ($scope, $state, Auth) {
-        $scope.errors = [];
-
-        $scope.login = function () {
+    module.controller('LoginController', ["$scope", "$state", "Auth", function ($scope, $state, Auth) {
             $scope.errors = [];
-            Auth.login($scope.user).success(function (result) {
-                //$state.go('user.home');
-                $state.go('chatroom');
-            }).error(function (err) {
-                $scope.errors.push(err);
-            });
-        }
-    }]);
-    
-    module.controller('RegisterController',[ "$scope", "$state", "Auth",function ($scope, $state, Auth) {
-        $scope.register = function () {
-            Auth.register($scope.user).then(function (data) {
-                console.log(data);
-                $state.go('anon.home');
-            });
-        }
-    }]);
+
+            $scope.login = function () {
+                $scope.errors = [];
+                Auth.login($scope.user).success(function (result) {
+                    //$state.go('user.home');
+                    $state.go('chatroom');
+                }).error(function (err) {
+                    $scope.errors.push(err);
+                });
+            }
+        }]);
+
+    module.controller('RegisterController', ["$scope", "$state", "Auth", function ($scope, $state, Auth) {
+            $scope.register = function () {
+                Auth.register($scope.user).then(function (data) {
+                    console.log(data);
+                    $state.go('anon.home');
+                });
+            }
+        }]);
     //
     module.constant('AccessLevels', {
         anon: 0,
@@ -99,6 +101,8 @@ define(['cs!./common/index'], function (module) {
                 }
             },
             isAuthenticated: function () {
+                    
+            console.log(LocalService.get('auth_token'));
                 return LocalService.get('auth_token');
             },
             login: function (credentials) {
@@ -109,8 +113,13 @@ define(['cs!./common/index'], function (module) {
                 return login;
             },
             logout: function () {
-                // The backend doesn't care about logouts, delete the token and you're good to go.
-                LocalService.unset('auth_token');
+                // We must inform server 
+                   console.log(this.isAuthenticated());
+                var register = $http.post('/api/v1/auth/logout',  angular.fromJson(LocalService.get('auth_token')).user);
+                register.success(function (result) {
+                    LocalService.unset('auth_token');
+                });
+                return register;
             },
             register: function (formData) {
                 LocalService.unset('auth_token');

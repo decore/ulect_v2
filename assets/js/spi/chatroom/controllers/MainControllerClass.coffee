@@ -1,6 +1,6 @@
 define ['cs!./../namespaces'],(namespaces)->
-    ClassController = ($scope,EntityFactory,SocketEntityFactory, DialogService,$http,$sailsSocket)->
-
+    ClassController = ($scope,EntityFactory,SocketEntityFactory, DialogService,$http,$sailsSocket,CurrentUser)->
+        currentUser =  CurrentUser.user
         ##
         $sailsSocket.subscribe 'messages',(msg)->
             console.log '  get on controller AC220dd9ec0df20b77d7cdd306ee34f43a',msg
@@ -36,7 +36,7 @@ define ['cs!./../namespaces'],(namespaces)->
 
         $scope.conversationList = []
         $scope.operatorsList = []
-        $http.get('/api/v1/users').success(
+        $http.get('/api/v1/user').success(
             (data)->
                 $scope.operatorsList = data
         )
@@ -105,29 +105,23 @@ define ['cs!./../namespaces'],(namespaces)->
             )
             return
 
-        ## om Start dialog
+        ## on Start dialog between Operator and Client
         $scope.onStartDialog  = (_event,dailogId,message)->
             console.log 'onStartDialog',dailogId
             if $scope.currentChatRoom?
                 ##TODO: make request like RESTfull
-                $http.post('/api/v1/conversations/update/'+dailogId, {id:dailogId, isactive: true ; operator: 1}).then(
+                $http.post("/api/v1/conversations/#{dailogId}/operator",{id:dailogId, isactive: true , operator: currentUser().id}).then(
                     (data)->
                         console.log  data
-                        $scope.currentChatRoom.operator =  data.data.operator #$scope.operatorsList[0]
+                        $scope.currentChatRoom.operator =  data.data.operator
                 )
-                #                   SocketEntityFactory.sendData(roomId,message).then(
-                #                       (data)->
-                #                           console.log 'is ok send '
-                #                           $scope.messagesForUser = ''
-                #
-                #                   )
             return
         ## on Terminate dialog
         $scope.onTerminateDialog  = (_event,dailogId,message)->
             console.log 'onStartDialog',dailogId
             if $scope.currentChatRoom?
                 ##TODO: make request like RESTfull
-                $http.get(url:'/api/v1/conversations/update/'+dailogId,params:{isactive:false}).then(
+                $http.put("/api/v1/conversations/#{dailogId}",{isactive:false}).then(
                     (data)->
                         $scope.currentChatRoom.isactive = false
                         $scope.currentChatRoom = null
@@ -144,4 +138,4 @@ define ['cs!./../namespaces'],(namespaces)->
                 #                   )
             return
 
-    return ['$scope',"#{namespaces.name}EntityFactory","#{namespaces.name}SocketEntityFactoryClass", 'DialogService','$http','$sailsSocket',ClassController]
+    return ['$scope',"#{namespaces.name}EntityFactory","#{namespaces.name}SocketEntityFactoryClass", 'DialogService','$http','$sailsSocket','CurrentUserService',ClassController]

@@ -99,5 +99,13 @@ module.exports.routes = {
     /***
      * Auth API
      */
-    'POST /api/v1/auth/authenticate': 'AuthController.authenticate'
+    'POST /api/v1/auth/authenticate': 'AuthController.authenticate',
+    'POST /api/v1/auth/logout' : 'AuthController.logout',
+    
+    /**
+     * API Conversations
+     */
+    'POST /api/v1/conversations/:id/operator': 'ConversationsController.setOperator',
+    'get /api/v1/conversations': 'ConversationsController.find',
+    'get /api/v1/conversations/:id': 'ConversationsController.find',
 };

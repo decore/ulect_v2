@@ -10,7 +10,7 @@ module.exports = {
         username: {
             
             type: "string",
-            defaultsTo: "Demo User"
+            defaultsTo: "New Operator"
         },
         //TODO: delete default value
         AccountSid: {

@@ -41,7 +41,8 @@ Blue color - user replied operator (not initial message) that was not answere
                                 <i class="fa fa-exclamation"></i>    
                             </span>  
                             <span  ng-class="{'text':true, 'text-error':item.id == currentChatRoom.id}"> 
-                                <span  ng-if="!!item.operator">({{item.operator.username}})</span> 
+                                <span  ng-if="!!item.operator.username">({{item.operator.username}})</span> 
+                                <span  ng-if="!!item.operator.email&&!!!item.operator.username">({{item.operator.email}})</span> 
                                 {{item.client}}
                             </span>
 
@@ -85,7 +86,7 @@ Blue color - user replied operator (not initial message) that was not answere
 
                 <!--TODO: make it as directive -->
                 <ul autoscroll-down class="list-group" id="chat_dialog" style="height:100%;overflow-y: auto;border: #0000ed solid;"> 
-                    <li ng-repeat="item in currentChatMessages" class="list-group-item" 
+                    <li ng-repeat="item in currentChatMessages  track by $index" class="list-group-item" 
                         ngclass="{'text-right':item.owner == currentChatRoom.owner.id}">
                         <p  ng-class="{'text':true, 'text-warning':item.From == currentChatRoom.From}">({{item.updatedAt|  date:" hh:mm:ss"}}) <span ng-if="item.operator">Operator {{item.operator.username}} </span></p>
                         <span class="textMsg"> 

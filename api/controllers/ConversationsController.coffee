@@ -4,6 +4,8 @@
 ###
 module.exports = {
     index: (req,res)->
+
+        return res.json "index"
     ###
     FIND
     ###
@@ -22,19 +24,24 @@ module.exports = {
             _get_params = req.params.all()
             paginateCriteria =
                 page: 1
-                limit: 10
+                limit: 100
             _sort =
                 id: "desc"
             paginateCriteria.page =  _get_params.page if !!_get_params.page
             paginateCriteria.limit =  _get_params.limit if !!_get_params.limit
             _sort = JSON.parse(_get_params.sort) if !!_get_params.sort
+
+            messageCriteria =
+                # limit: 5
+                sort : 'createdAt asc'
+                where: {}
             Conversations.count().exec(
                 (error, count)->
                     if (error)
                         res.status 500
                         return res.json(error)
                     else
-                        Conversations.find().sort(_sort).paginate(paginateCriteria).populate('msgs').exec(
+                        Conversations.find().sort(_sort).paginate(paginateCriteria).populate('msgs',messageCriteria).populate('operator').exec(
                             (err,entities)->
                                 if err
                                     res.status 500
@@ -46,5 +53,76 @@ module.exports = {
                                 return res.json(entities)
                         )
             )
+    ###
+    start dialog between Operator and Client
+    ###
+    setOperator: (req,res)->
+        console.log 'Conversations:setOperator', req.token
+        ## get current
+        _id = req.param('id')
+        Conversations.findOne(id:_id).populate('operator').exec(
+            (err,entity)->
+                console.log 'find' , entity
+                if err
+                    res.status 500
+                    return res.json err
+                if !entity
+                    return res.json err:msg:"Conversation not found"
+                ## check current operator
+                if entity.operator?
+                    ##TODO: delete dublicate call
+                    Conversations.findOne(id:_id).populate('operator').exec(
+                        (err, dialog)->
+                            if err
+                                return res.json err
+                            return res.json dialog
+                        )
+
+                else
+                    entity.operator = req.token.sid
+                    entity.isWaitAnswer = true
+                    entity.save(
+                        (err)->
+                            if err
+                                return res.json err
+                            ##send auto response
+                            _params =
+                                ##TODO: account sid req.token
+                                to : entity.client
+                                ## TODO: template  #%OPERATOR_NAME% is here to help you”
+                                body:  "Operator N1 is here to help you"
+                            TwilioService.sendSMS( _params, (err,message)->
+                                console.log 'auto response operator  send message', message
+                                ##TODO: replace demo operator
+                                _.extend message , { dialog : entity.id, operator: 0}
+                                if err
+                                    res.status 500
+                                    return res.json err
+                                Messages.create(message).exec(
+                                    (err,entity)->
+                                        if err
+                                            res.status 500
+                                            return res.json err
+                                        if !entity
+                                            res.status 418
+                                            return res.json err
+                                        return res.json entity
+
+                                )
+                                )
+
+                            ##TODO: delete dublicate call
+
+                            Conversations.findOne(id:_id).populate('operator').exec(
+                                (err, dialog)->
+                                    if err
+                                        return res.json err
+                                    return res.json dialog
+                            )
+
+                    )
+                    res.status 418
+                    return res.json entity
+        )
 
 }

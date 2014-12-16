@@ -35,7 +35,7 @@ module.exports = {
             values.Body  = values.body;
             delete values.body;
         }
-        Users.findOne({id: values.operator}).exec(
+        User.findOne({id: values.operator}).exec(
                 function (err, user) {
                     if (err)
                         return cb();

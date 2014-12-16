@@ -9,7 +9,7 @@ module.exports = {
     #    res.json "ok"
     login: (req, res) ->
         passport.authenticate("local", (err, user, info) ->
-            console.log
+
             if (err) or (not user)
                 res.send
                     success: false
@@ -37,7 +37,14 @@ module.exports = {
         return
 
     logout: (req, res) ->
+        console.log 'logout'
         req.logout()
+        User.findOne(id:req.param('id')).exec(
+            (err, user)->
+                if user.isLogin == true
+                    user.isLogin = false
+                    user.save()
+        )
         res.send
             success: true
             message: "logoutSuccessful"
@@ -66,9 +73,11 @@ module.exports = {
                         err: "invalid username or password"
 
                 else
+                    user.isLogin = true
+                    user.save()
                     res.json
                         user: user
-                        token: sailsTokenAuth.issueToken(sid: user.id)
+                        token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid)
 
                 return
             return
@@ -89,7 +98,7 @@ module.exports = {
         ).exec (err, user) ->
             if err
                 res.json err.status,
-                    err: err 
+                    err: err
                 return
             if user
                 delete user.password
