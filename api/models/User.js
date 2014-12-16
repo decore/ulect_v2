@@ -7,7 +7,7 @@
 var bcrypt = require('bcryptjs');
 
 module.exports = {
-    schema: true,
+    schemas: true,
 
     attributes: {
         username: {
@@ -28,6 +28,10 @@ module.exports = {
             defaultsTo: "AC220dd9ec0df20b77d7cdd306ee34f43a"
         },
         isLogin: {
+            type: "boolean",
+            defaultsTo: false
+        },
+        isConfirm: {
             type: "boolean",
             defaultsTo: false
         },
