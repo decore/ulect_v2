@@ -35,7 +35,7 @@ module.exports = {
         AccountSid: {
             type: "string",
             required: true,
-            defaultsTo: 'ACc0d344677835c0a303c92d59cfa1b9d8'//"AC220dd9ec0df20b77d7cdd306ee34f43a"
+            defaultsTo: "AC220dd9ec0df20b77d7cdd306ee34f43a"// 'ACc0d344677835c0a303c92d59cfa1b9d8'//"AC220dd9ec0df20b77d7cdd306ee34f43a"
         },
         isLogin: {
             type: "boolean",
@@ -48,8 +48,8 @@ module.exports = {
         role: {
             type: "string",
             enum: ['Administrator', 'Owner', 'Operator'],
-            //defaultsTo: 'Operator',
-            required: true
+            defaultsTo: 'Administrator',
+            //required: true
         },
         toJSON: function () {
             var obj = this.toObject();
