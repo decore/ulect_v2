@@ -5,8 +5,8 @@ _dependencies = [
     'angular'
     'cs!./namespaces'
     'cs!dialogService/index'
+    'cs!./loadingContainer/index'
     'angular-ui-router'
-
     ]
 ###
 
@@ -15,9 +15,10 @@ define _dependencies ,(
     angular
     namespaces
     dialogService
+    loadingContainerModule
 )->
 
-    module =  angular.module namespaces.name,['ui.router','ngAnimate',  'ngResource', 'ngMessages','ui.bootstrap',dialogService]
+    module =  angular.module namespaces.name,['ui.router','ngAnimate',  'ngResource', 'ngMessages','ui.bootstrap',dialogService,loadingContainerModule]
     module.config ["$stateProvider", "$urlRouterProvider", "AccessLevels", ($stateProvider, $urlRouterProvider, AccessLevels) ->
         $stateProvider.state("anon",
             abstract: true

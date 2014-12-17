@@ -14,8 +14,9 @@ Blue color - user replied operator (not initial message) that was not answere
     }
 </style>
 <section class="row-fluid"  ng-init="status = {open:true}; status2 = {open:true}; currentChatRoom = null;"
-         style="height: 100%; 
-         "> 
+         style="height: 100%;"
+         loading-container="isBusy || isLocked"
+         > 
     <style>
         #chat_dialog .textMsg{
             border-radius: 1em;
@@ -97,7 +98,7 @@ Blue color - user replied operator (not initial message) that was not answere
             </div>
 
         </article>
-        <footer class="col-sm-offset-4 navbar-fixed-bottom"   > 
+        <footer class="col-sm-offset-4 navbar-fixed-bottom" loading-container="isLocked"> 
             <form class="form well-sm  col-sm-12" id="chatform" ng-submit="onSendMessage($event, currentChatRoom.id, messagesForUser)" > 
                 <div class="form-group">
                     <div class="col-sm-10 col-lg-10">
