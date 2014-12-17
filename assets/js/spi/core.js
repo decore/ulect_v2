@@ -89,6 +89,9 @@ define(['cs!./common/index'], function (module) {
         anon: 0,
         user: 1
     });
+   
+    module.constant('baseUrl', '/api/v1');    
+    
     module.factory('Auth', function ($http, LocalService, AccessLevels) {
         return {
             authorize: function (access) {

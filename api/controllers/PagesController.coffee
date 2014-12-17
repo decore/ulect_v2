@@ -8,7 +8,7 @@ module.exports = {
         res.view 'pages/home',
             user: req.user
             ng_spa_name: 'debug'
-    ## SPI 
+    ## SPI
     spi: (req,res)->
         res.view 'pages/home',
             user: req.user
@@ -24,14 +24,14 @@ module.exports = {
         Users.findOne(id:1).exec(
           (err, user )->
             if err
-                user=
-                    id: 1
-                    username: "Demo User ID1"
-                    role: {id:2,name:'operator'}
-                    sid: "AC220dd9ec0df20b77d7cdd306ee34f43a"
-
+                user={}
             return res.view
                 user: user
                 ng_spa_name: 'chatroom'
         )
+    management: (req,res)->
+        res.view 'pages/home',
+            user: req.user
+            ng_spa_name: 'management'
+
 }

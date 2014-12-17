@@ -96,8 +96,7 @@ define ['cs!./../namespaces'],(namespaces)->
             console.log 'onSendMessage ',dailogId,message
             $scope.isLocked = true
             SocketEntityFactory.sendData(dailogId,message).then(
-                (data)->
-                    console.log 'is ok send '
+                (data)-> 
                     $scope.messagesForUser = ''
                     $scope.isLocked = false
                 (err)->

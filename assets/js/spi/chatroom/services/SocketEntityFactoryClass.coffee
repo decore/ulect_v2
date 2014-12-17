@@ -29,8 +29,6 @@ define ['sails.io'],->
                     _.merge _room, $isNewMsg:true
                     console.log
                     _room.msgs.push msg.data.data
-
-        console.warn 'start .subscribe user'
         #        $sailsSocket.subscribe 'messages',(msg)->
         #            console.log 'is get socket msgs on subscribe',msg
         #            return
@@ -50,23 +48,10 @@ define ['sails.io'],->
                 )
                 return _dataList;
             )
-        #_loadMessages()
         _sendMessage = (dialogId,msg)->
-            return $http.post(Entity_API_Url,{ dialog:dialogId, body:msg}).then(
-                (data)->
-                    console.log 'data send ok', data
-                (reason)->
-                    console.log 'data send error', reason
-            )
-
-            #            return $sailsSocket.post(Entity_API_Url+'/'+roomId+'/message',msg).then( (res)->
-            #                _dataList.push(res.data);
-            #                return res.data;
-            #            )
-
+            return $http.post(Entity_API_Url,{ dialog:dialogId, body:msg})
         return {
-            data: _dataList
-            #load: _loadMessages
+            data: _dataList 
             sendData: _sendMessage
         }
     return ['$sailsSocket','$http',SocketEntityFactoryClass]
