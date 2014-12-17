@@ -28,6 +28,33 @@
                 height: 100%;
                 z-index: -100;
             }
+            /* TEMPORARY CONTENT LOADING CONTAINER */
+.loading-container {
+    position: relative;
+}
+
+.loading-container .loading:before, .loading-container .loading:after {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 50px;
+    min-width: 50px;
+}
+
+.loading-container .loading:before {
+    z-index: 1020;
+
+    background: white url('/images/loader.gif') no-repeat center;
+    opacity: 0.5;
+}
+
+.loading-container .loading-container .loading {
+    display: none;
+}
+
         </style>
         <div class="container-fluid" id="pages_body" ui-view>
             <%- body %>

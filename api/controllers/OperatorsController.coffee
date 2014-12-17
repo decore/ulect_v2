@@ -37,7 +37,7 @@ module.exports = {
             firstname: firstname
             lastname: lastname
             password: password
-            email: email 
+            email: email
             role: 'Operator' ##NOTE: hardcode role name 'Operator'
         , (err, user) ->
             if err
@@ -47,22 +47,46 @@ module.exports = {
                     else
                         req.flash "error", "Error.Passport.User.Exists"
                 return next(err)
-        #            Passport.create
-        #                protocol: "local"
-        #                password: password
-        #                user: user.id
-        #            , (err, passport) ->
-        #                if err
-        #                    req.flash "error", "Error.Passport.Password.Invalid"  if err.code is "E_VALIDATION"
-        #                    return user.destroy((destroyErr) ->
-        #                        next destroyErr or err
-        #                        return
-        #                    )
-        #                #next null, user
-        #                return res.json(user,201)
-        #            return
+            #            Passport.create
+            #                protocol: "local"
+            #                password: password
+            #                user: user.id
+            #            , (err, passport) ->
+            #                if err
+            #                    req.flash "error", "Error.Passport.Password.Invalid"  if err.code is "E_VALIDATION"
+            #                    return user.destroy((destroyErr) ->
+            #                        next destroyErr or err
+            #                        return
+            #                    )
+            #                #next null, user
+            #                return res.json(user,201)
+            #            return
+            Email.send(
+                to: [
+                    name: user.username
+                    email: user.email
+                ]
+                subject: 'Operator Registration CrosLinkMedia SMSChat'
+                html:
+                    'You was registered as Operator <a href="#test">LIKT TO SITE</a><br/>'+
+                    "You login\password : #{user.email}/#{password}"
+                text: 'You was registry '
+                (err)->
+                    #                // If you need to wait to find out if the email was sent successfully,
+                    #                // or run some code once you know one way or the other, here's where you can do that.
+                    #                // If `err` is set, the send failed.  Otherwise, we're good!
+                    console.log 'is send OK or' , err
+                    if err
+                        res.status 418
+                        user.destroy((destroyErr) ->
+                                    next destroyErr or err
+                                    return
+                        )
+                        return res.json msg: "email not send",err
 
-            return res.json(user,201)
+                    return res.json(user,201)
+                )
+            #return res.json(user,201)
         return
 
 
