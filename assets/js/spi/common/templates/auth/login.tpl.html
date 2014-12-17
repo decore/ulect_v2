@@ -1,5 +1,8 @@
-<alert class="alert" ng-repeat="error in errors" type="danger">{{error.err}}</alert>
-<form name="registerForm" class="form-signin" novalidate>
+ 
+<form name="registerForm" class="form-signin col-sm-4 col-sm-offset-4" novalidate>
+    <h2>Login</h2>
+    <alert class="alert" ng-repeat="error in errors" type="danger">{{error.err}}</alert>
+  <hr>
   <div class="control-group">
     <input type="email" class="form-control" placeholder="email" name="email" ng-model="user.email" required>
     <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.email.$error">
@@ -19,6 +22,6 @@
       </div>
     </div>
   </div>
-
+<br/>
   <input type="submit" class="btn btn-lg btn-primary btn-block" ng-click="login()" value="Login" />
 </form>

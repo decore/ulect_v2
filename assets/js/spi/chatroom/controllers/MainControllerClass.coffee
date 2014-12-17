@@ -36,7 +36,7 @@ define ['cs!./../namespaces'],(namespaces)->
 
         $scope.conversationList = []
         $scope.operatorsList = []
-        $http.get('/api/v1/user').success(
+        $http.get('/api/v1/operators').success(
             (data)->
                 $scope.operatorsList = data
         )
@@ -96,7 +96,7 @@ define ['cs!./../namespaces'],(namespaces)->
             console.log 'onSendMessage ',dailogId,message
             $scope.isLocked = true
             SocketEntityFactory.sendData(dailogId,message).then(
-                (data)-> 
+                (data)->
                     $scope.messagesForUser = ''
                     $scope.isLocked = false
                 (err)->

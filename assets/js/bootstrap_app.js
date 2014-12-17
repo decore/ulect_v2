@@ -85,7 +85,7 @@ define(['domReady!', 'angular', 'core','page', 'angularjs-toaster', 'angular-res
                             var _ref, _ref1, _ref2;
                             //console.log(rejection);   
                             if (rejection.statusText === "Internal Server Error"){
-                                  NotificationService.error("Server error", "Сбой в работе сервера");
+                                  NotificationService.error("Server error", "Internal Server Error");
                             }
                             if (rejection.status === 500 || rejection.status === 400 || rejection.status === 401) {
                                 //console.log("Response Error 500,400,401", rejection);

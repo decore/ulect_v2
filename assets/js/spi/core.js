@@ -48,19 +48,25 @@ define(['cs!./common/index'], function (module) {
             $scope.isCollapsed = true;
             $scope.auth = Auth;
             $scope.user = CurrentUser.user;
+            
             $scope.logout = function () {
                 Auth.logout().success(function (result) {
                     $location.url('');
                 });
             };
         }]);
-    module.controller('LoginController', ["$scope", "$state", "Auth", function ($scope, $state, Auth) {
+    module.controller('LoginController', ["$scope", "$state", "Auth", 'CurrentUserService','$location',function ($scope, $state, Auth,CurrentUser,$location) {
             $scope.errors = [];
+            //$scope.user = CurrentUser.user;
             $scope.login = function () {
                 $scope.errors = [];
                 Auth.login($scope.user).success(function (result) {
                     //$state.go('user.home');
-                    $state.go('chatroom');
+                    if(CurrentUser.user().role ==='Administrator'){
+                    $location.url('/management/operators');
+                        }else{
+                          $state.go('chatroom');
+                        }
                 }).error(function (err) {
                     $scope.errors.push(err);
                 });
@@ -69,14 +75,15 @@ define(['cs!./common/index'], function (module) {
     module.controller('RegisterController', ["$scope", "$state", "Auth", function ($scope, $state, Auth) {
             //TODO: delete on production
             $scope.user = {
-                companyname: "Demo Company (at " + (new Date()).toISOString()+")",
-                email: 'demo@demo.com',
+                //companyname: "Demo Company (at " + (new Date()).toISOString()+")",
+                //email: 'demo@demo.com',
                 country: "US",
-                firstname: "Demo First Name (at " + (new Date()).toISOString()+")",
-                lastname: "Demo Last Name (at " + (new Date()).toISOString()+")",
-                password: "demo123456",
-                confirmPassword: "demo123456",
-                phone: "+19999999"
+                //firstname: "Demo First Name (at " + (new Date()).toISOString()+")",
+                //lastname: "Demo Last Name (at " + (new Date()).toISOString()+")",
+                //password: "demo123456",
+                //confirmPassword: "demo123456",
+                //phone: "+19999999",
+                role: "Administrator"
             }
             $scope.register = function () {
                 Auth.register($scope.user).then(function (data) { 

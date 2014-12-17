@@ -47,8 +47,9 @@ module.exports = {
         },
         role: {
             type: "string",
-            enum: ['Admin', 'Owner', 'Operator'],
-            defaultsTo: 'Operator'
+            enum: ['Administrator', 'Owner', 'Operator'],
+            //defaultsTo: 'Operator',
+            required: true
         },
         toJSON: function () {
             var obj = this.toObject();

@@ -41,7 +41,7 @@ module.exports = {
         req.logout()
         User.findOne(id:req.param('id')).exec(
             (err, user)->
-
+                console.log user
                 if user?.isLogin? and user.isLogin == true
                     user.isLogin = false
                     user.save()
@@ -103,7 +103,7 @@ module.exports = {
             firstname:  _params.firstname
             lastname:  _params.lastname
             isLogin: true ##TODO: change this. Make user isLogin after login
-            
+
         ).exec(
             (err, user)->
                 if err
