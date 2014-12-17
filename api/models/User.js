@@ -8,11 +8,21 @@ var bcrypt = require('bcryptjs');
 
 module.exports = {
     schemas: true,
-
     attributes: {
-        username: {
+        firstname: {
             type: "string",
-            defaultsTo: "New Operator"
+            defaultsTo: "First name"
+        },
+        lastname: {
+            type: "string",
+            defaultsTo: "New Last name"
+        },
+//        username: {
+//            type: "string",
+//            defaultsTo: "New Operator"
+//        },
+        getUserName: function () {
+            return this.firstname + ' ' + this.lastname;
         },
         email: {
             type: 'string',
@@ -42,8 +52,10 @@ module.exports = {
         },
         toJSON: function () {
             var obj = this.toObject();
+            obj.username = this.getUserName()
             delete obj.encryptedPassword;
             delete obj.AccountSid;
+            console.log('get user',obj);
             return obj;
         }
     },
