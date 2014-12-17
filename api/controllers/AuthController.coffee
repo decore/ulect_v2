@@ -41,7 +41,8 @@ module.exports = {
         req.logout()
         User.findOne(id:req.param('id')).exec(
             (err, user)->
-                if user.isLogin == true
+
+                if user?.isLogin? and user.isLogin == true
                     user.isLogin = false
                     user.save()
         )
@@ -91,24 +92,60 @@ module.exports = {
             return res.json(401,
                 err: "Password doesn't match"
             )
+        if !_params.email
+            return res.json(401,
+                err: "Email doesn't set"
+            )
+        ##NOTE: create user and make it active
         User.create(
             email: _params.email
             password: _params.password
+            firstname:  _params.firstname
+            lastname:  _params.lastname
+            isLogin: true ##TODO: change this. Make user isLogin after login
+        ).exec(
+            (err, user)->
+                if err
+                    res.status err.status
+                    return res.json  err: err
+                if user
+                    console.log 'user.username
+                    delete user.password',user.username
+                    delete user.password
+                    _params.owner = user.id
+                    Profile.create(_params).exec(
+                        (err,profile)->
+                            console.log profile
+                            ##
+                            if err
+                                console.log 'profile err',err
+                                res.status err.status
+                                return res.json err
+                                Email.send(
+                                    to: [
+                                        name: _params.username
+                                        email: _params.email
+                                    ]
+                                    subject: 'Registration CrosLinkMedia SMSChat'
+                                    html:
+                                        'For confirm registration go to url <a href="#test">LIKT TO SITE</a><br/>'
+                                    text: 'You need confirm registration '
+                                    (err)->
+                                        #                // If you need to wait to find out if the email was sent successfully,
+                                        #                // or run some code once you know one way or the other, here's where you can do that.
+                                        #                // If `err` is set, the send failed.  Otherwise, we're good!
+                                        console.log 'is send OK or' , err
+                                        res.status 418
+                                        return res.json msg: "is send",err
+                                )
 
-        ).exec (err, user) ->
-            if err
-                res.json err.status,
-                    err: err
+
+                            return res.json
+                                user: user
+                                token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid)
+                    )
+
                 return
-            if user
-                delete user.password
-                Profile.create()
-
-                res.json
-                    user: user
-                    token: sailsTokenAuth.issueToken(sid: user.id)
-
-            return
-
+        )
         return
 }
