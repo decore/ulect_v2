@@ -1,0 +1,72 @@
+<!-- template "form.userprofile.tpl.html"-->
+<!-- Modal -->
+<div class="modal-content">
+    <div class="modal-header"> 
+        <h4 ng-if="!currEntity.id">Add New Operator</h4>
+        <h4 ng-if="currEntity.id">Edit Operator <strong>{{currEntity.username}}</strong></h4>
+    </div>
+    <form name="EditForm" class="form-horizontal" role="form" ng-submit="onSave(editEntity)" loading-container="isBusy" novalidate>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="attribute_firstname">
+                   First Name
+                </label>
+
+                <div class="col-sm-8">
+                    <input class="form-control" ng-model="editEntity.firstname" id="attribute_name" type="text"
+                           required>
+                </div>
+
+            </div>
+                        <div class="form-group">
+                <label class="control-label col-sm-4" for="attribute_name">
+                    Last Name
+                </label>
+
+                <div class="col-sm-8">
+                    <input class="form-control" ng-model="editEntity.lastname" id="attribute_lastname" type="text"
+                           required>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="model_name">
+                    Email address
+                </label>
+                <div class="col-sm-8">
+                    <input class="form-control" ng-model="editEntity.email" id="model_name" type="email" required>
+                </div> 
+            </div>
+ 
+<!--            <div class="form-group">
+                <label class="control-label col-sm-4" for="sample_data">
+                    Time zone
+                </label>
+
+                <div class="col-sm-8"> 
+                    <select class="form-control" ngmodel="editEntity.timeZoneId" id="timezine" required
+                            ngoptions="timesone.timeZoneId as timesone.displayName for timesone in timeZonesList">
+                        <option value="">Select...</option>
+                    </select>
+                </div>
+            </div>-->
+<!--            <div class="form-group">
+                <label class="control-label col-sm-4" for="sample_data">
+                    Role
+                </label>
+
+                <div class="col-sm-8">
+                    <select ngoptions="role for role in userRolesList" class="form-control" ngmodel="editEntity.role" id="sample_data"   required>
+                        <option value="">Select...</option>
+                    </select>
+                </div>
+            </div>-->
+        </div>
+        <div class="modal-footer"> 
+            <button type="submit" class="btn btn-primary btn_save" ng-disabled="EditForm.$invalid">Submit</button>
+            <button type="button" class="btn btn-default btn_save" ng-disabled="!EditForm.$pristine" ng-click="onSetNewPassword(editEntity)" ng-if="editEntity.userId">Set new password</button>
+            <button type="button" class="btn btn-default btn_cancel" ng-click="onCancel()">Cancel</button>
+        </div>
+    </form>
+</div>
+<!-- //template "Scripts/src/administration/tasksqueue/10_searchproductmodels/templates/form.productmodel.tpl.html"-->

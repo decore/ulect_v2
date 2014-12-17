@@ -1,0 +1,56 @@
+<!-- template "relevanousers.tpl.html"-->
+<section ui-view="content" class="tasks">
+    <div class="col-sm-12 no-padding" loading-container="isBusy || tableParams.settings().$loading">
+        <div class="col-sm-12">
+            <h3 class="text text-left task-title col-sm-12">
+                Manage operators
+<!--                <button
+                                              ng-click="onOpenInstruction()"
+                                              type="button"
+                                              class="btn btn-info pull-right">
+                    Instruction
+                </button>-->
+            </h3>
+
+            <hr/>
+            <div class="pusher-15"></div>
+
+            <div class="col-sm-12 no-padding">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="active"><a>Users</a></li>
+                </ul>
+            </div>
+
+            <div class="col-sm-12 no-padding content-table">
+                <div class="pusher-15"></div>
+
+                <div class="col-sm-6">
+                    <search-box ng-model="tableParams.filter()['userName']"></search-box>
+                </div>
+                <div class="col-sm-6">
+                    <button ng-click="onAddUser()" class="btn btn-primary pull-right">Add new Operator</button>
+                </div>
+
+                <div class="pusher-15"></div>
+
+                <div class="col-sm-12 no-padding">
+                    <table ng-table="tableParams" class="table table-striped table-fixed">
+                        <tbody>
+                            <tr ng-repeat="item in $data">
+                                <td data-title="'Name'" sortable="'username'">{{item.username}}</td>
+                                
+                                <td data-title="'Email'" sortable="'email'">{{item.email}}</td> 
+                                <!--<td data-title="'Role'" sortable="'role'" >{{item.role}}</td>-->
+                                <td data-title="'Controls'">
+                                    <button class="btn btn-xs btn-warning" ng-click="onEditUser(item)">Edit</button>
+                                    <button class="btn btn-xs btn-danger" ng-click="onDeleteUser(item)">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
+        </div>
+    </div>
+</section>
+<!-- //template "relevanousers.tpl.html"-->

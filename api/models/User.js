@@ -54,8 +54,7 @@ module.exports = {
             var obj = this.toObject();
             obj.username = this.getUserName()
             delete obj.encryptedPassword;
-            delete obj.AccountSid;
-            console.log('get user',obj);
+            delete obj.AccountSid; 
             return obj;
         }
     },

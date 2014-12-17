@@ -4,7 +4,9 @@ module and class dependecies
 _dependencies = [
     'angular'
     'cs!./namespaces'
+    'cs!dialogService/index'
     'angular-ui-router'
+
     ]
 ###
 
@@ -12,9 +14,10 @@ _dependencies = [
 define _dependencies ,(
     angular
     namespaces
+    dialogService
 )->
 
-    module =  angular.module namespaces.name,['ui.router','ngAnimate',  'ngResource', 'ngMessages']
+    module =  angular.module namespaces.name,['ui.router','ngAnimate',  'ngResource', 'ngMessages','ui.bootstrap',dialogService]
     module.config ["$stateProvider", "$urlRouterProvider", "AccessLevels", ($stateProvider, $urlRouterProvider, AccessLevels) ->
         $stateProvider.state("anon",
             abstract: true

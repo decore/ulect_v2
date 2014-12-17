@@ -32,12 +32,12 @@ module.exports.routes = {
      ***************************************************************************/
 
     '/': 'PagesController.index',
-
     '/home': 'PagesController.index',
-    
     'get /register': 'PagesController.spi',
-    'get /login':  'PagesController.spi',
+    'get /login': 'PagesController.spi',
     '/chatroom': 'PagesController.chatroom',
+    '/management': 'PagesController.management',
+    '/management/operators': 'PagesController.management',
     /***************************************************************************
      *                                                                          *
      * Custom routes here...                                                    *
@@ -47,10 +47,10 @@ module.exports.routes = {
      * for configuration options and examples.                                  *
      *                                                                          *
      ***************************************************************************/
-     
+
     // 'get /login': 'AuthController.login',
     'get /logout': 'AuthController.logout',
-    'get /user/create':'AuthController.register',
+    'get /user/create': 'AuthController.register',
     'get /messages/migrate': {
         controller: 'MessagesController',
         action: 'migrate',
@@ -59,15 +59,7 @@ module.exports.routes = {
     /***
      * API routes
      * 
-     */
-    /**
-     * Operators 
-     */
-    'get /api/v1/operators': {
-        controller: 'OperatorsController',
-        action: 'find',
-        locals: {layout: 'layout'}
-    },
+     */ 
     //  send messages
     'post /api/v1/messages': {
         controller: 'MessagesController',
@@ -100,12 +92,23 @@ module.exports.routes = {
      * Auth API
      */
     'POST /api/v1/auth/authenticate': 'AuthController.authenticate',
-    'POST /api/v1/auth/logout' : 'AuthController.logout',
-    
+    'POST /api/v1/auth/logout': 'AuthController.logout',
     /**
      * API Conversations
      */
     'POST /api/v1/conversations/:id/operator': 'ConversationsController.setOperator',
     'get /api/v1/conversations': 'ConversationsController.find',
     'get /api/v1/conversations/:id': 'ConversationsController.find',
+    /**
+     * API Operators
+     */
+    'get /api/v1/operators':{
+        controller: 'OperatorsController',
+        action: 'find',
+        locals: {layout: 'layout'}
+    }, 
+    'get /api/v1/operators/:id': 'OperatorsController.find',
+    'post /api/v1/operators': 'OperatorsController.create',
+    'put /api/v1/operators/:id': 'OperatorsController.update',
+    'delete /api/v1/operators/:id': 'OperatorsController.destroy'
 };
