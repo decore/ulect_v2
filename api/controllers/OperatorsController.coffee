@@ -8,6 +8,66 @@
 module.exports = {
     index: (req,res)->
         return res.json {}
+    ###
+    CREATE Operator
+    ###
+    create :(req, res, next) ->
+        email = req.param("email")
+        firstname = req.param("firstname")
+        lastname = req.param("lastname")
+        password = req.param("password")
+        #password = generatePassword(12, false, /\d/) ##TODO: password generate?
+        unless email
+            req.flash "error", "Error.Passport.Email.Missing"
+            return next(new Error("No email was entered."))
+        unless firstname
+            req.flash "error", "Error.Passport.Firstname.Missing"
+            return next(new Error("No firstname was entered."))
+        unless lastname
+            req.flash "error", "Error.Passport.Lastname.Missing"
+            return next(new Error("No lastname was entered."))
+        unless password
+            req.flash "error", "Error.Passport.Password.Missing"
+            return next(new Error("No password was entered."))
+        #        unless city
+        #            req.flash "error", "Error.Registration.City.Missing"
+        #            return next(new Error("No city support was entered."))
+        User.create
+            #username: username
+            firstname: firstname
+            lastname: lastname
+            password: password
+            email: email 
+            role: 'Operator' ##NOTE: hardcode role name 'Operator'
+        , (err, user) ->
+            if err
+                if err.code is "E_VALIDATION"
+                    if err.invalidAttributes.email
+                        req.flash "error", "Error.Passport.Email.Exists"
+                    else
+                        req.flash "error", "Error.Passport.User.Exists"
+                return next(err)
+        #            Passport.create
+        #                protocol: "local"
+        #                password: password
+        #                user: user.id
+        #            , (err, passport) ->
+        #                if err
+        #                    req.flash "error", "Error.Passport.Password.Invalid"  if err.code is "E_VALIDATION"
+        #                    return user.destroy((destroyErr) ->
+        #                        next destroyErr or err
+        #                        return
+        #                    )
+        #                #next null, user
+        #                return res.json(user,201)
+        #            return
+
+            return res.json(user,201)
+        return
+
+
+
+
     ##active operators list
     ###
     Operators list
@@ -73,8 +133,8 @@ module.exports = {
                             res.status err.status
                             return res.json(err);
                         if users.length == 0
-                           res.status 404
-                           return res.json  msg:"Operator not found or delete"
+                            res.status 404
+                            return res.json  msg:"Operator not found or delete"
                         User.findOne(id).exec(
                             (err,user)->
                                 if err then return next(err)

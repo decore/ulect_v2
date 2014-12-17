@@ -103,6 +103,7 @@ module.exports = {
             firstname:  _params.firstname
             lastname:  _params.lastname
             isLogin: true ##TODO: change this. Make user isLogin after login
+            
         ).exec(
             (err, user)->
                 if err

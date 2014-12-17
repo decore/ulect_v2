@@ -37,7 +37,7 @@ define ['cs!./../module','cs!./../namespace'],(module,namespace)->
                 $scope: $scope.$new()
             ###* confirm delete (used service) ###
             $scope.onDeleteUser = (item)->
-                delDlg = DialogService.deleteDialog "Delete User","Are you sure you want to delete selected <strong>#{item.userName}</strong>?"
+                delDlg = DialogService.deleteDialog "Delete confirmation","Are you sure you want to delete selected row?"
                 delDlg.result.then(
                     ##confirn delete entity
                     (res)->
@@ -81,6 +81,7 @@ define ['cs!./../module','cs!./../namespace'],(module,namespace)->
                             $scope.isBusy = false
 
                             console.log 'entity',isNew,entity
+                            ##TODO: delete - used only one role 'Operator'
                             $scope.userRolesList = userRolesList
 
                             if isNew
@@ -90,25 +91,26 @@ define ['cs!./../module','cs!./../namespace'],(module,namespace)->
                                 $scope.currEntity = _.clone entity
                                 $scope.editEntity = entity
                                 $scope.editEntity.canEdit = true
-                            ###* set new password for user ###
-                            $scope.onSetNewPassword = (params=null)->
-                                $scope.isBusy = true
-                                delDlg = DialogService.confirm "Set new password","Are you sure you want to generate new password for <strong>#{$scope.currEntity.userName}</strong>?"
-                                delDlg.result.then(
-                                    (result)->
-                                        console.log params
-                                        $scope.editEntity.$updatePassword().then(
-                                            (result)->
-                                                $scope.isBusy = false
-                                                NotificationService.success 'Success', "A new password is generated and sent by email <strong>#{result.userName}</strong>"
-                                            (error)->
-                                                if  error.data?.message? and error.status != 500
-                                                    NotificationService.error 'Error', error.data.message
-                                                $scope.isBusy = false
-                                        )
-                                    (error)->
-                                        $scope.isBusy = false
-                                )
+                            ##TODO:delete not used code
+                            #                            ###* set new password for user ###
+                            #                            $scope.onSetNewPassword = (params=null)->
+                            #                                $scope.isBusy = true
+                            #                                delDlg = DialogService.confirm "Set new password","Are you sure you want to generate new password for <strong>#{$scope.currEntity.userName}</strong>?"
+                            #                                delDlg.result.then(
+                            #                                    (result)->
+                            #                                        console.log params
+                            #                                        $scope.editEntity.$updatePassword().then(
+                            #                                            (result)->
+                            #                                                $scope.isBusy = false
+                            #                                                NotificationService.success 'Success', "A new password is generated and sent by email <strong>#{result.userName}</strong>"
+                            #                                            (error)->
+                            #                                                if  error.data?.message? and error.status != 500
+                            #                                                    NotificationService.error 'Error', error.data.message
+                            #                                                $scope.isBusy = false
+                            #                                        )
+                            #                                    (error)->
+                            #                                        $scope.isBusy = false
+                            #                                )
 
                             ###* on save in server-side ###
                             $scope.onSave = ->
