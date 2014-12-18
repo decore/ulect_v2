@@ -75,7 +75,7 @@ module.exports.routes = {
         //TODO: add API keys controll 
     },
     // messages from client
-    'post /api/v1/messages/client': {
+    'post /api/v1/messages/client/:number': {
         controller: 'MessagesController',
         action: 'clientMessage',
         locals: {layout: 'layout'}

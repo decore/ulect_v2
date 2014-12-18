@@ -87,6 +87,7 @@ module.exports = {
 
         )
     ## client messages registration
+
     clientMessage: (req,res)->
         _params = req.params.all()
         console.log 'client send as messages',_params
