@@ -123,13 +123,13 @@ module.exports = {
             paginateCriteria.limit =  _get_params.limit if !!_get_params.limit
             _sort = JSON.parse(_get_params.sort) if !!_get_params.sort
             console.log _sort
-            User.count().exec(
+            User.count(role:'Operator').exec(
                 (error, count)->
                     if (error)
                         res.status 500
                         return res.json error
                     else
-                        User.find().sort(_sort).paginate(paginateCriteria).exec(
+                        User.find(role:'Operator').sort(_sort).paginate(paginateCriteria).exec(
                             (err,userList)->
                                 if err
                                     res.status 500
