@@ -85,44 +85,44 @@ module.exports = {
                         (err)->
                             if err
                                 return res.json err
-                            ##send auto response
-                            _params =
-                                ##TODO: account sid req.token
-                                to : entity.client
-                                ## TODO: template  #%OPERATOR_NAME% is here to help you”
-                                body:  "Operator N1 is here to help you"
-                            TwilioService.sendSMS( _params, (err,message)->
-                                console.log 'auto response operator  send message', message
-                                ##TODO: replace demo operator
-                                _.extend message , { dialog : entity.id, operator: 0}
-                                if err
-                                    res.status 500
-                                    return res.json err
-                                Messages.create(message).exec(
-                                    (err,entity)->
-                                        if err
-                                            res.status 500
-                                            return res.json err
-                                        if !entity
-                                            res.status 418
-                                            return res.json err
-                                        return res.json entity
-
-                                )
-                                )
-
-                            ##TODO: delete dublicate call
-
                             Conversations.findOne(id:_id).populate('operator').exec(
                                 (err, dialog)->
                                     if err
                                         return res.json err
+                                     ##send auto response
+                                    _params =
+                                        ##TODO: account sid req.token
+                                        to : entity.client
+                                        ## TODO: template  #%OPERATOR_NAME% is here to help you”
+                                        body:  "Operator #{dialog.operator.username} is here to help you"
+                                    TwilioService.sendSMS( _params, (err,message)->
+                                        _.extend message , { dialog : dialog.id, operator: 0}
+                                        if err
+                                            res.status 500
+                                            return res.json err
+                                        Messages.create(message).exec(
+                                            (err,entity)->
+                                                #if err
+                                                #    res.status 500
+                                                #    return res.json err
+                                                #if !entity
+                                                #    res.status 418
+                                                #    return res.json err
+                                                #return res.json entity
+
+                                        )
+                                    )
+
+                            ##TODO: delete dublicate call
+
+
+
                                     return res.json dialog
                             )
 
                     )
-                    res.status 418
-                    return res.json entity
+                    #res.status 418
+                    #return res.json entity
         )
 
 }
