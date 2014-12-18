@@ -126,7 +126,7 @@ define ['cs!./../namespaces'],(namespaces)->
                         $scope.currentChatRoom = null
                         $scope.currentChatMessages = null
                     (msg)->
-                        alert 'Error'
+                        #alert 'Error'
                         console.log msg
                 )
                 #                   SocketEntityFactory.sendData(roomId,message).then(

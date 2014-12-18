@@ -1,17 +1,23 @@
 ###
 module and class dependecies
 ###
-_dependencies = [
+#_dependencies = [
+#    'angular'
+#    'cs!./namespaces'
+#    'cs!dialogService/index'
+#    'cs!./loadingContainer/index'
+#    'angular-ui-router'
+#    ]
+###
+
+###
+define  [
     'angular'
     'cs!./namespaces'
     'cs!dialogService/index'
     'cs!./loadingContainer/index'
     'angular-ui-router'
-    ]
-###
-
-###
-define _dependencies ,(
+    ] ,(
     angular
     namespaces
     dialogService
