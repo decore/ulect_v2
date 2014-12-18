@@ -1,50 +1,52 @@
 define ['cs!./../namespaces'],(namespaces)->
     ClassController = ($scope,EntityFactory,SocketEntityFactory, DialogService,$http,$sailsSocket,CurrentUser)->
         currentUser =  CurrentUser.user
-        ##
-        $sailsSocket.subscribe 'messages',(msg)->
-            console.log '  get on controller',msg
-            if msg.verb == "create"
-                (_.find($scope.conversationList, id: msg.data.dialog)).msgs.push msg.data
-            else
-                console.log 'TODO: update status of messages'
-            return
-        ## Conversation
-        $sailsSocket.subscribe 'conversations',(msg)->
-            console.log 'conversations ',msg
-            switch msg.verb
-                when "create"
-                    console.log 'event create conversations ',msg
-                    msg.data.msgs = []
-                    $scope.conversationList.push msg.data #if $scope.currentChatMessages?
-                when "update"
-                    console.log 'event update conversations ',msg
-                    _.extend _.find($scope.conversationList, id: msg.data.id), msg.data
-            return
 
-        ## Operators
-        $sailsSocket.subscribe 'operator',(msg)->
-            switch msg.verb
-                when "create"
-                    console.log 'event create operator ',msg
-                    $scope.operatorsList.push msg.data
-                when "update"
-                    console.log 'event update operator ',msg
-                    _.extend _.find($scope.operatorsList, id: msg.data.id) ,  msg.data
-            return
+        #        ##
+        #        $sailsSocket.subscribe 'messages',(msg)->
+        #            console.log '  get on controller',msg
+        #            if msg.verb == "create"
+        #                (_.find($scope.conversationList, id: msg.data.dialog)).msgs.push msg.data
+        #            else
+        #                console.log 'TODO: update status of messages'
+        #            return
+        #        ## Conversation
+        #        $sailsSocket.subscribe 'conversations',(msg)->
+        #            console.log 'conversations ',msg
+        #            switch msg.verb
+        #                when "create"
+        #                    console.log 'event create conversations ',msg
+        #                    msg.data.msgs = []
+        #                    $scope.conversationList.push msg.data #if $scope.currentChatMessages?
+        #                when "update"
+        #                    console.log 'event update conversations ',msg
+        #                    _.extend _.find($scope.conversationList, id: msg.data.id), msg.data
+        #            return
+        #
+        #        ## Operators
+        #        $sailsSocket.subscribe 'operator',(msg)->
+        #            switch msg.verb
+        #                when "create"
+        #                    console.log 'event create operator ',msg
+        #                    $scope.operatorsList.push msg.data
+        #                when "update"
+        #                    console.log 'event update operator ',msg
+        #                    _.extend _.find($scope.operatorsList, id: msg.data.id) ,  msg.data
+        #            return
 
 
-        $scope.conversationList = []
-        $scope.operatorsList = []
-        $http.get('/api/v1/operators').success(
-            (data)->
-                $scope.operatorsList = data
-        )
-
-        $http.get('/api/v1/conversations').success(
-            (data)->
-                $scope.conversationList = data
-        )
+        $scope.conversationList = SocketEntityFactory.conversationList#[]
+        $scope.operatorsList = SocketEntityFactory.operatorsList# []
+        #        $http.get('/api/v1/operators').success(
+        #            (data)->
+        #                $scope.operatorsList = data
+        #
+        #        )
+        #
+        #        $http.get('/api/v1/conversations').success(
+        #            (data)->
+        #                $scope.conversationList = data
+        #        )
         #SocketEntityFactory.load()
         #        EntityFactory.query().$promise.then(
         #            (data)->

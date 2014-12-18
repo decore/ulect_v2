@@ -53,9 +53,9 @@ module.exports = {
         },
         toJSON: function () {
             var obj = this.toObject();
-            obj.username = this.getUserName()
+            obj.username = this.getUserName();
             delete obj.encryptedPassword;
-            delete obj.AccountSid; 
+            //delete obj.AccountSid; 
             return obj;
         }
     },
@@ -76,17 +76,32 @@ module.exports = {
     //
     afterCreate: function (values, cb) {
         if (values.role === 'Operator') {
-            sails.sockets.broadcast(values.AccountSid, 'operator', {verb: 'create', data: values});
+            User.findOne(values).exec(
+                    function (err, values) {
+                        if (err)
+                            return cb(err); 
+                        console.log('create send -------');
+                        sails.sockets.broadcast(values.AccountSid, 'operator', {verb: 'create', data: values, dt: new Date()});
+                        cb();
+                    });
+        } else {
+            cb();
         }
-        cb();
     },
     //
     afterUpdate: function (values, cb) {
-        if (values.role === 'Operator') {
-            sails.sockets.broadcast(values.AccountSid, 'operator', {verb: 'update', data: values});
+        if (values.role === 'Operator') { 
+         User.findOne(values).exec(
+                    function (err, values) {
+                        if (err)
+                            return cb(err); 
+                        console.log('update send -------');
+                        sails.sockets.broadcast(values.AccountSid, 'operator', {verb: 'update', data: values, dt: new Date()});
+                        cb();
+                    });
+        } else {
+            cb();
         }
-
-        cb();
     },
     //
     validPassword: function (password, user, cb) {
