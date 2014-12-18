@@ -2,10 +2,10 @@
  * bootstraps angular onto the window.document node
  * 
  */
-define(['domReady!', 'angular', 'core','page', 'angularjs-toaster', 'angular-resource' ], function (document, ng, core, page) {
+define(['domReady!', 'angular', 'core','page','sails.io','ngsails.io',  'angular-bootstrap','angular-ui-router','angular-animate', 'angular-sails' ,"angular-messages", 'angularjs-toaster', 'angular-sanitize','angular-resource'], function (document, angular, core, page) {
     'use strict';
     console.log(core["name"]);
-    var app_init = ng.module('spaApp', [core["name"],page['name'], 'toaster' ]); 
+    var app_init = angular.module('spaApp', [core["name"],page['name'], 'toaster' ]); 
     app_init.factory('NotificationService', [
         'toaster', function (toaster) {
             return {
@@ -134,7 +134,7 @@ define(['domReady!', 'angular', 'core','page', 'angularjs-toaster', 'angular-res
             }
         }
     });
-    ng.bootstrap(document.getElementsByTagName('html'), [app_init['name'],
+    angular.bootstrap(document.getElementsByTagName('html'), [app_init['name'],
         function () {
             console.info('The following is required if you want AngularJS Scenario tests to work');
             // The following is required if you want AngularJS Scenario tests to work
@@ -143,6 +143,6 @@ define(['domReady!', 'angular', 'core','page', 'angularjs-toaster', 'angular-res
             // return ng;
         }
     ]);
-    ng.resumeBootstrap(); //https://docs.angularjs.org/guide/bootstrap & http://stackoverflow.com/questions/25668958/angular-is-missing-resumebootstrap-function
+    angular.resumeBootstrap(); //https://docs.angularjs.org/guide/bootstrap & http://stackoverflow.com/questions/25668958/angular-is-missing-resumebootstrap-function
 
 });
