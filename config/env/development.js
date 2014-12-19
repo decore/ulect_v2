@@ -19,7 +19,15 @@ module.exports = {
     // models: {
     //   connection: 'someMongodbServer'
     // }
-    MANDRILL_KEY: 's_aEGIXFZIe4vGonFZoqFA',
-    MANDRILL_FROM_NAME: "DEMO CrossLinkMedia",
-    MANDRILL_FROM_EMAIL: 'nikolay.gerzhan@gmail.com'   
+    madrill: {
+        MANDRILL_KEY: 's_aEGIXFZIe4vGonFZoqFA',
+        MANDRILL_FROM_NAME: "DEMO CrossLinkMedia",
+        MANDRILL_FROM_EMAIL: 'nikolay.gerzhan@gmail.com'
+    },
+    twilio: {
+        TWILIO_ACCOUNT_SID: 'AC220dd9ec0df20b77d7cdd306ee34f43a',
+        TWILIO_AUTH_TOKEN: 'f702406810816dab63eb2fe7e5001961',
+        TWILIO_NUMBER: '+16505675330',
+        StatusCallback: 'http://newspaper-plan.cloudapp.net:3000/api/v1/messages/status'
+    }
 };

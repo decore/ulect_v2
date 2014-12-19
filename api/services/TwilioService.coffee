@@ -1,12 +1,12 @@
 ##Load the twilio module
 twilio = require('twilio');
 ##
-config =
+config = sails.config.twilio
     # Account twilio.crosslinksms@gmail.com
-    TWILIO_ACCOUNT_SID: 'AC220dd9ec0df20b77d7cdd306ee34f43a'
-    TWILIO_AUTH_TOKEN :'f702406810816dab63eb2fe7e5001961'
-    TWILIO_NUMBER:'+16505675330'
-    StatusCallback: 'http://newspaper-plan.cloudapp.net:3000/api/v1/messages/status'
+    #    TWILIO_ACCOUNT_SID: 'AC220dd9ec0df20b77d7cdd306ee34f43a'
+    #    TWILIO_AUTH_TOKEN :'f702406810816dab63eb2fe7e5001961'
+    #    TWILIO_NUMBER:'+16505675330'
+    #    StatusCallback: 'http://newspaper-plan.cloudapp.net:3000/api/v1/messages/status'
     # TEST Account
     #        TWILIO_ACCOUNT_SID: 'ACf05f511ddc69d343935861aedb799742',
     #        TWILIO_AUTH_TOKEN :'9df8a9b345ded148b21f48e9852ef37e',
@@ -26,7 +26,7 @@ Send Message
 ###
 exports.sendSMS =  (options,cb)->
     ##TODO: add controll "options" parameter API key
-        console.log 'TwilioSrvice:sendSMS(',options,')'
+        #console.log 'TwilioSrvice:sendSMS(',options,')'
         if options.body
             ##NOTE: hook for debug
             #options.to = '+79832877503'#'+79504328892'#
@@ -50,17 +50,17 @@ exports.sendSMS =  (options,cb)->
             # The "error" variable will contain error information, if any.
             # If the request was successful, this value will be "falsy"
             cb(error,message)
-            if !error
-                # The second argument to the callback will contain the information
-                # sent back by Twilio for the request. In this case, it is the
-                # information about the text messsage you just sent:
-                console.log('Success! The SID for this SMS message is:');
-                console.log(message.sid);
-
-                console.log('Message sent on:');
-                console.log(message.dateCreated);
-            else
-                console.log('Oops! There was an error.');
+            #            if !error
+            #                # The second argument to the callback will contain the information
+            #                # sent back by Twilio for the request. In this case, it is the
+            #                # information about the text messsage you just sent:
+            #                console.log('Success! The SID for this SMS message is:');
+            #                console.log(message.sid);
+            #
+            #                console.log('Message sent on:');
+            #                console.log(message.dateCreated);
+            #            else
+            #                console.log('Oops! There was an error.');
 
         )
 ##https://www.twilio.com/docs/api/rest/available-phone-numbers
