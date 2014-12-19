@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>SPA debug</title>
+
+
+        <meta name="theme-color" content="#3372DF">
+
+        <!-- Page styles -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/latest/cosmo/bootstrap.min.css" type="text/css"> 
+    </head>
+    <body>
+        <header class="app-bar promote-layer">
+            <div class="app-bar-container">
+                <button class="menu"> </button>
+                <h1 class="logo">Web <strong>Starter Kit</strong></h1>
+                <section class="app-bar-actions">
+                    <!-- Put App Bar Buttons Here -->
+                    <!-- e.g <button><i class="icon icon-star"></i></button> -->
+                </section>
+            </div>
+        </header>
+
+        <nav class="navdrawer-container promote-layer">
+            <h4>Navigation</h4>
+            <ul>
+                <li><a href="#hello">Hello</a></li>
+                <li><a href="#get-started">Get Started</a></li>
+                <li><a href="styleguide.html">Style Guide</a></li>
+            </ul>
+        </nav>
+
+        <main ui-view>
+            <h1 id="hello">Hello!</h1>
+            <p>Welcome to Web Starter Kit.</p>
+
+            <h2 id="get-started">Get Started.</h2>
+            <p>Read how to <a href="https://developers.google.com/web/starter-kit">Get Started</a> or check out the <a href="styleguide.html">Style Guide</a>.</p>
+        </main> 
+        <div class="container-fluid" ui-view ng-include="'/templates/debug/index.tpl.html'"  style="position: absolute;
+     width: 100%;
+     height: 100%;
+     padding-top: 60px;
+     padding-bottom: 164px;
+     overflow-y: auto;">
+    <div class="label label-warning">Загрузка...</div>
+</div>
+        <script>
+//            console.log = function () {
+//            };
+//            console.info = function () {
+//            };
+//            console.warn = function () {
+//            };
+            
+                  
+            window.name = 'NG_DEFER_BOOTSTRAP!'; //SEE: https://docs.angularjs.org/guide/bootstrap
+            var ng_spa_name = 'debug';
+
+            var spi_cb = function (require, config) {
+                //This function will be called when all the dependencies
+                //listed above in deps are loaded. Note that this
+                //function could be called before the page is loaded.
+                //This callback is optional.
+                config.urlArgs = 'bust=v0.0.0.'+(new Date()).getDay();//+Math.random(); // установка версии для кэшеривания
+                config.baseUrl = 'src/spi';//'/js/spa';//
+                config.paths['app'] = ng_spa_name;
+                window.require.config(config);// update global require config
+                window.require.config({
+                    locale: window.localStorage.getItem("locale") || (typeof (vhistory) !== "undefined" ? app.language : navigator.language)
+                });
+                require(['bootstrap_app']);// load app(spi)
+
+            };
+        </script>
+        <script>
+            var require = {
+                deps: ['require', 'src/debug.config-require.js'],
+                callback: function (require, config) {
+                    spi_cb(require, config);
+                }
+            };
+        </script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js" datamain="/js/main"></script>
+
+    </body>
+</html>

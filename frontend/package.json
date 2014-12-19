@@ -1,0 +1,28 @@
+{
+  "name": "smschatclm_frontend",
+  "version": "0.0.1",
+  "description": "Front-end smschatclm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gerzhan@bitbucket.org/root85/smschatclm.git"
+  },
+  "keywords": [
+    "Chat"
+  ],
+  "author": "Nikolay Gerzhan <nikolay.gerzhan@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "coffee-script": "^1.8.0",
+    "gulp": "^3.8.10",
+    "webpack": "^1.4.13",
+    "gulp-webpack": "^1.1.0",
+    "vinyl-named": "^1.1.0",
+    "coffee-loader": "^0.7.2",
+    "gulp-changed": "^1.1.0",
+    "gulp-util": "^3.0.1"
+  }
+}
