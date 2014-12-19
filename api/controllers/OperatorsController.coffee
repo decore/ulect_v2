@@ -12,6 +12,7 @@ module.exports = {
     CREATE Operator
     ###
     create :(req, res, next) ->
+        console.log 'Conversations:setOperator', req.token
         email = req.param("email")
         firstname = req.param("firstname")
         lastname = req.param("lastname")
@@ -38,6 +39,7 @@ module.exports = {
             lastname: lastname
             password: password
             email: email
+            AccountSid: req.token.AccountSid
             role: 'Operator' ##NOTE: hardcode role name 'Operator'
         , (err, user) ->
             if err
@@ -61,21 +63,23 @@ module.exports = {
             #                #next null, user
             #                return res.json(user,201)
             #            return
+            ##
             Email.send(
                 to: [
                     name: user.username
                     email: user.email
                 ]
-                subject: 'Operator Registration CrosLinkMedia SMSChat'
+                subject: 'Operator Registration CrosLinkMedia(SMSChat)'
                 html:
-                    'You was registered as Operator <a href="#test">LIKT TO SITE</a><br/>'+
-                    "You login\password : #{user.email}/#{password}"
-                text: 'You was registry '
+                    'You was registered as Operator in CrosLinkMedia(SMSChat)<br/>'+
+                    "login: #{user.email} <br/>"+
+                    "password: #{password}"
+                text: 'Registration Operator CrosLinkMedia'
                 (err)->
                     #                // If you need to wait to find out if the email was sent successfully,
                     #                // or run some code once you know one way or the other, here's where you can do that.
                     #                // If `err` is set, the send failed.  Otherwise, we're good!
-                    console.log 'is send OK or' , err
+                    console.log 'is send for '+ user.email , err
                     if err
                         res.status 418
                         user.destroy((destroyErr) ->

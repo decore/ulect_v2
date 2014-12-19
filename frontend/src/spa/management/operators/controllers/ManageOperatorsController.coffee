@@ -126,7 +126,7 @@ define ['cs!./../module','cs!./../namespace'],(module,namespace)->
                                             $scope.isBusy = false
                                     )
                                 else
-                                    console.log '====',$scope.editEntity
+                                    #console.log '====',$scope.editEntity
                                     $scope.editEntity.$update().then(
                                         (result)->
                                             $scope.isBusy = false
@@ -151,8 +151,12 @@ define ['cs!./../module','cs!./../namespace'],(module,namespace)->
                         console.log result ,'=?=',item
                         if item?
                             _.extend item , result
+                        $scope.isBusy = false
+                        return
                     (result)->
                         console.log result
+                        $scope.isBusy = false
+                        return
 
                 )
     ]

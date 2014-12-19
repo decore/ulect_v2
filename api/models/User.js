@@ -32,10 +32,11 @@ module.exports = {
         encryptedPassword: {
             type: 'string'
         },
+        // 
         AccountSid: {
             type: "string",
             required: true,
-            defaultsTo: "AC220dd9ec0df20b77d7cdd306ee34f43a"// 'ACc0d344677835c0a303c92d59cfa1b9d8'//"AC220dd9ec0df20b77d7cdd306ee34f43a"
+           // defaultsTo: "AC220dd9ec0df20b77d7cdd306ee34f43a"// 'ACc0d344677835c0a303c92d59cfa1b9d8'//"AC220dd9ec0df20b77d7cdd306ee34f43a"
         },
         isLogin: {
             type: "boolean",

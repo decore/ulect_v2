@@ -9631,7 +9631,6 @@ define('cs!management/operators/controllers/ManageOperatorsController',['cs!./..
                     return $scope.isBusy = false;
                   });
                 } else {
-                  console.log('====', $scope.editEntity);
                   return $scope.editEntity.$update().then(function(result) {
                     $scope.isBusy = false;
                     console.log(result);
@@ -9650,10 +9649,12 @@ define('cs!management/operators/controllers/ManageOperatorsController',['cs!./..
         }).result.then(function(result) {
           console.log(result, '=?=', item);
           if (item != null) {
-            return _.extend(item, result);
+            _.extend(item, result);
           }
+          $scope.isBusy = false;
         }, function(result) {
-          return console.log(result);
+          console.log(result);
+          $scope.isBusy = false;
         });
       };
     }
