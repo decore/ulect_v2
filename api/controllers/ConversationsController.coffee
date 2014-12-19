@@ -60,6 +60,8 @@ module.exports = {
         console.log 'Conversations:setOperator', req.token
         ## get current
         _id = req.param('id')
+
+
         Conversations.findOne(id:_id).populate('operator').exec(
             (err,entity)->
                 console.log 'find' , entity
@@ -94,7 +96,7 @@ module.exports = {
                                         ##TODO: account sid req.token
                                         to : entity.client
                                         ## TODO: template  #%OPERATOR_NAME% is here to help you”
-                                        body:  "Operator #{dialog.operator.username} is here to help you"
+                                        body:  "Operator #{dialog.operator.firstname} #{dialog.operator.lastname} is here to help you"
                                     TwilioService.sendSMS( _params, (err,message)->
                                         _.extend message , { dialog : dialog.id, operator: 0}
                                         if err

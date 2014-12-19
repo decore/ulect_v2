@@ -33,11 +33,12 @@ module.exports = {
                     res.status 500
                     return res.json err:msg:"Dialog not found or not active"
                 _params.to = dialog.client
+
                 console.log "TO SEND params ",_params
                 TwilioService.sendSMS( _params, (err,message)->
                     console.log 'is send message', message
                     ##TODO: replace demo operator
-                    _.extend message , { dialog : dialog.id, operator: 1}
+                    _.extend message , { dialog : dialog.id, operator: }
                     console.log 'is extend message===', message
                     if err
                         res.status 500
