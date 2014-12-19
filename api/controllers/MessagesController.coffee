@@ -38,7 +38,7 @@ module.exports = {
                 TwilioService.sendSMS( _params, (err,message)->
                     console.log 'is send message', message
                     ##TODO: replace demo operator
-                    _.extend message , { dialog : dialog.id, operator: }
+                    _.extend message , { dialog : dialog.id, operator: req.token.sid }
                     console.log 'is extend message===', message
                     if err
                         res.status 500
