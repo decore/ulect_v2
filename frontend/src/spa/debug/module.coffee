@@ -1,14 +1,11 @@
 ###
 module and class dependecies
 ###
-_dependencies = [
-    'angular'
-    'cs!./namespaces'
-    ]
+
 ###
 
 ###
-define _dependencies ,(
+define ['angular', 'cs!./namespaces'] ,(
     angular
     namespaces
 )->

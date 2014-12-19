@@ -3,7 +3,7 @@ Module namespace configuration
 ###
 define [],()->
     return {
-        name: "chatroom"
+        name: "debug"
         module:
-            name: "chatroom"
+            name: "debug"
     }
