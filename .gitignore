@@ -117,4 +117,5 @@ nbproject
 .idea
 .node_history
 /assets/vendors/
-/frontend/
+/frontend/js/
+/frontend/vendors/

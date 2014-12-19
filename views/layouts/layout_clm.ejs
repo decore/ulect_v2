@@ -5,10 +5,20 @@
 
         <!-- Viewport mobile tag for sensible mobile support -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-           <link href="/vendors/angularjs-toaster/toaster.css" rel="stylesheet" type="text/css"/> 
+        <link href="/styles/toaster.css" rel="stylesheet" type="text/css"/> 
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"> 
+        <style> 
+            @charset "UTF-8"; 
+            [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
+            .ng-cloak, .x-ng-cloak,
+            .ng-hide:not(.ng-hide-animate) {
+                display: none !important;
+            } 
+            ng\:form {
+                display: block;
+            }</style>
         <link href="/styles/importer.css" rel="stylesheet" type="text/css"/> 
-        <link href="/vendors/angular/angular-csp.css" rel="stylesheet" type="text/css"/>
+
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/latest/cosmo/bootstrap.min.css" type="text/css"> 
         <% include ./../parts/head.ejs %>
     </head>
@@ -29,77 +39,42 @@
                 z-index: -100;
             }
             /* TEMPORARY CONTENT LOADING CONTAINER */
-.loading-container {
-    position: relative;
-}
+            .loading-container {
+                position: relative;
+            }
 
-.loading-container .loading:before, .loading-container .loading:after {
-    content: " ";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    min-height: 50px;
-    min-width: 50px;
-}
+            .loading-container .loading:before, .loading-container .loading:after {
+                content: " ";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                min-height: 50px;
+                min-width: 50px;
+            }
 
-.loading-container .loading:before {
-    z-index: 1020;
+            .loading-container .loading:before {
+                z-index: 1020;
 
-    background: white url('/images/loader.gif') no-repeat center;
-    opacity: 0.5;
-}
+                background: white url('/images/loader.gif') no-repeat center;
+                opacity: 0.5;
+            }
 
-.loading-container .loading-container .loading {
-    display: none;
-}
+            .loading-container .loading-container .loading {
+                display: none;
+            }
 
         </style>
         <div class="container-fluid" id="pages_body" ui-view>
             <%- body %>
         </div>
         <% include ./../parts/footer %>
+        <!--<script src="/js/dependencies/sails.io.js" type="text/javascript"></script>-->
         <script>
-//            console.log = function () {
-//            };
-//            console.info = function () {
-//            };
-//            console.warn = function () {
-//            };
-        <% if( user!='undefine' && !!user){ %>
-            var user = <%- JSON.stringify(user) %> ; 
-        <% }else{%>     
-            var user = {} ;
-        <% } %>     
-            console.log('init user',user);
-            window.name = 'NG_DEFER_BOOTSTRAP!'; //SEE: https://docs.angularjs.org/guide/bootstrap
-            var ng_spa_name = '<%= ng_spa_name %>';
-
-            var spi_cb = function (require, config) {
-                //This function will be called when all the dependencies
-                //listed above in deps are loaded. Note that this
-                //function could be called before the page is loaded.
-                //This callback is optional.
-                config.urlArgs = 'bust=v0.0.0.'+(new Date()).getDay();//+Math.random(); // установка версии для кэшеривания
-                config.baseUrl = '/js/spi';//'/src/';
-                config.paths['page'] = ng_spa_name;
-                window.require.config(config);// update global require config
-                window.require.config({
-                    locale: window.localStorage.getItem("locale") || (typeof (vhistory) !== "undefined" ? app.language : navigator.language)
-                });
-                require(['../bootstrap_app']);// load app(spi)
-
-            };
+            window.name = 'NG_DEFER_BOOTSTRAP!';
         </script>
-        <script>
-            var require = {
-                deps: ['require', '/js/debug.config-require.js'],
-                callback: function (require, config) {
-                    spi_cb(require, config);
-                }
-            };
-        </script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js" datamain="/js/main"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js" ></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js" data-main="/js/spa/<%= ng_spa_name %>"></script>
     </body>
 </html>
