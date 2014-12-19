@@ -1,3 +1,4 @@
+##https://www.npmjs.com/package/amd-optimize/
 gulp = require 'gulp'
 gulpWebpack = require 'gulp-webpack'
 named = require('vinyl-named');

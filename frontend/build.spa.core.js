@@ -9,7 +9,7 @@
 //        'page': 'chatroom'
 //    },
     CoffeeScript: {
-        bare: true
+        bare: false
     },
     modules: [
         //Just specifying a module name means that module will be converted into
@@ -39,12 +39,17 @@
          {
             name: "debug",
             exclude: [
+                'lodash',
+                'angular',
                 'coffee-script'
             ],
             stubModules: ['text', 'tpl','cs'],
+            findNestedDependencies: true,
+            insertRequire: ['../bootstrap_app'],
         },
         
-    ],    
+    ],   
+//       removeCombined: true,
     exclude: ['coffee-script'],
     stubModules: ['text', 'tpl','cs'],
     findNestedDependencies: true,

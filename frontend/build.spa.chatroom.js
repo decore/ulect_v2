@@ -15,7 +15,7 @@
     stubModules: ['text', 'cs'],
     findNestedDependencies: true,
     name: '../bootstrap_app',
-    include: [ 'angular','core','../main.config' ],
+    include: [ '../main.config' ],
      
     insertRequire: ['../bootstrap_app'],
   //  wrap: false,

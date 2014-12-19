@@ -3,10 +3,10 @@
  *  NOTE: for run production build execute command $node r.js -o build_one_file.js
  */
 ({
-    baseUrl: "./js/spi",
-    mainConfigFile: "./js/main.config.js",
+    baseUrl: "./src/spa",
+    mainConfigFile: "./src/main.config.js",
     paths: {
-        'page': 'management'
+        'page': 'debug'
     },
     CoffeeScript: {
         bare: true
@@ -16,13 +16,15 @@
     findNestedDependencies: true,
     name: '../bootstrap_app',
     include: [ '../main.config' ],
-    //wrap: false,
+     
+    insertRequire: ['../bootstrap_app'],
+  //  wrap: false,
     wrap: {
         startFile: "built/start.frag",
         endFile: "built/end.frag"
     },
-      out: './../assets/js/spa/management.js'
-   // out: './js/spa/management.js'
+    out: './../assets/js/spa/debug.js'
+    //out: './../../.tmp/public/js/spa/chatroom.js'
     , optimize: 'none'
     , uglify2: {
         'screw-ie8': true,
