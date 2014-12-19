@@ -15,16 +15,15 @@
     stubModules: ['text', 'cs'],
     findNestedDependencies: true,
     name: '../bootstrap_app',
-    include: [ '../main.config' ],
-     
+    include: ['../main.config'],
     insertRequire: ['../bootstrap_app'],
-  //  wrap: false,
+    //  wrap: false,
     wrap: {
         startFile: "built/start.frag",
         endFile: "built/end.frag"
     },
     out: './../assets/js/spa/chatroom.js'
-    //out: './../../.tmp/public/js/spa/chatroom.js'
+            //out: './../../.tmp/public/js/spa/chatroom.js'
     , optimize: 'none'
     , uglify2: {
         'screw-ie8': true,

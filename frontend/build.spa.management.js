@@ -3,8 +3,8 @@
  *  NOTE: for run production build execute command $node r.js -o build_one_file.js
  */
 ({
-    baseUrl: "./js/spi",
-    mainConfigFile: "./js/main.config.js",
+    baseUrl: "./src/spa",
+    mainConfigFile: "./src/main.config.js",
     paths: {
         'page': 'management'
     },
@@ -15,7 +15,8 @@
     stubModules: ['text', 'cs'],
     findNestedDependencies: true,
     name: '../bootstrap_app',
-    include: [ '../main.config' ],
+    include: [ '../main.config' ],     
+    insertRequire: ['../bootstrap_app'],
     //wrap: false,
     wrap: {
         startFile: "built/start.frag",

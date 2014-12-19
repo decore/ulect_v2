@@ -15,7 +15,7 @@
     stubModules: ['text', 'cs'],
     findNestedDependencies: true,
     name: '../bootstrap_app',
-    include: [ '../main.config' ],
+    include: [ 'core','../main.config' ],
      
     insertRequire: ['../bootstrap_app'],
   //  wrap: false,
