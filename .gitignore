@@ -117,4 +117,7 @@ nbproject
 .node_history
 /assets/vendors/
 /frontend/js/
+/frontend/vendors/ 
 /frontend/vendors/
+config/local.js
+config/local.js
