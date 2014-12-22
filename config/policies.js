@@ -34,9 +34,11 @@ module.exports.policies = {
     OperatorsController:{
         '*':['tokenAuth']  
     },
-    MessagesController:{
-        '*': ['tokenAuth']  
-    }    
+    MessagesController:{                                                                                                                                                                                                            
+        '*': ['tokenAuth'] ,                                                                                                                                                                                                        
+        'clientMessage': true,                                                                                                                                                                                                      
+        'statusMessage': true                                                                                                                                                                                                   
+    }   
             /***************************************************************************
              *                                                                          *
              * Here's an example of mapping some policies to run before a controller    *
