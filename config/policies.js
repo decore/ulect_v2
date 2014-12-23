@@ -25,41 +25,46 @@ module.exports.policies = {
      *                                                                          *
      ***************************************************************************/
 
-     '*': true,
-   AuthController:{
-        'apikey': ['tokenAuth']  ,
+    '*': true,
+    AuthController: {
+        'apikey': ['tokenAuth'],
         '*': true
     },
-    ConversationsController:{
-        '*':true, //TODO: change this rule 
+    ConversationsController: {
+        '*': true, //TODO: change this rule 
         setOperator: ['tokenAuth']
     },
-    OperatorsController:{
-        '*':['tokenAuth']  
+    OperatorsController: {
+        '*': ['tokenAuth']
     },
-    MessagesController:{                                                                                                                                                                                                            
-        '*': ['tokenAuth'] ,                                                                                                                                                                                                        
-        'clientMessage': true,                                                                                                                                                                                                      
-        'statusMessage': true                                                                                                                                                                                                   
-    }   
-            /***************************************************************************
-             *                                                                          *
-             * Here's an example of mapping some policies to run before a controller    *
-             * and its actions                                                          *
-             *                                                                          *
-             ***************************************************************************/
-            // RabbitController: {
+    MessagesController: {
+        '*': ['tokenAuth'],
+        'clientMessage': true,
+        'statusMessage': true
+    },
+    AutoresponseSettingsController:{
+         '*': true, //TODO: change this rule 
+        getSettings: ['tokenAuth'],
+        saveSettings: ['tokenAuth']
+    }
+    /***************************************************************************
+     *                                                                          *
+     * Here's an example of mapping some policies to run before a controller    *
+     * and its actions                                                          *
+     *                                                                          *
+     ***************************************************************************/
+    // RabbitController: {
 
-            // Apply the `false` policy as the default for all of RabbitController's actions
-            // (`false` prevents all access, which ensures that nothing bad happens to our rabbits)
-            // '*': false,
+    // Apply the `false` policy as the default for all of RabbitController's actions
+    // (`false` prevents all access, which ensures that nothing bad happens to our rabbits)
+    // '*': false,
 
-            // For the action `nurture`, apply the 'isRabbitMother' policy
-            // (this overrides `false` above)
-            // nurture	: 'isRabbitMother',
+    // For the action `nurture`, apply the 'isRabbitMother' policy
+    // (this overrides `false` above)
+    // nurture	: 'isRabbitMother',
 
-            // Apply the `isNiceToAnimals` AND `hasRabbitFood` policies
-            // before letting any users feed our rabbits
-            // feed : ['isNiceToAnimals', 'hasRabbitFood']
-            // }
+    // Apply the `isNiceToAnimals` AND `hasRabbitFood` policies
+    // before letting any users feed our rabbits
+    // feed : ['isNiceToAnimals', 'hasRabbitFood']
+    // }
 };

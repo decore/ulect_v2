@@ -20,6 +20,7 @@ module.exports = {
         firstname: "string",
         lastname: "string",
         phone: "string"
+        
     }
 };
 
