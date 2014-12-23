@@ -2,9 +2,11 @@
 * Echo Controller
 * @author Nikolay Gerzhan <nikolay.gerzhan@gmail.com>
 ###
+format = require("string-template")
 module.exports = {
     index: (req,res)->
-        return res.json {}
+        message = format  "{DEMO}", DEMO: "Demo name"+"Demo "
+        return res.json {msg:message}
 
     rooms: (req, res)->
         roomNamesAll = JSON.stringify(sails.sockets.rooms());
