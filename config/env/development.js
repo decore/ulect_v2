@@ -28,6 +28,6 @@ module.exports = {
         TWILIO_ACCOUNT_SID: 'AC220dd9ec0df20b77d7cdd306ee34f43a',
         TWILIO_AUTH_TOKEN: 'f702406810816dab63eb2fe7e5001961',
         TWILIO_NUMBER: '+16505675330',
-        StatusCallback: 'http://newspaper-plan.cloudapp.net:3000/api/v1/messages/status'
+        StatusCallback: 'http://78921f6d.ngrok.com/api/v1/messages/status'
     }
 };

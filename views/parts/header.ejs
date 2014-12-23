@@ -55,6 +55,7 @@
 
                     </ul>
                 </li>
+                <li ng-show="auth.isAuthenticated()&& user().role==='Administrator'"><a  ng-click ="getApiKey()" _href="/apikey" target="_self" > <span class="fa fa-key"></span> Get API Key</a></li>
             </ul>
             <!--            <ul class="nav navbar-nav">
                             <li class="active"><a href="#">Active</a></li>
@@ -74,8 +75,8 @@
                         </ul>-->
             <ul class="nav navbar-nav navbar-right"  ng-cloak>
                 <li ng-hide="auth.isAuthenticated()"><a href="/login">Login</a></li>
-                <!--<li ng-hide="auth.isAuthenticated()"><a href="/register">Register</a></li>-->
-                <!--<li ng-show="auth.isAuthenticated()"><p class="navbar-text">Hello, <strong><i class="fa fa-user"> </i> {{user().email}}</strong></p></li>-->
+                <li ng-hide="auth.isAuthenticated()"><a href="/register">Register</a></li>
+                <li ng-show="auth.isAuthenticated()"><p class="navbar-text">Hello, <strong><i class="fa fa-user"> </i> {{user().email}}</strong></p></li>
                 <li ng-show="auth.isAuthenticated()"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i> Logout <strong>(<i class="fa fa-user"> </i> {{user().username}}</strong>)</a></li>
             </ul>
             <!--            <ul class="nav navbar-nav navbar-right ng-cloak" >

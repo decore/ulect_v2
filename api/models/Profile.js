@@ -11,7 +11,8 @@ module.exports = {
             model: 'User',
             via: 'id',
             required: true
-        }, companyname: "string",
+        },
+        companyname: "string",
         country: {
             model: 'Country',
             via: 'id'

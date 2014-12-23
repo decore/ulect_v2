@@ -38,11 +38,14 @@ define  [
             url: "/login"
             templateUrl:"templates/#{module.name.replace /\.+/g, "/"}/auth/login.tpl.html"# "auth/login.html"
             controller: "LoginController"
-        ).state "anon.register",
+        ).state( "anon.register",
             url: "/register"
             templateUrl: "templates/#{module.name.replace /\.+/g, "/"}/auth/register.tpl.html"#"auth/register.html"
-            controller: "RegisterController"
-
+            controller: "RegisterController")
+        .state( "anon.activate",
+            url: "/activate?token"
+            templateUrl: "templates/#{module.name.replace /\.+/g, "/"}/auth/activate.tpl.html"
+            controller: "ActivateController")
         #            $stateProvider.state("user",
         #                abstract: true
         #                template: "<ui-view/>"
@@ -55,5 +58,11 @@ define  [
 
         $urlRouterProvider.otherwise "/"
         return
+    ]
+
+    module.controller 'ActivateController', ['$scope','$stateParams',($scope,$stateParams)->
+
+           $scope.activationstate = $stateParams.token
+           console.log '',$stateParams
     ]
     return module

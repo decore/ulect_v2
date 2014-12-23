@@ -35,9 +35,15 @@ module.exports.routes = {
     '/home': 'PagesController.index',
     'get /register': 'PagesController.spi',
     'get /login': 'PagesController.spi',
+    'get /activate?': 'PagesController.spi',
+    
+    'get /account/activate?': 'AuthController.activate',
+    
     '/chatroom': 'PagesController.chatroom',
     '/management': 'PagesController.management',
     '/management/operators': 'PagesController.management',
+    '/management/account': 'PagesController.management',
+    
     /***************************************************************************
      *                                                                          *
      * Custom routes here...                                                    *
@@ -110,5 +116,8 @@ module.exports.routes = {
     'get /api/v1/operators/:id': 'OperatorsController.find',
     'post /api/v1/operators': 'OperatorsController.create',
     'put /api/v1/operators/:id': 'OperatorsController.update',
-    'delete /api/v1/operators/:id': 'OperatorsController.destroy'
+    'delete /api/v1/operators/:id': 'OperatorsController.destroy',
+    
+    //
+    'get /api/v1/apikey/:id': 'AuthController.apikey'
 };

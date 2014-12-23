@@ -1,92 +1,118 @@
 <!-- template "operators.tpl.html"-->
 <section ui-view="content" class="tasks">
-    <div class="col-sm-12 no-padding" loading-container="isBusy || tableParams.settings().$loading">
-        <div class="col-sm-12">
-            <h3 class="text text-left task-title col-sm-12">
-               Account settings
-<!--                <button
-                                              ng-click="onOpenInstruction()"
-                                              type="button"
-                                              class="btn btn-info pull-right">
-                    Instruction
-                </button>-->
- <!--<button ng-click="onAddUser()" class="btn btn-primary pull-right">Add new Operator</button>-->
-            </h3>
-
-            <hr/>
-            <div class="pusher-15"></div>
-
-<!--            <div class="col-sm-12 no-padding">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a>Users</a></li>
-                </ul>
-            </div>-->
-
-            <div class="col-sm-12 no-padding content-table">
-                <div class="pusher-15"></div>
-
-<!--                <div class="col-sm-6">
-                    <search-box ng-model="tableParams.filter()['userName']"></search-box>
-                </div>-->
-<!--                <div class="col-sm-6">
-                    <button ng-click="onAddUser()" class="btn btn-primary pull-right">Add new Operator</button>
-                </div>-->
-
-                <div class="pusher-15"></div>
-
-                <div class="col-sm-12 no-padding">
-                    <form name="registerForm" class="form-signin" novalidate> 
+   <legend>My Profile settings</legend>
+  
     <div class="form-group"> 
-          <label for="inputEmail" class="col-lg-2 control-label">Email</label>
-      <div class="col-lg-10">
-        <input type="text" class="form-control" placeholder="First name" name="firstname" ng-model="user.firstname" required>
-        <div ng-show="registerForm.firstname.$dirty" ng-messages="registerForm.firstname.$error">
-            <div ng-message="required">
-                Enter First name
-            </div>
-
-        </div>
-      </div>
-      </div>
-    </div>
-    <div class="control-group"> 
-        <input type="text" class="form-control" placeholder="Last name" name="lastname" ng-model="user.lastname" required>
-        <div ng-show="registerForm.lastname.$dirty" ng-messages="registerForm.lastname.$error">
-            <div ng-message="required">
-                Enter Last name
-            </div>
-
-        </div>
-    </div>
-<!-- company name-->
-    <div class="control-group"> 
-        <input type="text" class="form-control" placeholder="Company name" name="companyname" ng-model="user.companyname" required>
-        <div ng-show="registerForm.companyname.$dirty" ng-messages="registerForm.companyname.$error">
-            <div ng-message="required">
-               Enter Company name
-            </div>
-
-        </div>
-    </div>
-<!-- //company name-->
-                    </form>
-<!--                    <table ng-table="tableParams" class="table table-striped table-fixed">
-                        <tbody>
-                            <tr ng-repeat="item in $data">
-                                <td data-title="'Name'" sortable="'firstname'">{{item.username}}</td>
-                                
-                                <td data-title="'Email'" sortable="'email'">{{item.email}}</td> 
-                                <td data-title="'Role'" sortable="'role'" >{{item.role}}</td>
-                                <td data-title="'Controls'">
-                                    <button class="btn btn-xs btn-warning" ng-click="onEditUser(item)">Edit</button>
-                                    <button class="btn btn-xs btn-danger" ng-click="onDeleteUser(item)">Delete</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>-->
+        <label for="firstname" class="col-lg-2 control-label">First name</label>
+        <div class="col-lg-10">
+            <input type="text" class="form-control" placeholder="First name" name="firstname" ng-model="user.firstname" required>
+            <div ng-show="registerForm.firstname.$dirty" ng-messages="registerForm.firstname.$error">
+                <div ng-message="required">
+                    Enter First name
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
+    <div class="form-group"> 
+        <label for="firstname" class="col-lg-2 control-label">Last name</label>
+        <div class="col-lg-10">
+            <input type="text" class="form-control" placeholder="Last name" name="lastname" ng-model="user.lastname" required>
+            <div ng-show="registerForm.lastname.$dirty" ng-messages="registerForm.lastname.$error">
+                <div ng-message="required">
+                    Enter Last name
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- company name-->
+    <div class="form-group"> 
+        <label for="companyname" class="col-lg-2 control-label">Company name</label>
+        <div class="col-lg-10">
+            <input type="text" class="form-control" placeholder="Company name" name="companyname" ng-model="user.companyname" required>
+            <div ng-show="registerForm.companyname.$dirty" ng-messages="registerForm.companyname.$error">
+                <div ng-message="required">
+                    Enter Company name
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- //company name-->
+
+
+    <!-- country-->
+    <div class="form-group"> 
+        <label for="country" class="col-lg-2 control-label">Country</label>
+        <div class="col-lg-10">
+            <!--<input type="text" class="form-control" placeholder="country" name="country" ng-model="user.country" required>-->
+               <select class="form-control" id="country" ng-model="user.country" required ng-options=" value.Country for (key,value) in countryList">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+            <div ng-show="registerForm.country.$dirty" ng-messages="registerForm.country.$error">
+                <div ng-message="required">
+                    Select country 
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    <!-- //country -->
+
+    <div class="form-group"> 
+        <label for="email" class="col-lg-2 control-label">Email</label>
+        <div class="col-lg-10">
+            <input type="email" class="form-control" placeholder="email" name="email" ng-model="user.email" required>
+            <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.email.$error">
+                <div ng-message="required">
+                    You forgot the email address.
+                </div>
+                <div ng-message="email">
+                    That is not a well formed email address.
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group"> 
+        <label for="phone" class="col-lg-2 control-label">Contact phone</label>
+        <div class="col-lg-10">
+            <input type="text" class="form-control" placeholder="phone" name="phone" ng-model="user.phone" required>
+            <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.phone.$error">
+                <div ng-message="required">
+                    Enter phone
+                </div>          
+            </div>
+        </div>
+    </div>
+    <div class="form-group"> 
+        <label for="password" class="col-lg-2 control-label">Password</label>
+        <div class="col-lg-10">
+            <input type="password" class="form-control" placeholder="password" name="password" ng-model="user.password" required>
+            <div ng-show="registerForm.password.$dirty" ng-messages="registerForm.password.$error">
+                <div ng-message="required">
+                    You forgot the password.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group"> 
+        <label for="confirmpassword" class="col-lg-2 control-label">Confirm password</label>
+        <div class="col-lg-10">
+            <input type="password" class="form-control" placeholder="confirm password" name="confirmpassword" ng-model="user.confirmPassword" required>
+            <div ng-show="registerForm.confirmpassword.$dirty" ng-messages="registerForm.confirmpassword.$error">
+                <div ng-message="required">
+                    You forgot the password confirmation.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="submit" class="btn btn-lg btn-primary btn-block" ng-click="register()" value="Create Account" />
 </section>
 <!-- //template "operators.tpl.html"-->

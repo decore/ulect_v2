@@ -25,8 +25,11 @@ module.exports.policies = {
      *                                                                          *
      ***************************************************************************/
 
-    // '*': true,
-
+     '*': true,
+   AuthController:{
+        'apikey': ['tokenAuth']  ,
+        '*': true
+    },
     ConversationsController:{
         '*':true, //TODO: change this rule 
         setOperator: ['tokenAuth']
