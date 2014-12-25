@@ -4,37 +4,39 @@
 passport = require("passport");
 jwt = require('jsonwebtoken');
 secret = 'ewfn09qu43f09qfj94qf*&H#(R';
+format = require("string-template")
+moment = require('moment');
 module.exports = {
     #login: (req,res)->
     #    res.json "ok"
-    login: (req, res) ->
-        passport.authenticate("local", (err, user, info) ->
-
-            if (err) or (not user)
-                res.send
-                    success: false
-                    message: "invalidPassword"
-
-                return
-            else
-                if err
-                    res.send
-                        success: false
-                        message: "unknownError"
-                        error: err
-
-                else
-                    token = jwt.sign(user, secret,
-                        expiresInMinutes: 60 * 24
-                    )
-                    res.send
-                        success: true
-                        user: user
-                        token: token
-
-            return
-        ) req, res
-        return
+    #    login: (req, res) ->
+    #        passport.authenticate("local", (err, user, info) ->
+    #
+    #            if (err) or (not user)
+    #                res.send
+    #                    success: false
+    #                    message: "invalidPassword"
+    #
+    #                return
+    #            else
+    #                if err
+    #                    res.send
+    #                        success: false
+    #                        message: "unknownError"
+    #                        error: err
+    #
+    #                else
+    #                    token = jwt.sign(user, secret,
+    #                        expiresInMinutes: 60 * 24
+    #                    )
+    #                    res.send
+    #                        success: true
+    #                        user: user
+    #                        token: token
+    #
+    #            return
+    #        ) req, res
+    #        return
 
     logout: (req, res) ->
         console.log 'logout'
@@ -85,13 +87,13 @@ module.exports = {
                 return
             return
         return
-    register : (req, res) ->
+    _register : (req, res) ->
         console.log _params = req.params.all()
         return res.json
             user: {id:20}
             token: sailsTokenAuth.issueToken(sid: 20 ,AccountSid:'',role:'Administrator')
     ## API call - Customer Registration
-    _register : (req, res) ->
+    register : (req, res) ->
         console.log _params = req.params.all()
         #TODO: Do some validation on the input
         if _params.password isnt _params.confirmPassword
@@ -108,7 +110,7 @@ module.exports = {
             password: _params.password
             firstname:  _params.firstname
             lastname:  _params.lastname
-            isLogin: true ##TODO: change this. Make user isLogin after login
+            isLogin: false ##TODO: change this. Make user isLogin after login
         ).exec(
             (err, user)->
                 if err
@@ -119,7 +121,8 @@ module.exports = {
                     #delete user.username
                     delete user.password
                     _params.owner = user.id
-
+                    #if _params.country?
+                    #    _params.country = ISO:_params.ISO, Country:_params.Country
                     Profile.create(_params).exec(
                         (err,profile)->
                             console.log profile
@@ -145,7 +148,7 @@ module.exports = {
                                     res.status 418
                                     return res.json msg: "is send",err
                             )
-                            res.status 403 if !user.activated
+                            res.status 201
                             return res.json
                                 user: user
                                 token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
@@ -199,7 +202,7 @@ module.exports = {
         #
         #        )
         #        return res.json  token, req.params.all()
-
+    ## get API key
     apikey: (req,res)->
         User.findOne(id:req.token.sid ).exec(
             (err, user)->
@@ -210,7 +213,75 @@ module.exports = {
                         res.status 401
                         res.json err: "User not found "
                     else
-                       res.json key:user.AccountSid
+                        res.json key:user.AccountSid
 
+        )
+    ## Password forgot API (RF07 - Resetting password)
+    forgotpassword:(req,res)->
+        crosslinkmedia = sails.config.crosslinkmedia
+        issueDate = moment().utc().format()
+        console.log 'issueDate', issueDate
+        _email = req.param('email')
+        User.findOne(email:_email).exec( (err,user)->
+            if err
+                res.status err.status
+                res.json err:err, user_msg: "Not found"
+            else
+                if !user
+                  res.status 400
+                  return res.json user_msg: "Email not found"
+                console.log
+                user  = user.toJSON()
+                Email.send(
+                    to: [
+                        name: user.username
+                        email: user.email
+                    ]
+                    subject: 'Password Reset ' ##CrosLinkMedia SMSChat
+                    html:
+                        #format 'For confirm registration go to url <a href="#test">LIKT TO SITE</a><br/>'
+
+                        format  "{USERNAME},"+
+                            "Someone has asked to reset the password for your account.<br/>" +
+                            "If you did not request a password reset, you can disregard this email."+
+                            "No changes have been made to your account."+
+                            "<br/>To reset your password, follow this link (or paste into your browser):<br/>"+
+                            "{LINKVERIFICATE}",{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/reset-verification?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email,expiresInMinutes: 1,issue:issueDate)}
+                    text: 'Password reset'
+                    (err)->
+                        #                // If you need to wait to find out if the email was sent successfully,
+                        #                // or run some code once you know one way or the other, here's where you can do that.
+                        #                // If `err` is set, the send failed.  Otherwise, we're good!
+                        if err
+                            res.status 418
+                            res.json user_msg:  "Error! Please try again.",
+                        else
+                            res.json user_msg: format "An email has been sent to {EMAIL} with further instructions on resetting your password.",EMAIL:user.email
+                )
+        )
+    ##
+    updatepassword:(req,res)->
+        token = req.param('token')
+        now = moment().utc()
+        if !req.param('token')
+           return res.json(400, {err: 'No Authorization token was found'});
+
+        sailsTokenAuth.verifyToken(req.param('token'), (err, token)->
+            if err
+                 return res.json(400, {err: 'Token verify error'});
+            _email = token.email
+            console.log token
+
+            User.findOneByEmail(_email, (err,user)->
+                if err
+                    res.status 500
+                    res.json err
+                else
+
+                    #user.save(
+                    res.json
+                         user: user
+                         token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
+            )
         )
 }

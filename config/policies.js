@@ -28,6 +28,7 @@ module.exports.policies = {
     '*': true,
     AuthController: {
         'apikey': ['tokenAuth'],
+        'updatepassword':true , //NOTE: token key control in controller 
         '*': true
     },
     ConversationsController: {

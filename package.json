@@ -54,6 +54,7 @@
     "twilio": "^1.10.0",
     "sails-mandrill": "^0.10.2",
     "crypto": "0.0.3",
-    "string-template": "^0.2.0"
+    "string-template": "^0.2.0",
+    "moment": "^2.8.4"
   }
 }

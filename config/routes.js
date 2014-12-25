@@ -36,6 +36,8 @@ module.exports.routes = {
     'get /register': 'PagesController.spi',
     'get /login': 'PagesController.spi',
     'get /activate?': 'PagesController.spi',
+    'get /reset-password?': 'PagesController.spi',
+    'get /reset-verification?': 'PagesController.spi',
     
     'get /account/activate?': 'AuthController.activate',
     
@@ -99,6 +101,8 @@ module.exports.routes = {
      */
     'POST /api/v1/auth/authenticate': 'AuthController.authenticate',
     'POST /api/v1/auth/logout': 'AuthController.logout',
+    'POST /api/v1/auth/forgotpassword': 'AuthController.forgotpassword',
+    'POST /api/v1/auth/updatepassword': 'AuthController.updatepassword',
     /**
      * API Conversations
      */
