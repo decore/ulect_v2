@@ -5,7 +5,8 @@
    <button type="button" class="btn btn-sm btn-link pull-right" ng-click="onChangePassword($event)">Change password</button>
    
    <form name="registerForm" ng-submit="onSave($event,profile)" loading-container="isBusy" class="form-signin form-horizontal col-sm-8 col-sm-offset-2" novalidate>  
-    <h3 class="text text-left text-info">Contact Information</h3>
+   
+       <h3 class="text text-left text-info">Contact Information</h3>
     <div class="form-group"> 
         <label for="firstname" class="col-lg-2 control-label">First name</label>
         <div class="col-lg-10">
@@ -53,6 +54,19 @@
             </div>
         </div>
     </div>
+     <div class="form-group"> 
+        <label for="phone" class="col-lg-2 control-label">SMS chat phone</label>
+        <div class="col-lg-10">
+            <p>{{ profile.phoneNumber}}</p>
+<!--            <input type="text" class="form-control" placeholder="phone" name="phone" ng-model="profile.phoneNumber" required>
+            <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.phone.$error">
+                <div ng-message="required">
+                    Enter phone
+                </div>          
+            </div>-->
+        </div>
+    </div>
+    
       <div class="modal-footer"> 
             <button type="submit" class="btn btn-primary btn_save" ng-disabled="registerForm.$invalid&&!EditForm.$pristin">Save changes</button>
             <!--<button type="button" class="btn btn-default btn_save" ng-disabled="!EditForm.$pristine" ng-click="onSetNewPassword(editEntity)" ng-if="editEntity.userId">Set new password</button>-->

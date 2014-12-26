@@ -112,5 +112,56 @@ module.exports = {
 
                 )
         )
+    ## auto send sms waiting clients
+    autosendSMS: (req,res)->
+        #
+        _criteriesMsgs =
+            limit: 1
+            sort : 'createdAt desc'
+#            where: {
+#                operator: null
+#            }
+        Conversations.find(isactive: true,isWaitAnswer: true).populate("msgs",_criteriesMsgs).exec(
+            (err, conversations)->
+                if err
+                    return res.json err
+
+                _.forEach   conversations , (item)->
+                    AutoresponseSettings.findOne(AccountSid:item.msgs[0].AccountSid).exec(
+                        (err,settings)->
+                            if err
+                               _params.to = dialog.client
+
+                    #        
+                    #
+                    #                            _params=item.msgs[0]
+                    #
+                    #                            console.log "TO SEND params ",_params
+                    #                            TwilioService.sendSMS( _params, (err,message)->
+                    #                                console.log 'is send message', message
+                    #                                ##TODO: replace demo operator
+                    #                                _.extend message , { dialog : dialog.id, operator: req.token.sid }
+                    #                                console.log 'is extend message===', message
+                    #                                if err
+                    #                                    res.status 500
+                    #                                    return res.json err
+                    #                                dialog.isWaitAnswer = false
+                    #                                Messages.create(message).exec(
+                    #                                    (err,entity)->
+                    #                                        if err
+                    #                                            res.status 500
+                    #                                            return res.json err
+                    #                                        if !entity
+                    #                                            res.status 418
+                    #                                            return res.json err
+                    #                                        dialog.save()
+                    #                                        return res.json entity
+                    #
+                    #                                )
+                    #                            )
+                            res.json conversations
+                    )
+        )
+
 
 }

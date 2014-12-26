@@ -6,6 +6,7 @@
  */
 
 module.exports = {
+    schemas:true,    
     attributes: {
         owner: {
             model: 'User',
@@ -20,7 +21,11 @@ module.exports = {
         countryISO:  "string",
         //        firstname: "string",
         //        lastname: "string",
-        phone: "string"
+        phone: "string",
+        phoneNumber:{
+            type:"string",
+            defaultsTo:"+18303550804"
+        }
         
     }
 };
