@@ -20,7 +20,7 @@ module.exports = {
 
             )
         params.owner.id = id
-        Profile.findOrCreate({id:id},params).exec(
+        Profile.findOrCreate({owner:id},params).exec(
             (err,profile)->
                 if err
                     return res.json err
@@ -36,6 +36,9 @@ module.exports = {
                                 else
                                     res.json profile
                         )
+                    else
+                         res.status 404
+                         res.json user_msg:"Profile no created"
 
         )
 }
