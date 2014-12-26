@@ -15,10 +15,11 @@ module.exports = {
         companyname: "string",
         country: {
             model: 'Country',
-            via: 'id'
+            via: 'ISO'
         },
-        firstname: "string",
-        lastname: "string",
+        countryISO:  "string",
+        //        firstname: "string",
+        //        lastname: "string",
         phone: "string"
         
     }

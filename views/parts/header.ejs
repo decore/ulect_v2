@@ -47,15 +47,15 @@
         </div>
         <div class="navbar-collapse collapse navbar-inverse-collapse" collapse="isCollapsed">
             <ul class="nav navbar-nav ng-cloak"> 
-                <li ng-show="auth.isAuthenticated()&& user().role==='Operator'"> <a href="/chatroom" target="_self" ><i class="fa fa-wechat" > </i> Chatroom</a></li>              
-                <li ng-show="auth.isAuthenticated()&& user().role==='Administrator'" class="dropdown">
+                <li ng-show="auth.isAuthenticated() && user().role === 'Operator'"> <a href="/chatroom" target="_self" ><i class="fa fa-wechat" > </i> Chatroom</a></li>              
+                <li ng-show="auth.isAuthenticated() && user().role === 'Administrator'" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="fa fa-adn"></span> Administrator <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/management/operators" target="_self"> <i> <span class="fa fa-users"></span></i> Operators</a></li>
 
                     </ul>
                 </li>
-                <li ng-show="auth.isAuthenticated()&& user().role==='Administrator'"><a  ng-click ="getApiKey()" _href="/apikey" target="_self" > <span class="fa fa-key"></span> Get API Key</a></li>
+                <li ng-show="auth.isAuthenticated() && user().role === 'Administrator'"><a  ng-click ="getApiKey()" _href="/apikey" target="_self" > <span class="fa fa-key"></span> Get API Key</a></li>
             </ul>
             <!--            <ul class="nav navbar-nav">
                             <li class="active"><a href="#">Active</a></li>
@@ -74,29 +74,28 @@
                             </li>
                         </ul>-->
             <ul class="nav navbar-nav navbar-right"  ng-cloak>
+            </ul>
+            <ul class="nav navbar-nav navbar-right ng-cloak" >
                 <li ng-hide="auth.isAuthenticated()"><a href="/login">Login</a></li>
                 <li ng-hide="auth.isAuthenticated()"><a href="/register">Register</a></li>
-                <li ng-show="auth.isAuthenticated()"><p class="navbar-text">Hello, <strong><i class="fa fa-user"> </i> {{user().email}}</strong></p></li>
-                <li ng-show="auth.isAuthenticated()"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i> Logout <strong>(<i class="fa fa-user"> </i> {{user().username}}</strong>)</a></li>
+                <!--<li ng-show="auth.isAuthenticated()"><p class="navbar-text">Hello, <strong><i class="fa fa-user"> </i> {{user().email}}</strong></p></li>-->
+                <!--<li ng-show="auth.isAuthenticated()"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i> Logout <strong>(<i class="fa fa-user"> </i> {{user().username}}</strong>)</a></li>-->
+
+                <li class="dropdown" ng-show="auth.isAuthenticated()">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <strong><i class="fa fa-user"> </i> {{user().email}}</strong><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                          <li ng-show="auth.isAuthenticated()"><a href="/management/account/profile"><i class="fa fa-cc"></i> Profile </a></li>
+                        <li ng-show="auth.isAuthenticated()&& user().role === 'Administrator'"><a href="/management/account/settings"><i class="fa fa-cc"></i> Settings </a></li>
+                        <!--<li><a href="#">Something else here</a></li>-->
+                        <li class="divider"></li>
+                            <!--<strong>(<i class="fa fa-user"> </i> {{user().email}})</strong>-->
+                         <li ng-show="auth.isAuthenticated()"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i> Logout </a></li>
+
+                    </ul>
+                </li>
+                
+                
             </ul>
-            <!--            <ul class="nav navbar-nav navbar-right ng-cloak" >
-            
-                            <% if (!user){%>
-                            <li><a href="/login"><i class="fa fa-sign-in"></i> LOG IN</a></li>
-                            <% }else{ %>
-                            <li><a href="/logout"><i class="fa fa-sign-out"></i> LOG OUT (<i class="fa fa-user"> </i><%= user.username %>)</a></li>
-                            <% }%>
-                                            <li class="dropdown">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#">Action</a></li>
-                                                    <li><a href="#">Another action</a></li>
-                                                    <li><a href="#">Something else here</a></li>
-                                                    <li class="divider"></li>
-                                                    <li><a href="#">Separated link</a></li>
-                                                </ul>
-                                            </li>
-                        </ul>-->
         </div>
         </div>
         <toaster-container toaster-options="{'position-class': 'toast-bottom-right'}"></toaster-container>

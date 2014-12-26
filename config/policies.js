@@ -28,6 +28,8 @@ module.exports.policies = {
     '*': true,
     AuthController: {
         'apikey': ['tokenAuth'],
+        'changePassword': ['tokenAuth'],
+        'updatepassword': true, //NOTE: token key control in controller 
         '*': true
     },
     ConversationsController: {
@@ -42,8 +44,8 @@ module.exports.policies = {
         'clientMessage': true,
         'statusMessage': true
     },
-    AutoresponseSettingsController:{
-         '*': true, //TODO: change this rule 
+    AutoresponseSettingsController: {
+        '*': true, //TODO: change this rule 
         getSettings: ['tokenAuth'],
         saveSettings: ['tokenAuth']
     }

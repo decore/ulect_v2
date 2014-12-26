@@ -68,12 +68,12 @@ module.exports = {
             return obj;
         },
         country: {
-                    model: "Country",
-                    via: "ISO"
-                }
-        ,APIkey:{
+            model: "Country",
+            via: "ISO"
+        }
+        , APIkey: {
             type: "string"
-        }        
+        }
     },
     beforeCreate: function (values, next) {
         bcrypt.genSalt(10, function (err, salt) {
@@ -89,6 +89,25 @@ module.exports = {
                 next(null, values);
             });
         });
+    },
+    beforeUpdate: function (values, next) {
+        console.log("Before update");
+        if (values.password) {
+            bcrypt.genSalt(10, function (err, salt) {
+                if (err)
+                    return next(err);
+                console.log(values.password);
+                bcrypt.hash(values.password, salt, function (err, hash) {
+                    if (err)
+                        return next(err);
+                    values.encryptedPassword = hash;
+                    //values.activated = false; //make sure nobody is creating a user with activate set to true, this is probably just for paranoia sake :)
+                    //values.activationToken = cryptoService.token(new Date().getTime() + values.email);
+                    //values.APIkey = cryptoService.genAPIkey(new Date().getTime() + values.email);
+                    next(null, values);
+                });
+            });
+        }
     },
     //
     afterCreate: function (values, cb) {

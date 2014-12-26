@@ -20,7 +20,7 @@ module.exports = {
             ng_spa_name: 'debug'
     ## operator chat room
     chatroom: (req,res)->
-        console.log sails.config.twilio
+
         ##TODO: use real information about user
         Users.findOne(id:1).exec(
           (err, user )->
