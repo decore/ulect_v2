@@ -80,13 +80,24 @@ module.exports = {
                 else
                     user.isLogin = true
                     user.save()
-                    res.json
-                        user: user
-                        token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
+                    #TODO: FIX FIND PHONE
+                    Profile.findOne().where( 'owner.AccountSid':user.AccountSid).populate('owner').exec(
+                        (err, profile)->
+                            console.log profile,user.AccountSid
+                            if err or !!!profile
+                                _phoneNumber='no phone'
+                            else
+                               _phoneNumber = profile.phoneNumber
 
+                            res.json
+
+                                user: _.extend user.toJSON(),phoneNumber: _phoneNumber
+                                token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
+                    )
                 return
             return
         return
+    ##TODO: delete
     _register : (req, res) ->
         console.log _params = req.params.all()
         return res.json
@@ -94,6 +105,8 @@ module.exports = {
             token: sailsTokenAuth.issueToken(sid: 20 ,AccountSid:'',role:'Administrator')
     ## API call - Customer Registration
     register : (req, res) ->
+        crosslinkmedia = sails.config.crosslinkmedia
+        issueDate = moment().utc().format()
         console.log _params = req.params.all()
         #TODO: Do some validation on the input
         if _params.password isnt _params.confirmPassword
@@ -138,7 +151,8 @@ module.exports = {
                                 ]
                                 subject: 'New Account Acivation Required  ' ##CrosLinkMedia SMSChat
                                 html:
-                                    'For confirm registration go to url <a href="#test">LIKT TO SITE</a><br/>'
+                                    format 'For confirm registration go to url <br/>'+
+                                    '<a href="{LINKVERIFICATE}>{LINKVERIFICATE}</a>',{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/activate?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email,expiresInMinutes: 1,issue:issueDate)}
                                 text: 'You need confirm registration '
                                 (err)->
                                     #                // If you need to wait to find out if the email was sent successfully,

@@ -1,8 +1,8 @@
 <form name="registerForm" class="form-signin form-horizontal col-sm-8 col-sm-offset-2" novalidate>  
     <legend>Activate Account </legend>
-    <section ng-switch='!activationstate'>{{activationstate}}
+    <section ng-switch='!activationstate'>
         <p ng-if = "!activationstate" > Please check your email for activate account   </p>     
-        <div ng-if = "activationstate" > 
+        <div ng-if = "activationstate"> 
             <label ng-show="isBusy" class="label label-warning">Please waite...</label>
             <label ng-show="!isBusy" class="label label-success">Registration complete success</label>
             <!--<label ng-show="!isBusy" class="label label-success">Registration complete success</label>-->

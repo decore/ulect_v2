@@ -42,12 +42,14 @@ module.exports.policies = {
     MessagesController: {
         '*': ['tokenAuth'],
         'clientMessage': true,
-        'statusMessage': true
+        'statusMessage': true,
+        'autosendSMS': true
     },
     AutoresponseSettingsController: {
         '*': true, //TODO: change this rule 
         getSettings: ['tokenAuth'],
-        saveSettings: ['tokenAuth']
+        saveSettings: ['tokenAuth'],
+      
     }
     /***************************************************************************
      *                                                                          *
