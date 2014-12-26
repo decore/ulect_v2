@@ -138,7 +138,8 @@ module.exports = {
                                 ]
                                 subject: 'New Account Acivation Required  ' ##CrosLinkMedia SMSChat
                                 html:
-                                    'For confirm registration go to url <a href="#test">LIKT TO SITE</a><br/>'
+                                    format 'For confirm registration go to url <a href="{LINKVERIFICATE}">{LINKVERIFICATE}</a><br/>',{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/activate?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email)}
+                                    #'For confirm registration go to url <a href="#test">LIKT TO SITE</a><br/>'
                                 text: 'You need confirm registration '
                                 (err)->
                                     #                // If you need to wait to find out if the email was sent successfully,
