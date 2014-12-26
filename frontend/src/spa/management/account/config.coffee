@@ -6,6 +6,8 @@ define [
     'cs!./module'
     'cs!./statespace' ## Configuration for ui-route state
 ], (namespace, module, statespace)->
+
+
     module.config ['$stateProvider', '$urlRouterProvider',($stateProvider,$urlRouterProvider)->
         ###
         Main configuration $stateProvider
@@ -16,14 +18,68 @@ define [
             url: statespace.url
             abstract: true
             template: "<ui-view>"
+
             data:
                 pageTitle: statespace.pageTitle
-
+        #RF06 - User can change password
         $stateProvider.state statespace.name+'.profile',
             url: '/profile'
             templateUrl: "templates/#{namespace.replace /\.+/g, "/"}/profile.tpl.html"
             data:
                 pageTitle: statespace.pageTitle
+            controller: ["$scope","$modal","$http","CurrentUserService",($scope,$modal,$http,CurrentUserService)->
+                apiURL = '/api/v1'
+                currentUser = CurrentUserService.user
+                $scope.profile = {}
+                $http.get('/api/v1/account/profile/'+currentUser().id).then(
+                    (result)->
+                        $scope.profile =  result.data
+                        return true
+                    (err)->
+                        $scope.profile = {}
+                        return false
+                )
+                $scope.onChangePassword = (_event)->
+                    _event.preventDefault()
+                    $modal.open(
+                        windowClass: 'addModal'
+                        templateUrl: "templates/#{namespace.replace /\.+/g, "/"}/form.changepassword.tpl.html"
+                        controller: ['$scope','$modalInstance',($scope,$modalInstance)->
+                            $scope.editEntity =
+                                password : "test"
+                            $scope.onCancel = ->
+                                $modalInstance.dismiss('cancel')
+                            $scope.onSave = (_event,data)->
+                                _event.preventDefault() if _event
+                                $scope.isBusy = true
+                                $http.put(apiURL+'/account/changepassword',data).then(
+                                    (result)->
+                                        $modalInstance.close()
+                                    (err)->
+                                       $scope.isBusy = false
+                                       if err.data?.user_msg?
+                                        $scope.message =
+                                            text : err.data.user_msg
+                                            status: 'label-danger'
+                                        #$modalInstance.dismiss()
+                                )
+                        ]
+                    )
+                $scope.onSave = (_event,data)->
+                    $scope.isBusy = true
+                    $http.put('/api/v1/account/profile/'+currentUser().id,data).then(
+                        (result)->
+                            $scope.profile
+                            console.log result
+                            $scope.isBusy = false
+                        (err)->
+                            $scope.user = {}
+                            $scope.isBusy = false
+                    )
+            ]
+
+
+
         $stateProvider.state statespace.name+'.settings',
             url: '/settings'
             templateUrl: "templates/#{namespace.replace /\.+/g, "/"}/settings.tpl.html"

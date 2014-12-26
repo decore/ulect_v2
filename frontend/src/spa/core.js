@@ -119,7 +119,8 @@ define(['cs!./common/index'], function (module) {
     //
     module.constant('AccessLevels', {
         anon: 0,
-        user: 1
+        user: 1,
+        administrator: 2
     });
 
     module.constant('baseUrl', '/api/v1');

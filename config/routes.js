@@ -44,8 +44,9 @@ module.exports.routes = {
     '/chatroom': 'PagesController.chatroom',
     '/management': 'PagesController.management',
     '/management/operators': 'PagesController.management',
-    '/management/account/:id?': 'PagesController.management',
      
+    '/management/account/profile': 'PagesController.management',
+    '/management/account/:id?': 'PagesController.management',
     /***************************************************************************
      *                                                                          *
      * Custom routes here...                                                    *
@@ -125,5 +126,8 @@ module.exports.routes = {
     //
     'get /api/v1/apikey/:id': 'AuthController.apikey',
     'get /api/v1/account/settings': 'AutoresponseSettingsController.getSettings',
-    'put /api/v1/account/settings/:type': 'AutoresponseSettingsController.saveSettings'
+    'put /api/v1/account/settings/:type': 'AutoresponseSettingsController.saveSettings',
+    'put /api/v1/account/changepassword': 'AuthController.changePassword',
+    'get /api/v1/account/profile/:id':"ProfileController.getProfile",
+    'put /api/v1/account/profile/:id':"ProfileController.saveProfile",
 };

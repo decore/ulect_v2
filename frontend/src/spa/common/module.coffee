@@ -61,6 +61,7 @@ define  [
             templateUrl: "templates/#{module.name.replace /\.+/g, "/"}/password/verification.tpl.html"
             #controller: "ResetController"
         )
+
             #            $stateProvider.state("user",
             #                abstract: true
             #                template: "<ui-view/>"

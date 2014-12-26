@@ -228,8 +228,8 @@ module.exports = {
                 res.json err:err, user_msg: "Not found"
             else
                 if !user
-                  res.status 400
-                  return res.json user_msg: "Email not found"
+                    res.status 400
+                    return res.json user_msg: "Email not found"
                 console.log
                 user  = user.toJSON()
                 Email.send(
@@ -264,11 +264,11 @@ module.exports = {
         token = req.param('token')
         now = moment().utc()
         if !req.param('token')
-           return res.json(400, {err: 'No Authorization token was found'});
+            return res.json(400, {err: 'No Authorization token was found'});
 
         sailsTokenAuth.verifyToken(req.param('token'), (err, token)->
             if err
-                 return res.json(400, {err: 'Token verify error'});
+                return res.json(400, {err: 'Token verify error'});
             _email = token.email
             console.log token
 
@@ -280,8 +280,61 @@ module.exports = {
 
                     #user.save(
                     res.json
-                         user: user
-                         token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
+                        user: user
+                        token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
             )
         )
+    changePassword:(req,res)->
+        console.log req.params.all(),req.token
+        token =req.token
+        if !req.token
+            return res.json(400, {err: 'Token verify error'});
+        _email = token.email
+        console.log token
+        #password: "test"
+        #passwordConfirm: "ss"
+        #passwordOld:
+        email = req.param("email")
+        password = req.param("password")
+        passwordOld = req.param("passwordOld")
+        passwordConfirm = req.param("passwordConfirm")
+        if not passwordOld or not password
+            return res.json(400,
+                user_msg: "Password is required"
+            )
+        if passwordConfirm != password
+            return res.json(400,
+                user_msg: "Password and passwordConfirm not equal "
+            )
+
+        User.findOne id:token.sid , (err, user) ->
+            console.log user
+            unless user
+                return res.json(400,
+                    user_msg: "invalid password "+token.sid
+                )
+            #if user.activated == false
+            #    return res.json 403, err: "Account not activated"
+
+            User.validPassword passwordOld, user, (err, valid) ->
+                console.log err,valid
+                if err
+                    return res.json err
+                unless valid
+                    res.json 400,
+                        user_msg: "invalid password"
+                else
+                    user.isLogin = true
+                    user.save(password:password)
+                    res.json
+                        user: user.toJSON()
+                        token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
+
+                return
+            return
+        return
+        #res.status 501
+        #res.json
+        #    user_msg: "ERROR"
+        #    token: req.token
 }

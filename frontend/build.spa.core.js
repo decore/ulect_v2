@@ -57,8 +57,8 @@
     //include: [ 'angular' ,'core'],
     //wrap: true,
     wrap: {
-        startFile: "built/start.frag",
-        endFile: "built/end.frag"
+        startFile: "build/start.frag",
+        endFile: "build/end.frag"
     },
     //out: './js/spa/core.js'
      dir: './js/spa'

@@ -18,8 +18,8 @@ module.exports = {
             via: 'ISO'
         },
         countryISO:  "string",
-        firstname: "string",
-        lastname: "string",
+        //        firstname: "string",
+        //        lastname: "string",
         phone: "string"
         
     }
