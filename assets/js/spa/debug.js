@@ -9167,8 +9167,87 @@ define('cs!common/module',['angular', 'cs!./namespaces', 'cs!dialogService/index
         url: "/register",
         templateUrl: "templates/" + (module.name.replace(/\.+/g, "/")) + "/auth/register.tpl.html",
         controller: "RegisterController"
+      }).state("anon.activate", {
+        url: "/activate?token",
+        templateUrl: "templates/" + (module.name.replace(/\.+/g, "/")) + "/auth/activate.tpl.html",
+        controller: "ActivateController"
+      }).state("anon.password", {
+        abstract: true,
+        templateUrl: "templates/" + (module.name.replace(/\.+/g, "/")) + "/password/index.tpl.html",
+        controller: "ResetController"
+      }).state("anon.password.reset", {
+        url: "/reset-password",
+        templateUrl: "templates/" + (module.name.replace(/\.+/g, "/")) + "/password/reset.tpl.html"
+      }).state("anon.password.verification", {
+        url: "/reset-verification?token",
+        templateUrl: "templates/" + (module.name.replace(/\.+/g, "/")) + "/password/verification.tpl.html"
       });
       $urlRouterProvider.otherwise("/");
+    }
+  ]);
+  module.controller('ActivateController', [
+    '$scope', '$stateParams', '$http', function($scope, $stateParams, $http) {
+      $scope.activationstate = $stateParams.token;
+      $scope.sid = $stateParams.id;
+      console.log('===', $stateParams);
+      $scope.isBusy = true;
+      if ($scope.activationstate) {
+        return $http.put('/').then(function() {}).fail(function() {
+          return $scope.isBusy = false;
+        });
+      }
+    }
+  ]);
+  module.controller('ResetController', [
+    '$scope', '$state', '$stateParams', '$http', '$location', '$log', 'Auth', function($scope, $state, $stateParams, $http, $location, $log, Auth) {
+      var apiURL, token;
+      apiURL = '/api/v1';
+      token = $state.params.token;
+      $log.info($stateParams, $state);
+      $scope.isBusy = false;
+      $scope.user = {
+        password: "1",
+        passwordConfirm: "1"
+      };
+      $scope.message = null;
+      $scope.onTest = function() {
+        return console.log("data");
+      };
+      $scope.onSendInstruction = function(event, email) {
+        if (event) {
+          event.preventDefault();
+        }
+        $scope.message = null;
+        $scope.isBusy = true;
+        $http.post(apiURL + '/auth/forgotpassword', {
+          email: email
+        }).then(function(result) {
+          $log.info(result);
+          console.log(result);
+          $scope.message = {
+            text: result.data.user_msg,
+            status: 'alert-success'
+          };
+          return $scope.isBusy = false;
+        }, function(err) {
+          $scope.message = {
+            text: err.data.user_msg,
+            status: 'alert-danger'
+          };
+          return $scope.isBusy = false;
+        });
+      };
+      return $scope.onSetNewPassword = function(event, data) {
+        data.token = token;
+        $log.info("data", data);
+        if (event) {
+          event.preventDefault();
+        }
+        $scope.isBusy = true;
+        Auth.updatepassword(data).then(function(result) {
+          $location.url('/');
+        }, function(err) {});
+      };
     }
   ]);
   return module;
@@ -9178,10 +9257,22 @@ define('cs!common/module',['angular', 'cs!./namespaces', 'cs!dialogService/index
 define('text!common/templates/home.tpl.html',[],function () { return '<!-- template "chatroom/templates/index.tpl.html"-->  \r\n<section class="row-fluid"> \r\n \r\n    <h1 class="text text-center" >CrossLinkMedia SMSChat v 0.0.1</h1>\r\n    <br/>\r\n    <!--<p class="text text-center text-info" > <a ng-href="/login"> Please login </a> </p>-->\r\n</section>\r\n<!-- //template "index.tpl.html"-->';});
 
 
-define('text!common/templates/auth/login.tpl.html',[],function () { return ' \r\n<form name="registerForm" class="form-signin col-sm-4 col-sm-offset-4" novalidate>\r\n    <h2>Login</h2>\r\n    <alert class="alert" ng-repeat="error in errors" type="danger">{{error.err}}</alert>\r\n  <hr>\r\n  <div class="control-group">\r\n    <input type="email" class="form-control" placeholder="email" name="email" ng-model="user.email" required>\r\n    <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.email.$error">\r\n      <div ng-message="required">\r\n        You forgot the email address.\r\n      </div>\r\n      <div ng-message="email">\r\n        That is not a well formed email address.\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class="control-group">\r\n    <input type="password" class="form-control" placeholder="password" name="password" ng-model="user.password" required>\r\n    <div ng-show="registerForm.password.$dirty" ng-messages="registerForm.password.$error">\r\n      <div ng-message="required">\r\n        You forgot the password.\r\n      </div>\r\n    </div>\r\n  </div>\r\n<br/>\r\n  <input type="submit" class="btn btn-lg btn-primary btn-block" ng-click="login()" value="Login" />\r\n</form>';});
+define('text!common/templates/auth/login.tpl.html',[],function () { return ' \r\n<form name="registerForm" class="form-signin col-sm-4 col-sm-offset-4" novalidate>\r\n    <h2>Login</h2>\r\n    <alert class="alert" ng-repeat="error in errors" type="danger">{{error.err}}</alert>\r\n  <hr>\r\n  <div class="control-group">\r\n    <input type="email"  tabindex="1"  class="form-control" placeholder="email" name="email" ng-model="user.email" required>\r\n    <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.email.$error">\r\n      <div ng-message="required">\r\n        You forgot the email address.\r\n      </div>\r\n      <div ng-message="email">\r\n        That is not a well formed email address.\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class="control-group">\r\n    <input type="password"  tabindex="2"  class="form-control" placeholder="password" name="password" ng-model="user.password" required>\r\n    <div ng-show="registerForm.password.$dirty" ng-messages="registerForm.password.$error">\r\n      <div ng-message="required">\r\n        You forgot the password.\r\n      </div>\r\n    </div>\r\n  </div>\r\n<br/>\r\n  <input type="submit"  tabindex="3"  class="col-sm-12 btn btn-lg btn-primary btn-block" ng-click="login()" value="Login" />\r\n  <a href="/reset-password" tabindex="4" class="btn btn-link pull-right">Forgot Password?</a>\r\n</form>';});
 
 
-define('text!common/templates/auth/register.tpl.html',[],function () { return '<form name="registerForm" class="form-signin" novalidate> \r\n    <div class="control-group"> \r\n        <input type="text" class="form-control" placeholder="First name" name="firstname" ng-model="user.firstname" required>\r\n        <div ng-show="registerForm.firstname.$dirty" ng-messages="registerForm.firstname.$error">\r\n            <div ng-message="required">\r\n                Enter First name\r\n            </div>\r\n\r\n        </div>\r\n    </div>\r\n    <div class="control-group"> \r\n        <input type="text" class="form-control" placeholder="Last name" name="lastname" ng-model="user.lastname" required>\r\n        <div ng-show="registerForm.lastname.$dirty" ng-messages="registerForm.lastname.$error">\r\n            <div ng-message="required">\r\n                Enter Last name\r\n            </div>\r\n\r\n        </div>\r\n    </div>\r\n<!-- company name-->\r\n    <div class="control-group"> \r\n        <input type="text" class="form-control" placeholder="Company name" name="companyname" ng-model="user.companyname" required>\r\n        <div ng-show="registerForm.companyname.$dirty" ng-messages="registerForm.companyname.$error">\r\n            <div ng-message="required">\r\n               Enter Company name\r\n            </div>\r\n\r\n        </div>\r\n    </div>\r\n<!-- //company name-->\r\n\r\n\r\n<!-- country-->\r\n    <div class="control-group"> \r\n        <input type="text" class="form-control" placeholder="country" name="country" ng-model="user.country" required>\r\n        <div ng-show="registerForm.country .$dirty" ng-messages="registerForm.country.$error">\r\n            <div ng-message="required">\r\n                Select country \r\n            </div>\r\n\r\n        </div>\r\n    </div>\r\n<!-- //country -->\r\n\r\n    <div class="control-group">\r\n        <input type="email" class="form-control" placeholder="email" name="email" ng-model="user.email" required>\r\n        <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.email.$error">\r\n            <div ng-message="required">\r\n                You forgot the email address.\r\n            </div>\r\n            <div ng-message="email">\r\n                That is not a well formed email address.\r\n            </div>\r\n        </div>\r\n    </div>\r\n\r\n\r\n    <div class="control-group">\r\n        <input type="text" class="form-control" placeholder="phone" name="phone" ng-model="user.phone" required>\r\n        <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.phone.$error">\r\n            <div ng-message="required">\r\n               Enter phone\r\n            </div>          \r\n        </div>\r\n    </div>\r\n    <div class="control-group">\r\n        <input type="password" class="form-control" placeholder="password" name="password" ng-model="user.password" required>\r\n        <div ng-show="registerForm.password.$dirty" ng-messages="registerForm.password.$error">\r\n            <div ng-message="required">\r\n                You forgot the password.\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class="control-group">\r\n        <input type="password" class="form-control" placeholder="confirm password" name="confirmpassword" ng-model="user.confirmPassword" required>\r\n        <div ng-show="registerForm.confirmpassword.$dirty" ng-messages="registerForm.confirmpassword.$error">\r\n            <div ng-message="required">\r\n                You forgot the password confirmation.\r\n            </div>\r\n        </div>\r\n    </div>\r\n\r\n    <input type="submit" class="btn btn-lg btn-primary btn-block" ng-click="register()" value="Create Account" />\r\n</form>';});
+define('text!common/templates/auth/register.tpl.html',[],function () { return '<form name="registerForm" class="form-signin form-horizontal col-sm-8 col-sm-offset-2" novalidate>  \r\n    <legend>Registration</legend>\r\n\r\n\r\n    <!--    <div class="form-group">\r\n            <label for="inputEmail" class="col-lg-2 control-label">First name</label>\r\n            <div class="col-lg-10">\r\n                <input type="text" class="form-control" id="inputEmail" placeholder="Email">\r\n            </div>\r\n        </div>-->\r\n\r\n\r\n    <div class="form-group"> \r\n        <label for="firstname" class="col-lg-2 control-label">First name</label>\r\n        <div class="col-lg-10">\r\n            <input type="text" class="form-control" placeholder="First name" name="firstname" ng-model="user.firstname" required>\r\n            <div ng-show="registerForm.firstname.$dirty" ng-messages="registerForm.firstname.$error">\r\n                <div ng-message="required">\r\n                    Enter First name\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class="form-group"> \r\n        <label for="firstname" class="col-lg-2 control-label">Last name</label>\r\n        <div class="col-lg-10">\r\n            <input type="text" class="form-control" placeholder="Last name" name="lastname" ng-model="user.lastname" required>\r\n            <div ng-show="registerForm.lastname.$dirty" ng-messages="registerForm.lastname.$error">\r\n                <div ng-message="required">\r\n                    Enter Last name\r\n                </div>\r\n\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <!-- company name-->\r\n    <div class="form-group"> \r\n        <label for="companyname" class="col-lg-2 control-label">Company name</label>\r\n        <div class="col-lg-10">\r\n            <input type="text" class="form-control" placeholder="Company name" name="companyname" ng-model="user.companyname" required>\r\n            <div ng-show="registerForm.companyname.$dirty" ng-messages="registerForm.companyname.$error">\r\n                <div ng-message="required">\r\n                    Enter Company name\r\n                </div>\r\n\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <!-- //company name-->\r\n\r\n\r\n    <!-- country-->\r\n    <div class="form-group"> \r\n        <label for="country" class="col-lg-2 control-label">Country</label>\r\n        <div class="col-lg-10">\r\n            <!--<input type="text" class="form-control" placeholder="country" name="country" ng-model="user.country" required>-->\r\n\r\n            <select class="form-control" id="country" ng-model="user.country" required ng-options="value.ISO as  value.Country group by value[\'Type of number\'] for (key,value) in countryList| filter:{\'SMS Enabled\':\'Yes\'}">\r\n           \r\n            </select>\r\n<!--            <select class="form-control" id="country" ng-model="user.country" required ng-options="value.ISO as  value.Country for (key,value) in countryList | filter:{\'SMS Enabled\':\'Yes\',\'Type of number\':\'Mobile\'}">\r\n            </select>-->\r\n            <div ng-show="registerForm.country.$dirty" ng-messages="registerForm.country.$error">\r\n                <div ng-message="required">\r\n                    Select country \r\n                </div>\r\n            </div>\r\n\r\n        </div>\r\n    </div>\r\n    <!-- //country -->\r\n\r\n    <div class="form-group"> \r\n        <label for="email" class="col-lg-2 control-label">Email</label>\r\n        <div class="col-lg-10">\r\n            <input type="email" class="form-control" placeholder="email" name="email" ng-model="user.email" required>\r\n            <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.email.$error">\r\n                <div ng-message="required">\r\n                    You forgot the email address.\r\n                </div>\r\n                <div ng-message="email">\r\n                    That is not a well formed email address.\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div> \r\n    <div class="form-group"> \r\n        <label for="phone" class="col-lg-2 control-label">Contact phone</label>\r\n        <div class="col-lg-10">\r\n            <input type="text" class="form-control" placeholder="phone" name="phone" ng-model="user.phone" required>\r\n            <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.phone.$error">\r\n                <div ng-message="required">\r\n                    Enter phone\r\n                </div>          \r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class="form-group"> \r\n        <label for="password" class="col-lg-2 control-label">Password</label>\r\n        <div class="col-lg-10">\r\n            <input type="password" class="form-control" placeholder="password" name="password" ng-model="user.password" required>\r\n            <div ng-show="registerForm.password.$dirty" ng-messages="registerForm.password.$error">\r\n                <div ng-message="required">\r\n                    You forgot the password.\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class="form-group"> \r\n        <label for="confirmpassword" class="col-lg-2 control-label">Confirm password</label>\r\n        <div class="col-lg-10">\r\n            <input type="password" class="form-control" placeholder="confirm password" name="confirmpassword" ng-model="user.confirmPassword" required>\r\n            <div ng-show="registerForm.confirmpassword.$dirty" ng-messages="registerForm.confirmpassword.$error">\r\n                <div ng-message="required">\r\n                    You forgot the password confirmation.\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n\r\n    <input type="submit" class="btn btn-lg btn-primary btn-block" ng-click="register()" value="Create Account" />\r\n</form>';});
+
+
+define('text!common/templates/auth/activate.tpl.html',[],function () { return '<form name="registerForm" class="form-signin form-horizontal col-sm-8 col-sm-offset-2" novalidate>  \r\n    <legend>Activate Account </legend>\r\n    <section ng-switch=\'!activationstate\'>{{activationstate}}\r\n        <p ng-if = "!activationstate" > Please check your email for activate account   </p>     \r\n        <div ng-if = "activationstate" > \r\n            <label ng-show="isBusy" class="label label-warning">Please waite...</label>\r\n            <label ng-show="!isBusy" class="label label-success">Registration complete success</label>\r\n            <!--<label ng-show="!isBusy" class="label label-success">Registration complete success</label>-->\r\n        </div>   \r\n<!--    <div class="form-group"> \r\n        <label for="firstname" class="col-lg-2 control-label">First name</label>\r\n        <div class="col-lg-10">\r\n            <input type="text" class="form-control" placeholder="First name" name="firstname" ng-model="user.firstname" required>\r\n            <div ng-show="registerForm.firstname.$dirty" ng-messages="registerForm.firstname.$error">\r\n                <div ng-message="required">\r\n                    Enter First name\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <input type="submit" class="btn btn-lg btn-primary btn-block" ng-click="register()" value="Create Account" />-->\r\n    </section>\r\n</form>';});
+
+
+define('text!common/templates/password/index.tpl.html',[],function () { return '<div class="row">\r\n    <div class="col-sm-6 col-sm-offset-3">\r\n         <h2>Reset password</h2>\r\n         <div ui-view></div>\r\n    </div>\r\n\r\n</div>\r\n ';});
+
+
+define('text!common/templates/password/reset.tpl.html',[],function () { return ' \r\n\r\n<form  name="resetpasswordForm" method="post" class="form-reset-password form-horizontal" ng-submit="onSendInstruction($event,email)"> \r\n  \r\n    <div ng-show="message" class="alert" ng-class="message.status">{{message.text}}</div>\r\n    <!--<div class="alert alert-danger">The email address adasd#zsdfwerasdfasd@g.com doesn\'t look right. Please try again.</div>-->\r\n    <p>A reset password link will be sent to you.</p>\r\n    <input type="email" class="form-control" tabindex="1"  placeholder="Email address" name="email" ng-model="email" required>\r\n    <!--<input class="form-control" type="email" tabindex="1" placeholder="Email address" name="email" value="" required="">-->\r\n    <div ng-show="resetpasswordForm.email.$dirty" ng-messages="resetpasswordForm.email.$error">\r\n        <div ng-message="required">\r\n            You forgot the email address.\r\n        </div>\r\n        <div ng-message="email">\r\n            That is not a well formed email address.\r\n        </div>\r\n    </div>\r\n    <button type="submit" ng-disabled="resetpasswordForm.$invalid" tabindex="2" class="col-sm-6 btn btn-primary" value="Send email">Send email</button>\r\n\r\n    <a href="/login" tabindex="3" class="col-sm-6  btn btn-link">Back to login</a>\r\n</form>\r\n\r\n';});
+
+
+define('text!common/templates/password/verification.tpl.html',[],function () { return ' \r\n<form name="resetpasswordForm" method="post" id="password-reset" ng-submit="onSetNewPassword($event,user)" novalidate> \r\n    <p>Please enter a new password.</p>\r\n\r\n    <input id="password1"\r\n           ng-model="user.password" \r\n            class="form-control"\r\n           type="password" tabindex="1" placeholder="New password" name="password" value="" required="">\r\n        <div ng-show="resetpasswordForm.password.$dirty" ng-messages="resetpasswordForm.password.$error">\r\n        <div ng-message="required">\r\n            You forgot the password.\r\n        </div> \r\n    </div>\r\n    <input type="password" ng-model="user.passwordConfirm"  class="form-control" tabindex="2" placeholder="Confirm new password" name="passwordConfirm" required="" >\r\n <div ng-show="resetpasswordForm.passwordConfirm.$dirty" ng-messages="resetpasswordForm.passwordConfirm.$error">\r\n        <div ng-message="required">\r\n            You forgot the confirm password.\r\n        </div> \r\n    </div>\r\n   {{user}}\r\n    <button type="button" ng-click="onSetNewPassword($event,user);" ngdisabled="resetpasswordForm.$invalid" tabindex="3" class="btn btn-primary" >Reset password</button>\r\n    <button type="button" ng-click="onTest(user)">ddd</button>\r\n</form>';});
 
 
 // Generated by CoffeeScript 1.7.1
@@ -9189,13 +9280,17 @@ define('text!common/templates/auth/register.tpl.html',[],function () { return '<
 /*
 Cache content of template(s) with current name space
  */
-define('cs!common/templates/templatesCache',['cs!./../module', 'text!./home.tpl.html', 'text!./auth/login.tpl.html', 'text!./auth/register.tpl.html'], function(module, tplIndex, tplLogin, tplRegister) {
+define('cs!common/templates/templatesCache',['cs!./../module', 'text!./home.tpl.html', 'text!./auth/login.tpl.html', 'text!./auth/register.tpl.html', 'text!./auth/activate.tpl.html', 'text!./password/index.tpl.html', 'text!./password/reset.tpl.html', 'text!./password/verification.tpl.html'], function(module, tplIndex, tplLogin, tplRegister, tplActivate, tplPasswordIndex, tplPasswordReset, tplPasswordVerification) {
   console.log("templates/" + (module.name.replace(/\.+/g, "/")) + "/index.tpl.html");
   return module.run([
     '$templateCache', function($templateCache) {
       $templateCache.put("templates/" + (module.name.replace(/\.+/g, "/")) + "/home.tpl.html", tplIndex);
       $templateCache.put("templates/" + (module.name.replace(/\.+/g, "/")) + "/auth/login.tpl.html", tplLogin);
-      return $templateCache.put("templates/" + (module.name.replace(/\.+/g, "/")) + "/auth/register.tpl.html", tplRegister);
+      $templateCache.put("templates/" + (module.name.replace(/\.+/g, "/")) + "/auth/register.tpl.html", tplRegister);
+      $templateCache.put("templates/" + (module.name.replace(/\.+/g, "/")) + "/auth/activate.tpl.html", tplActivate);
+      $templateCache.put("templates/" + (module.name.replace(/\.+/g, "/")) + "/password/index.tpl.html", tplPasswordIndex);
+      $templateCache.put("templates/" + (module.name.replace(/\.+/g, "/")) + "/password/reset.tpl.html", tplPasswordReset);
+      return $templateCache.put("templates/" + (module.name.replace(/\.+/g, "/")) + "/password/verification.tpl.html", tplPasswordVerification);
     }
   ]);
 });
@@ -9261,58 +9356,83 @@ define('core',['cs!./common/index'], function (module) {
             $scope.isCollapsed = true;
             $scope.auth = Auth;
             $scope.user = CurrentUser.user;
-            
+
             $scope.logout = function () {
                 Auth.logout().success(function (result) {
                     $location.url('');
                 });
             };
+            
+            $scope.getApiKey = function () {
+               Auth.apikey().success(function (result) {
+                    console.log(result)
+                    alert('Api key');
+                });
+            };
         }]);
-    module.controller('LoginController', ["$scope", "$state", "Auth", 'CurrentUserService','$location',function ($scope, $state, Auth,CurrentUser,$location) {
+    module.controller('LoginController', ["$scope", "$state", "Auth", 'CurrentUserService', '$location', function ($scope, $state, Auth, CurrentUser, $location) {
             $scope.errors = [];
             //$scope.user = CurrentUser.user;
             $scope.login = function () {
                 $scope.errors = [];
                 Auth.login($scope.user).success(function (result) {
                     //$state.go('user.home');
-                    if(CurrentUser.user().role ==='Administrator'){
-                    $location.url('/management/operators');
-                        }else{
-                          $state.go('chatroom');
-                        }
+                    if (CurrentUser.user().role === 'Administrator') {
+                        $location.url('/management/operators');
+                    } else {
+                        $state.go('chatroom');
+                    }
                 }).error(function (err) {
                     $scope.errors.push(err);
                 });
             }
         }]);
-    module.controller('RegisterController', ["$scope", "$state", "Auth", function ($scope, $state, Auth) {
+    //    module.factory('CountriesFactory',['$http', function($http){
+    //        return {
+    //            list: _l
+    //            
+    //        }
+    //            
+    //    }
+    //    ]
+            
+    //        )
+    module.controller('RegisterController', ["$scope", "$state", "Auth","$http", function ($scope, $state, Auth,$http) {
             //TODO: delete on production
+            
             $scope.user = {
-                //companyname: "Demo Company (at " + (new Date()).toISOString()+")",
-                //email: 'demo@demo.com',
+                companyname: "Demo Company (at " + (new Date()).toISOString()+")",
+                email: 'demo@demo.com',
                 country: "US",
-                //firstname: "Demo First Name (at " + (new Date()).toISOString()+")",
-                //lastname: "Demo Last Name (at " + (new Date()).toISOString()+")",
-                //password: "demo123456",
-                //confirmPassword: "demo123456",
-                //phone: "+19999999",
+                firstname: "Demo First Name (at " + (new Date()).toISOString()+")",
+                lastname: "Demo Last Name (at " + (new Date()).toISOString()+")",
+                password: "demo123456",
+                confirmPassword: "demo123456",
+                phone: "+19999999",
                 role: "Administrator"
             }
+            // ISO,Country,
+            $scope.countryList = []
+            $http.get('/countries.json').then(function(result){
+                 $scope.countryList = result.data;
+            })
+            
             $scope.register = function () {
-                Auth.register($scope.user).then(function (data) { 
-                    $state.go('anon.home'); 
+                Auth.register($scope.user).then(function (data) {
+                    $state.go('anon.activate');
                 });
             }
+            
         }]);
     //
     module.constant('AccessLevels', {
         anon: 0,
         user: 1
     });
-   
-    module.constant('baseUrl', '/api/v1');    
-    
-    module.factory('Auth', function ($http, LocalService, AccessLevels) {
+
+    module.constant('baseUrl', '/api/v1');
+
+    module.factory('Auth',['$http', 'LocalService', 'AccessLevels', '$location',function ($http, LocalService, AccessLevels,$location) {
         return {
             authorize: function (access) {
                 if (access === AccessLevels.user) {
@@ -9321,7 +9441,7 @@ define('core',['cs!./common/index'], function (module) {
                     return true;
                 }
             },
-            isAuthenticated: function () { 
+            isAuthenticated: function () {
                 return LocalService.get('auth_token');
             },
             login: function (credentials) {
@@ -9344,12 +9464,37 @@ define('core',['cs!./common/index'], function (module) {
                 LocalService.unset('auth_token');
                 var register = $http.post('/api/v1/auth/register', formData);
                 register.success(function (result) {
+                    //$location.url('/')    
+                    //LocalService.set('auth_token', JSON.stringify(result));
+                });
+                return register;
+            },
+            activate: function (formData) {
+                LocalService.unset('auth_token');
+                var register = $http.post('/api/v1/auth/activate', formData);
+                register.success(function (result) {
+                    //$location.url('/')   
+                    LocalService.unset('auth_token'); 
                     LocalService.set('auth_token', JSON.stringify(result));
                 });
                 return register;
-            }
+            },            
+            apikey:function () { 
+                var apikey = $http.get('/api/v1/apikey/'+ angular.fromJson(LocalService.get('auth_token')).user.id);
+                apikey.success(function (result) {
+                    console.log(result);
+                });
+                return apikey;
+            },
+            updatepassword: function (credentials) {
+                var updatepassword = $http.put('/api/v1/auth/updatepassword', credentials);
+                updatepassword.success(function (result) {
+                    LocalService.set('auth_token', JSON.stringify(result));
+                });
+                return updatepassword;
+            },
         }
-    })
+    }])
             .factory('AuthInterceptor', function ($q, $injector) {
                 var LocalService = $injector.get('LocalService');
                 return {

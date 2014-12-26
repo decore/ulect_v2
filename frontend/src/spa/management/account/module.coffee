@@ -1,17 +1,13 @@
 ###
- Template faile Mdule dependencies
- @exports "_module"
- @author Nikolay Gerzhan <nikolay.gerzhan@gmail.com>
+  @author Nikolay Gerzhan <nikolay.gerzhan@gmail.com>
 ###
 define ['angular'
         'cs!./namespace'
-        #'cs!common/index' ## Use common module
+        # 'cs!./settings/index'
 ], (
     angular
     namespace
-    #commonModule
+    #settingsModule
     )->
     ## create instance angularjs module
-    return angular.module namespace, [
-        #commonModule
-    ]
+    return angular.module namespace,[]# [settingsModule]

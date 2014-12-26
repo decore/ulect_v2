@@ -1,0 +1,22 @@
+ 
+
+<form  name="resetpasswordForm" method="post" class="form-reset-password form-horizontal" ng-submit="onSendInstruction($event,email)"> 
+  
+    <div ng-show="message" class="alert" ng-class="message.status">{{message.text}}</div>
+    <!--<div class="alert alert-danger">The email address adasd#zsdfwerasdfasd@g.com doesn't look right. Please try again.</div>-->
+    <p>A reset password link will be sent to you.</p>
+    <input type="email" class="form-control" tabindex="1"  placeholder="Email address" name="email" ng-model="email" required>
+    <!--<input class="form-control" type="email" tabindex="1" placeholder="Email address" name="email" value="" required="">-->
+    <div ng-show="resetpasswordForm.email.$dirty" ng-messages="resetpasswordForm.email.$error">
+        <div ng-message="required">
+            You forgot the email address.
+        </div>
+        <div ng-message="email">
+            That is not a well formed email address.
+        </div>
+    </div>
+    <button type="submit" ng-disabled="resetpasswordForm.$invalid" tabindex="2" class="col-sm-6 btn btn-primary" value="Send email">Send email</button>
+
+    <a href="/login" tabindex="3" class="col-sm-6  btn btn-link">Back to login</a>
+</form>
+

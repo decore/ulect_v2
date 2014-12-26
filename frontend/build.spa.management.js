@@ -19,8 +19,8 @@
     insertRequire: ['../bootstrap_app'],
     //wrap: false,
     wrap: {
-        startFile: "built/start.frag",
-        endFile: "built/end.frag"
+        startFile: "build/start.frag",
+        endFile: "build/end.frag"
     },
       out: './../assets/js/spa/management.js'
    // out: './js/spa/management.js'

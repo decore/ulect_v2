@@ -84,7 +84,7 @@ module.exports = {
 //        TWILIO_ACCOUNT_SID: 'AC220dd9ec0df20b77d7cdd306ee34f43a',
 //        TWILIO_AUTH_TOKEN: 'f702406810816dab63eb2fe7e5001961',
 //        TWILIO_NUMBER: '+16505675330',
-//        StatusCallback: ' http://78921f6d.ngrok.com/api/v1/messages/status'
+//        StatusCallback: 'http://78921f6d.ngrok.com/api/v1/messages/status'
 //    }
     //    madrill: {
     //        MANDRILL_KEY: 'qr94w8FY5Nk4jUrTYcAP9g',
@@ -99,4 +99,11 @@ module.exports = {
     //        TWILIO_NUMBER: '+18303550804',
     //        StatusCallback: 'http://newspaper-plan.cloudapp.net:3000/api/v1/messages/status'
     //    }
+    // Master Account web application
+    twilio: {
+        TWILIO_ACCOUNT_SID: 'ACc0d344677835c0a303c92d59cfa1b9d8',
+        TWILIO_AUTH_TOKEN: 'e6dc7e7cceed05eedf5e644975cab642',
+        TWILIO_NUMBER: '+18303550804',
+        StatusCallback: 'http://newspaper-plan.cloudapp.net:3000/api/v1/messages/status'
+    }
 };

@@ -35,9 +35,18 @@ module.exports.routes = {
     '/home': 'PagesController.index',
     'get /register': 'PagesController.spi',
     'get /login': 'PagesController.spi',
+    'get /activate?': 'PagesController.spi',
+    'get /reset-password?': 'PagesController.spi',
+    'get /reset-verification?': 'PagesController.spi',
+    
+    'get /account/activate?': 'AuthController.activate',
+    
     '/chatroom': 'PagesController.chatroom',
     '/management': 'PagesController.management',
     '/management/operators': 'PagesController.management',
+     
+    '/management/account/profile': 'PagesController.management',
+    '/management/account/:id?': 'PagesController.management',
     /***************************************************************************
      *                                                                          *
      * Custom routes here...                                                    *
@@ -93,6 +102,8 @@ module.exports.routes = {
      */
     'POST /api/v1/auth/authenticate': 'AuthController.authenticate',
     'POST /api/v1/auth/logout': 'AuthController.logout',
+    'POST /api/v1/auth/forgotpassword': 'AuthController.forgotpassword',
+    'POST /api/v1/auth/updatepassword': 'AuthController.updatepassword',
     /**
      * API Conversations
      */
@@ -110,5 +121,13 @@ module.exports.routes = {
     'get /api/v1/operators/:id': 'OperatorsController.find',
     'post /api/v1/operators': 'OperatorsController.create',
     'put /api/v1/operators/:id': 'OperatorsController.update',
-    'delete /api/v1/operators/:id': 'OperatorsController.destroy'
+    'delete /api/v1/operators/:id': 'OperatorsController.destroy',
+    
+    //
+    'get /api/v1/apikey/:id': 'AuthController.apikey',
+    'get /api/v1/account/settings': 'AutoresponseSettingsController.getSettings',
+    'put /api/v1/account/settings/:type': 'AutoresponseSettingsController.saveSettings',
+    'put /api/v1/account/changepassword': 'AuthController.changePassword',
+    'get /api/v1/account/profile/:id':"ProfileController.getProfile",
+    'put /api/v1/account/profile/:id':"ProfileController.saveProfile",
 };

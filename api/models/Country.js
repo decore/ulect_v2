@@ -8,7 +8,12 @@
 module.exports = {
 
   attributes: {
-
+      ISO: {
+          type:"string"
+      },
+      Country:{
+          type:"string"
+      }
   }
 };
 

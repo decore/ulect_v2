@@ -48,58 +48,84 @@ define(['cs!./common/index'], function (module) {
             $scope.isCollapsed = true;
             $scope.auth = Auth;
             $scope.user = CurrentUser.user;
-            
+
             $scope.logout = function () {
                 Auth.logout().success(function (result) {
                     $location.url('');
                 });
             };
+            
+            $scope.getApiKey = function () {
+               Auth.apikey().success(function (result) {
+                    console.log(result)
+                    alert('Api key');
+                });
+            };
         }]);
-    module.controller('LoginController', ["$scope", "$state", "Auth", 'CurrentUserService','$location',function ($scope, $state, Auth,CurrentUser,$location) {
+    module.controller('LoginController', ["$scope", "$state", "Auth", 'CurrentUserService', '$location', function ($scope, $state, Auth, CurrentUser, $location) {
             $scope.errors = [];
             //$scope.user = CurrentUser.user;
             $scope.login = function () {
                 $scope.errors = [];
                 Auth.login($scope.user).success(function (result) {
                     //$state.go('user.home');
-                    if(CurrentUser.user().role ==='Administrator'){
-                    $location.url('/management/operators');
-                        }else{
-                          $state.go('chatroom');
-                        }
+                    if (CurrentUser.user().role === 'Administrator') {
+                        $location.url('/management/operators');
+                    } else {
+                        $state.go('chatroom');
+                    }
                 }).error(function (err) {
                     $scope.errors.push(err);
                 });
             }
         }]);
-    module.controller('RegisterController', ["$scope", "$state", "Auth", function ($scope, $state, Auth) {
+    //    module.factory('CountriesFactory',['$http', function($http){
+    //        return {
+    //            list: _l
+    //            
+    //        }
+    //            
+    //    }
+    //    ]
+            
+    //        )
+    module.controller('RegisterController', ["$scope", "$state", "Auth","$http", function ($scope, $state, Auth,$http) {
             //TODO: delete on production
+            
             $scope.user = {
-                //companyname: "Demo Company (at " + (new Date()).toISOString()+")",
-                //email: 'demo@demo.com',
+                companyname: "Demo Company (at " + (new Date()).toISOString()+")",
+                email: 'demo@demo.com',
                 country: "US",
-                //firstname: "Demo First Name (at " + (new Date()).toISOString()+")",
-                //lastname: "Demo Last Name (at " + (new Date()).toISOString()+")",
-                //password: "demo123456",
-                //confirmPassword: "demo123456",
-                //phone: "+19999999",
+                firstname: "Demo First Name (at " + (new Date()).toISOString()+")",
+                lastname: "Demo Last Name (at " + (new Date()).toISOString()+")",
+                password: "demo123456",
+                confirmPassword: "demo123456",
+                phone: "+19999999",
                 role: "Administrator"
             }
+            // ISO,Country,
+            $scope.countryList = []
+            $http.get('/countries.json').then(function(result){
+                 $scope.countryList = result.data;
+            })
+            
             $scope.register = function () {
-                Auth.register($scope.user).then(function (data) { 
-                    $state.go('anon.home'); 
+                Auth.register($scope.user).then(function (data) {
+                    $state.go('anon.activate');
                 });
             }
+            
         }]);
     //
     module.constant('AccessLevels', {
         anon: 0,
-        user: 1
+        user: 1,
+        administrator: 2
     });
-   
-    module.constant('baseUrl', '/api/v1');    
-    
-    module.factory('Auth', function ($http, LocalService, AccessLevels) {
+
+    module.constant('baseUrl', '/api/v1');
+
+    module.factory('Auth',['$http', 'LocalService', 'AccessLevels', '$location',function ($http, LocalService, AccessLevels,$location) {
         return {
             authorize: function (access) {
                 if (access === AccessLevels.user) {
@@ -108,7 +134,7 @@ define(['cs!./common/index'], function (module) {
                     return true;
                 }
             },
-            isAuthenticated: function () { 
+            isAuthenticated: function () {
                 return LocalService.get('auth_token');
             },
             login: function (credentials) {
@@ -131,12 +157,37 @@ define(['cs!./common/index'], function (module) {
                 LocalService.unset('auth_token');
                 var register = $http.post('/api/v1/auth/register', formData);
                 register.success(function (result) {
+                    //$location.url('/')    
+                    //LocalService.set('auth_token', JSON.stringify(result));
+                });
+                return register;
+            },
+            activate: function (formData) {
+                LocalService.unset('auth_token');
+                var register = $http.post('/api/v1/auth/activate', formData);
+                register.success(function (result) {
+                    //$location.url('/')   
+                    LocalService.unset('auth_token'); 
                     LocalService.set('auth_token', JSON.stringify(result));
                 });
                 return register;
-            }
+            },            
+            apikey:function () { 
+                var apikey = $http.get('/api/v1/apikey/'+ angular.fromJson(LocalService.get('auth_token')).user.id);
+                apikey.success(function (result) {
+                    console.log(result);
+                });
+                return apikey;
+            },
+            updatepassword: function (credentials) {
+                var updatepassword = $http.put('/api/v1/auth/updatepassword', credentials);
+                updatepassword.success(function (result) {
+                    LocalService.set('auth_token', JSON.stringify(result));
+                });
+                return updatepassword;
+            },
         }
-    })
+    }])
             .factory('AuthInterceptor', function ($q, $injector) {
                 var LocalService = $injector.get('LocalService');
                 return {

@@ -1,3 +1,3 @@
-define(['cs!./management/index'],function(index){  
+define(['cs!./management/index'],function(index){   
     return index; 
 });
