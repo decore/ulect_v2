@@ -77,15 +77,17 @@ define  [
     ]
 
     module.controller 'ActivateController', ['$scope','$stateParams','$http',($scope,$stateParams,$http)->
+        apiURL = '/api/v1'
         $scope.activationstate = $stateParams.token
         $scope.sid = $stateParams.id
         console.log '===',$stateParams
         $scope.isBusy = true
         if  $scope.activationstate
-            $http.put('/').then(
-                ()->
+            $http.put('/a').then(
+                (result)->
 
-            ).fail(
+                (err)->
+            ).finally(
                 ()->
                     $scope.isBusy = false
 
@@ -99,8 +101,8 @@ define  [
         $log.info $stateParams,$state
         $scope.isBusy = false
         $scope.user =
-            password: "1"
-            passwordConfirm:"1"
+            password: ""
+            passwordConfirm:""
         $scope.message = null
 
         $scope.onTest = ()->
@@ -139,11 +141,10 @@ define  [
                     return
                 (err)->
 
+            ).finally(
+                ->
+                    $scope.isBusy = false
             )
-#            .fail(
-#                ->
-#                    $scope.isBusy = false
-#            )
             return
 
     ]

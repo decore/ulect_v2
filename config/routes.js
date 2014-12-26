@@ -104,6 +104,7 @@ module.exports.routes = {
     'POST /api/v1/auth/logout': 'AuthController.logout',
     'POST /api/v1/auth/forgotpassword': 'AuthController.forgotpassword',
     'POST /api/v1/auth/updatepassword': 'AuthController.updatepassword',
+    'PUT /api/v1/auth/activate': 'AuthController.updatepassword',
     /**
      * API Conversations
      */

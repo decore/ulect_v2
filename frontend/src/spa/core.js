@@ -57,8 +57,9 @@ define(['cs!./common/index'], function (module) {
             
             $scope.getApiKey = function () {
                Auth.apikey().success(function (result) {
-                    console.log(result)
-                    alert('Api key');
+                    console.log(result);
+                    //alert('Api key');
+                    prompt("API key",result.key);
                 });
             };
         }]);
@@ -93,14 +94,14 @@ define(['cs!./common/index'], function (module) {
             //TODO: delete on production
             
             $scope.user = {
-                companyname: "Demo Company (at " + (new Date()).toISOString()+")",
-                email: 'demo@demo.com',
+                companyname: '',//"Demo Company (at " + (new Date()).toISOString()+")",
+                email:'',// 'demo@demo.com',
                 country: "US",
-                firstname: "Demo First Name (at " + (new Date()).toISOString()+")",
-                lastname: "Demo Last Name (at " + (new Date()).toISOString()+")",
-                password: "demo123456",
-                confirmPassword: "demo123456",
-                phone: "+19999999",
+                firstname: '',//"Demo First Name (at " + (new Date()).toISOString()+")",
+                lastname: '',//"Demo Last Name (at " + (new Date()).toISOString()+")",
+                password: '',//"demo123456",
+                confirmPassword: '',//"demo123456",
+                phone:'',// "+19999999",
                 role: "Administrator"
             }
             // ISO,Country,

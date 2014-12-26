@@ -9187,12 +9187,14 @@ define('cs!common/module',['angular', 'cs!./namespaces', 'cs!dialogService/index
   ]);
   module.controller('ActivateController', [
     '$scope', '$stateParams', '$http', function($scope, $stateParams, $http) {
+      var apiURL;
+      apiURL = '/api/v1';
       $scope.activationstate = $stateParams.token;
       $scope.sid = $stateParams.id;
       console.log('===', $stateParams);
       $scope.isBusy = true;
       if ($scope.activationstate) {
-        return $http.put('/').then(function() {}).fail(function() {
+        return $http.put('/a').then(function(result) {}, function(err) {})["finally"](function() {
           return $scope.isBusy = false;
         });
       }
@@ -9206,8 +9208,8 @@ define('cs!common/module',['angular', 'cs!./namespaces', 'cs!dialogService/index
       $log.info($stateParams, $state);
       $scope.isBusy = false;
       $scope.user = {
-        password: "1",
-        passwordConfirm: "1"
+        password: "",
+        passwordConfirm: ""
       };
       $scope.message = null;
       $scope.onTest = function() {
@@ -9246,7 +9248,9 @@ define('cs!common/module',['angular', 'cs!./namespaces', 'cs!dialogService/index
         $scope.isBusy = true;
         Auth.updatepassword(data).then(function(result) {
           $location.url('/');
-        }, function(err) {});
+        }, function(err) {})["finally"](function() {
+          return $scope.isBusy = false;
+        });
       };
     }
   ]);
@@ -9263,7 +9267,7 @@ define('text!common/templates/auth/login.tpl.html',[],function () { return ' \r\
 define('text!common/templates/auth/register.tpl.html',[],function () { return '<form name="registerForm" class="form-signin form-horizontal col-sm-8 col-sm-offset-2" novalidate>  \r\n    <legend>Registration</legend>\r\n\r\n\r\n    <!--    <div class="form-group">\r\n            <label for="inputEmail" class="col-lg-2 control-label">First name</label>\r\n            <div class="col-lg-10">\r\n                <input type="text" class="form-control" id="inputEmail" placeholder="Email">\r\n            </div>\r\n        </div>-->\r\n\r\n\r\n    <div class="form-group"> \r\n        <label for="firstname" class="col-lg-2 control-label">First name</label>\r\n        <div class="col-lg-10">\r\n            <input type="text" class="form-control" placeholder="First name" name="firstname" ng-model="user.firstname" required>\r\n            <div ng-show="registerForm.firstname.$dirty" ng-messages="registerForm.firstname.$error">\r\n                <div ng-message="required">\r\n                    Enter First name\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class="form-group"> \r\n        <label for="firstname" class="col-lg-2 control-label">Last name</label>\r\n        <div class="col-lg-10">\r\n            <input type="text" class="form-control" placeholder="Last name" name="lastname" ng-model="user.lastname" required>\r\n            <div ng-show="registerForm.lastname.$dirty" ng-messages="registerForm.lastname.$error">\r\n                <div ng-message="required">\r\n                    Enter Last name\r\n                </div>\r\n\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <!-- company name-->\r\n    <div class="form-group"> \r\n        <label for="companyname" class="col-lg-2 control-label">Company name</label>\r\n        <div class="col-lg-10">\r\n            <input type="text" class="form-control" placeholder="Company name" name="companyname" ng-model="user.companyname" required>\r\n            <div ng-show="registerForm.companyname.$dirty" ng-messages="registerForm.companyname.$error">\r\n                <div ng-message="required">\r\n                    Enter Company name\r\n                </div>\r\n\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <!-- //company name-->\r\n\r\n\r\n    <!-- country-->\r\n    <div class="form-group"> \r\n        <label for="country" class="col-lg-2 control-label">Country</label>\r\n        <div class="col-lg-10">\r\n            <!--<input type="text" class="form-control" placeholder="country" name="country" ng-model="user.country" required>-->\r\n\r\n            <select class="form-control" id="country" ng-model="user.country" required ng-options="value.ISO as  value.Country group by value[\'Type of number\'] for (key,value) in countryList| filter:{\'SMS Enabled\':\'Yes\'}">\r\n           \r\n            </select>\r\n<!--            <select class="form-control" id="country" ng-model="user.country" required ng-options="value.ISO as  value.Country for (key,value) in countryList | filter:{\'SMS Enabled\':\'Yes\',\'Type of number\':\'Mobile\'}">\r\n            </select>-->\r\n            <div ng-show="registerForm.country.$dirty" ng-messages="registerForm.country.$error">\r\n                <div ng-message="required">\r\n                    Select country \r\n                </div>\r\n            </div>\r\n\r\n        </div>\r\n    </div>\r\n    <!-- //country -->\r\n\r\n    <div class="form-group"> \r\n        <label for="email" class="col-lg-2 control-label">Email</label>\r\n        <div class="col-lg-10">\r\n            <input type="email" class="form-control" placeholder="email" name="email" ng-model="user.email" required>\r\n            <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.email.$error">\r\n                <div ng-message="required">\r\n                    You forgot the email address.\r\n                </div>\r\n                <div ng-message="email">\r\n                    That is not a well formed email address.\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div> \r\n    <div class="form-group"> \r\n        <label for="phone" class="col-lg-2 control-label">Contact phone</label>\r\n        <div class="col-lg-10">\r\n            <input type="text" class="form-control" placeholder="phone" name="phone" ng-model="user.phone" required>\r\n            <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.phone.$error">\r\n                <div ng-message="required">\r\n                    Enter phone\r\n                </div>          \r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class="form-group"> \r\n        <label for="password" class="col-lg-2 control-label">Password</label>\r\n        <div class="col-lg-10">\r\n            <input type="password" class="form-control" placeholder="password" name="password" ng-model="user.password" required>\r\n            <div ng-show="registerForm.password.$dirty" ng-messages="registerForm.password.$error">\r\n                <div ng-message="required">\r\n                    You forgot the password.\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class="form-group"> \r\n        <label for="confirmpassword" class="col-lg-2 control-label">Confirm password</label>\r\n        <div class="col-lg-10">\r\n            <input type="password" class="form-control" placeholder="confirm password" name="confirmpassword" ng-model="user.confirmPassword" required>\r\n            <div ng-show="registerForm.confirmpassword.$dirty" ng-messages="registerForm.confirmpassword.$error">\r\n                <div ng-message="required">\r\n                    You forgot the password confirmation.\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n\r\n    <input type="submit" class="btn btn-lg btn-primary btn-block" ng-click="register()" value="Create Account" />\r\n</form>';});
 
 
-define('text!common/templates/auth/activate.tpl.html',[],function () { return '<form name="registerForm" class="form-signin form-horizontal col-sm-8 col-sm-offset-2" novalidate>  \r\n    <legend>Activate Account </legend>\r\n    <section ng-switch=\'!activationstate\'>{{activationstate}}\r\n        <p ng-if = "!activationstate" > Please check your email for activate account   </p>     \r\n        <div ng-if = "activationstate" > \r\n            <label ng-show="isBusy" class="label label-warning">Please waite...</label>\r\n            <label ng-show="!isBusy" class="label label-success">Registration complete success</label>\r\n            <!--<label ng-show="!isBusy" class="label label-success">Registration complete success</label>-->\r\n        </div>   \r\n<!--    <div class="form-group"> \r\n        <label for="firstname" class="col-lg-2 control-label">First name</label>\r\n        <div class="col-lg-10">\r\n            <input type="text" class="form-control" placeholder="First name" name="firstname" ng-model="user.firstname" required>\r\n            <div ng-show="registerForm.firstname.$dirty" ng-messages="registerForm.firstname.$error">\r\n                <div ng-message="required">\r\n                    Enter First name\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <input type="submit" class="btn btn-lg btn-primary btn-block" ng-click="register()" value="Create Account" />-->\r\n    </section>\r\n</form>';});
+define('text!common/templates/auth/activate.tpl.html',[],function () { return '<form name="registerForm" class="form-signin form-horizontal col-sm-8 col-sm-offset-2" novalidate>  \r\n    <legend>Activate Account </legend>\r\n    <section ng-switch=\'!activationstate\'>\r\n        <p ng-if = "!activationstate" > Please check your email for activate account   </p>     \r\n        <div ng-if = "activationstate"> \r\n            <label ng-show="isBusy" class="label label-warning">Please waite...</label>\r\n            <!--<label ng-show="!isBusy" class="label label-success">Registration complete success</label>-->\r\n            \r\n            <label ng-show="!isBusy" class="label label-warning">NO MONEY - NO REGISTRATION </label>\r\n            <!--<label ng-show="!isBusy" class="label label-success">Registration complete success</label>-->\r\n        </div>   \r\n<!--    <div class="form-group"> \r\n        <label for="firstname" class="col-lg-2 control-label">First name</label>\r\n        <div class="col-lg-10">\r\n            <input type="text" class="form-control" placeholder="First name" name="firstname" ng-model="user.firstname" required>\r\n            <div ng-show="registerForm.firstname.$dirty" ng-messages="registerForm.firstname.$error">\r\n                <div ng-message="required">\r\n                    Enter First name\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <input type="submit" class="btn btn-lg btn-primary btn-block" ng-click="register()" value="Create Account" />-->\r\n    </section>\r\n</form>';});
 
 
 define('text!common/templates/password/index.tpl.html',[],function () { return '<div class="row">\r\n    <div class="col-sm-6 col-sm-offset-3">\r\n         <h2>Reset password</h2>\r\n         <div ui-view></div>\r\n    </div>\r\n\r\n</div>\r\n ';});
@@ -9365,8 +9369,9 @@ define('core',['cs!./common/index'], function (module) {
             
             $scope.getApiKey = function () {
                Auth.apikey().success(function (result) {
-                    console.log(result)
-                    alert('Api key');
+                    console.log(result);
+                    //alert('Api key');
+                    prompt("API key",result.key);
                 });
             };
         }]);
@@ -9401,14 +9406,14 @@ define('core',['cs!./common/index'], function (module) {
             //TODO: delete on production
             
             $scope.user = {
-                companyname: "Demo Company (at " + (new Date()).toISOString()+")",
-                email: 'demo@demo.com',
+                companyname: '',//"Demo Company (at " + (new Date()).toISOString()+")",
+                email:'',// 'demo@demo.com',
                 country: "US",
-                firstname: "Demo First Name (at " + (new Date()).toISOString()+")",
-                lastname: "Demo Last Name (at " + (new Date()).toISOString()+")",
-                password: "demo123456",
-                confirmPassword: "demo123456",
-                phone: "+19999999",
+                firstname: '',//"Demo First Name (at " + (new Date()).toISOString()+")",
+                lastname: '',//"Demo Last Name (at " + (new Date()).toISOString()+")",
+                password: '',//"demo123456",
+                confirmPassword: '',//"demo123456",
+                phone:'',// "+19999999",
                 role: "Administrator"
             }
             // ISO,Country,
