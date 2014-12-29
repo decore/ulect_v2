@@ -131,4 +131,11 @@ module.exports.routes = {
     'put /api/v1/account/changepassword': 'AuthController.changePassword',
     'get /api/v1/account/profile/:id':"ProfileController.getProfile",
     'put /api/v1/account/profile/:id':"ProfileController.saveProfile",
+    'get /api/v2/ping':{
+        controller: 'EchoController',
+        action: 'ping',
+        locals:{
+            layout: 'layout'
+        }
+    }
 };

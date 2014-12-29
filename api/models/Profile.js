@@ -18,10 +18,12 @@ module.exports = {
             model: 'Country',
             via: 'ISO'
         },
-        countryISO:  "string",
-        //        firstname: "string",
-        //        lastname: "string",
-        phone: "string",
+        countryISO:  {
+            type:"string"
+        },
+        phone: {
+            type:"string"
+        },
         phoneNumber:{
             type:"string",
             defaultsTo:"+18303550804"

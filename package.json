@@ -55,6 +55,7 @@
     "sails-mandrill": "^0.10.2",
     "crypto": "0.0.3",
     "string-template": "^0.2.0",
-    "moment": "^2.8.4"
+    "moment": "^2.8.4",
+    "sails-mysql": "^0.10.8"
   }
 }

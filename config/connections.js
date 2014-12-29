@@ -45,6 +45,13 @@ module.exports.connections = {
         password: 'YOUR_MYSQL_PASSWORD',
         database: 'YOUR_MYSQL_DB'
     },
+    smschatclmBD: {
+        adapter: 'sails-mysql',
+        host: '127.0.0.1',
+        user: 'root',
+        password: 'usbw',
+        database: 'smschatclm'
+    },
     /***************************************************************************
      *                                                                          *
      * MongoDB is the leading NoSQL database.                                   *

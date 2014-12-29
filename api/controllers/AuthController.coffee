@@ -134,40 +134,42 @@ module.exports = {
                     #delete user.username
                     delete user.password
                     _params.owner = user.id
-                    #if _params.country?
-                    #    _params.country = ISO:_params.ISO, Country:_params.Country
+                    if _params.country?
+                        _params.country = ISO:_params.ISO, Country:_params.Country
                     Profile.create(_params).exec(
                         (err,profile)->
                             console.log profile
                             ##
                             if err
                                 console.log 'profile err',err
-                                res.status err.status
+                                User.destroy(user)
+                                res.status 500#err.status
                                 return res.json err
-                            Email.send(
-                                to: [
-                                    name: _params.username
-                                    email: _params.email
-                                ]
-                                subject: 'Confirm Email address to complete registration' ##CrosLinkMedia SMSChat
-                                html:
-                                    format 'Hello! <br>'+
-                                    'You have registered on the site CLM.com. In order to complete the registration of your account at this Email address, click on the link:<br/><br/>'+
-                                    '<a href="{LINKVERIFICATE}>{LINKVERIFICATE}</a>'+
-                                    '<br> If you did not register on the site CLM.com, please ignore this letter.',{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/activate?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email,expiresInMinutes: 1,issue:issueDate)}
-                                text: 'You need confirm registration '
-                                (err)->
-                                    #                // If you need to wait to find out if the email was sent successfully,
-                                    #                // or run some code once you know one way or the other, here's where you can do that.
-                                    #                // If `err` is set, the send failed.  Otherwise, we're good!
-                                    console.log 'is send OK or' , err
-                                    res.status 418
-                                    return res.json msg: "is send",err
-                            )
-                            res.status 201
-                            return res.json
-                                user: user
-                                token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
+                            else
+                                Email.send(
+                                    to: [
+                                        name: _params.username
+                                        email: _params.email
+                                    ]
+                                    subject: 'Confirm Email address to complete registration' ##CrosLinkMedia SMSChat
+                                    html:
+                                        format 'Hello! <br>'+
+                                        'You have registered on the site CLM.com. In order to complete the registration of your account at this Email address, click on the link:<br/><br/>'+
+                                        '<a href="{LINKVERIFICATE}>{LINKVERIFICATE}</a>'+
+                                        '<br> If you did not register on the site CLM.com, please ignore this letter.',{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/activate?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email,expiresInMinutes: 1,issue:issueDate)}
+                                    text: 'You need confirm registration '
+                                    (err)->
+                                        #                // If you need to wait to find out if the email was sent successfully,
+                                        #                // or run some code once you know one way or the other, here's where you can do that.
+                                        #                // If `err` is set, the send failed.  Otherwise, we're good!
+                                        console.log 'is send OK or' , err
+                                        res.status 418
+                                        return res.json msg: "is send",err
+                                )
+                                res.status 201
+                                return res.json
+                                    user: user
+                                    token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
                     )
 
                 return
