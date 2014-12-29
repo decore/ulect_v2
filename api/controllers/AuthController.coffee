@@ -149,10 +149,12 @@ module.exports = {
                                     name: _params.username
                                     email: _params.email
                                 ]
-                                subject: 'New Account Acivation Required  ' ##CrosLinkMedia SMSChat
+                                subject: 'Confirm Email address to complete registration' ##CrosLinkMedia SMSChat
                                 html:
-                                    format 'For confirm registration go to url <br/>'+
-                                    '<a href="{LINKVERIFICATE}>{LINKVERIFICATE}</a>',{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/activate?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email,expiresInMinutes: 1,issue:issueDate)}
+                                    format 'Hello! <br>'+
+                                    'You have registered on the site CLM.com. In order to complete the registration of your account at this Email address, click on the link:<br/><br/>'+
+                                    '<a href="{LINKVERIFICATE}>{LINKVERIFICATE}</a>'+
+                                    '<br> If you did not register on the site CLM.com, please ignore this letter.',{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/activate?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email,expiresInMinutes: 1,issue:issueDate)}
                                 text: 'You need confirm registration '
                                 (err)->
                                     #                // If you need to wait to find out if the email was sent successfully,
@@ -251,16 +253,19 @@ module.exports = {
                         name: user.username
                         email: user.email
                     ]
-                    subject: 'Password Reset ' ##CrosLinkMedia SMSChat
+                    subject: 'Function to reset the password' ##CrosLinkMedia SMSChat
                     html:
                         #format 'For confirm registration go to url <a href="#test">LIKT TO SITE</a><br/>'
 
-                        format  "{USERNAME},"+
-                            "Someone has asked to reset the password for your account.<br/>" +
-                            "If you did not request a password reset, you can disregard this email."+
-                            "No changes have been made to your account."+
-                            "<br/>To reset your password, follow this link (or paste into your browser):<br/>"+
-                            "{LINKVERIFICATE}",{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/reset-verification?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email,expiresInMinutes: 1,issue:issueDate)}
+                        format 'Hello! <br/>'+ #"{USERNAME},"+
+                            "You use the password reset. If you have forgotten your password, click on the link to reset your password: <br/><br/>"+
+                            '<a href="{LINKVERIFICATE}>{LINKVERIFICATE}</a>'+
+                            "<br/>If you do not need to reset the password, please ignore this letter."+
+                            #                            "Someone has asked to reset the password for your account.<br/>" +
+                            #                            "If you did not request a password reset, you can disregard this email."+
+                            #                            "No changes have been made to your account."+
+                            #                            "<br/>To reset your password, follow this link (or paste into your browser):<br/>"+
+                            "{LINKVERIFICATE}",{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/reset-verification?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email,expiresInMinutes: 60,issue:issueDate)}
                     text: 'Password reset'
                     (err)->
                         #                // If you need to wait to find out if the email was sent successfully,
