@@ -87,7 +87,8 @@ module.exports = {
                                     return
                         )
                         return res.json msg: "email not send",err
-
+                    user.activated = true
+                    user.save()
                     return res.json(user,201)
                 )
             #return res.json(user,201)

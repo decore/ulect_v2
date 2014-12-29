@@ -1,0 +1,33 @@
+/* 
+    Created for : CrossLinkMedia Chat
+    Author     : nikolay.gerzhan@gmail.com
+*/
+.page_chatroom { 
+    .initial_messages_received {
+        background-color: red;//#FFCC00;
+    }
+    .user_replied_operator{
+        background-color: blue;
+    }
+}
+#operator_list {
+    > .active{
+        background-color: #00CC66;
+    }
+}
+#chat_dialog {
+     height:100%;
+     width: 100%;
+     overflow-y: auto;
+     /*border: #0000ed solid;*/
+     
+     border: @list-group-border;
+    > .textMsg{
+        border-radius: 1em;
+        padding: 0.5em;
+    } 
+   
+}
+ui-view{
+    height: 100%;
+}

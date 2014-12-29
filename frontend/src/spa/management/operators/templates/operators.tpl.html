@@ -10,7 +10,7 @@
                                               class="btn btn-info pull-right">
                     Instruction
                 </button>-->
- <button ng-click="onAddUser()" class="btn btn-primary pull-right">Add new Operator</button>
+ <button ng-click="onAddUser()" class="btn btn-success pull-right">Add new Operator</button>
             </h3>
 
             <hr/>
@@ -26,7 +26,7 @@
                 <div class="pusher-15"></div>
 
                 <div class="col-sm-6">
-                    <search-box ng-model="tableParams.filter()['userName']"></search-box>
+                    <!--<search-box ng-model="tableParams.filter()['userName']"></search-box>-->
                 </div>
                 <div class="col-sm-6">
                     <!--<button ng-click="onAddUser()" class="btn btn-primary pull-right">Add new Operator</button>-->
@@ -43,7 +43,7 @@
                                 <td data-title="'Email'" sortable="'email'">{{item.email}}</td> 
                                 <!--<td data-title="'Role'" sortable="'role'" >{{item.role}}</td>-->
                                 <td data-title="'Controls'">
-                                    <button class="btn btn-xs btn-warning" ng-click="onEditUser(item)">Edit</button>
+                                    <button class="btn btn-xs btn-primary" ng-click="onEditUser(item)">Edit</button>
                                     <button class="btn btn-xs btn-danger" ng-click="onDeleteUser(item)">Delete</button>
                                 </td>
                             </tr>

@@ -10,7 +10,7 @@ define [
     'cs!./services/SocketEntityFactoryClass'
     'cs!./controllers/EditEntityControllerClass'
     'ng-table'
-    'angular-resource' 
+    'angular-resource'
     'ngsails.io'
 ],(
     angular

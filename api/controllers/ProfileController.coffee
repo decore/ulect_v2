@@ -4,7 +4,7 @@
 module.exports = {
     getProfile: (req,res)->
         id= req.param('id')
-        Profile.findOne(id).populate('owner').exec(
+        Profile.findOne(owner:id).populate('owner').exec(
             (err,profile)->
                 if err
                     return res.json err

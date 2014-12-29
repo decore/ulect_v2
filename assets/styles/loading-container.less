@@ -1,0 +1,33 @@
+/* 
+    http://leafo.net/lessphp/lessify/
+    Author     : nikolay.gerzhan@gmail.com
+*/
+.loading-container {
+    position:relative;
+    .loading:before {
+        content:" ";
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        min-height:50px;
+        min-width:50px;
+        z-index:1020;
+        background: @body-bg url('/images/loader.gif') no-repeat center;
+        opacity:0.5;
+    }
+    .loading:after {
+        content:" ";
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        min-height:50px;
+        min-width:50px;
+    }
+    .loading-container .loading {
+        display:none;
+    }
+}
