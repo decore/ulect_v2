@@ -24,7 +24,7 @@
     },
       out: './../assets/js/spa/management.js'
    // out: './js/spa/management.js'
-    , optimize: 'none'
+    , optimize: 'uglify2'//'none'
     , uglify2: {
         'screw-ie8': true,
         compress: {

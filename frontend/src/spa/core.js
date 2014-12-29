@@ -78,7 +78,7 @@ define(['cs!./common/index'], function (module) {
                 }).error(function (err) {
                     $scope.errors.push(err);
                 });
-            }
+            };
         }]);
     //    module.factory('CountriesFactory',['$http', function($http){
     //        return {
@@ -103,18 +103,18 @@ define(['cs!./common/index'], function (module) {
                 confirmPassword: '',//"demo123456",
                 phone:'',// "+19999999",
                 role: "Administrator"
-            }
+            };
             // ISO,Country,
-            $scope.countryList = []
+            $scope.countryList = [];
             $http.get('/countries.json').then(function(result){
                  $scope.countryList = result.data;
-            })
+            });
             
             $scope.register = function () {
                 Auth.register($scope.user).then(function (data) {
                     $state.go('anon.activate');
                 });
-            }
+            };
             
         }]);
     //
@@ -126,7 +126,7 @@ define(['cs!./common/index'], function (module) {
 
     module.constant('baseUrl', '/api/v1');
 
-    module.factory('Auth',['$http', 'LocalService', 'AccessLevels', '$location',function ($http, LocalService, AccessLevels,$location) {
+    module.factory('Auth',['$http', 'LocalService', 'AccessLevels', '$location', function ($http, LocalService, AccessLevels,$location) {
         return {
             authorize: function (access) {
                 if (access === AccessLevels.user) {
@@ -186,10 +186,10 @@ define(['cs!./common/index'], function (module) {
                     LocalService.set('auth_token', JSON.stringify(result));
                 });
                 return updatepassword;
-            },
+            }
         }
     }])
-            .factory('AuthInterceptor', function ($q, $injector) {
+            .factory('AuthInterceptor',[ "$q", "$injector",function ($q, $injector) {
                 var LocalService = $injector.get('LocalService');
                 return {
                     request: function (config) {
@@ -210,10 +210,10 @@ define(['cs!./common/index'], function (module) {
                         return $q.reject(response);
                     }
                 }
-            })
-            .config(function ($httpProvider) {
+            }])
+            .config(["$httpProvider",function ($httpProvider) {
                 $httpProvider.interceptors.push('AuthInterceptor');
-            });
+            }]);
     //======================Controllers
 
 
