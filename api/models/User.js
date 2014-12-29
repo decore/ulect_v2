@@ -47,8 +47,9 @@ module.exports = {
             defaultsTo: false
         },
         status: {
+            type: 'string',
             enum: ['closed', 'suspended', 'active'],
-            //defaultsTo: 'Administrator',
+            defaultsTo: 'suspended'
         },
         activationToken: {
             type: "string"
@@ -56,7 +57,7 @@ module.exports = {
         role: {
             type: "string",
             enum: ['Administrator', 'Owner', 'Operator'],
-            defaultsTo: 'Administrator',
+            defaultsTo: 'Administrator'
             //required: true
         },
         toJSON: function () {

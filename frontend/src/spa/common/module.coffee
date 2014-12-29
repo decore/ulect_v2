@@ -80,10 +80,9 @@ define  [
         apiURL = '/api/v1'
         $scope.activationstate = $stateParams.token
         $scope.sid = $stateParams.id
-        console.log '===',$stateParams
         $scope.isBusy = true
         if  $scope.activationstate
-            $http.put('/a').then(
+            $http.put('/api/v1/activated').then(
                 (result)->
 
                 (err)->
