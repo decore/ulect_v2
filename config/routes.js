@@ -137,5 +137,7 @@ module.exports.routes = {
         locals:{
             layout: 'layout'
         }
-    }
+    },
+    'get /api/v2/:key/operators': 'APIcallController.getOperators',
+    'get /api/v2/:key/message/:phonenumber': 'APIcallController.sendMessage'
 };

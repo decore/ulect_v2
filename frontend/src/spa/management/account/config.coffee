@@ -46,7 +46,7 @@ define [
                         templateUrl: "templates/#{namespace.replace /\.+/g, "/"}/form.changepassword.tpl.html"
                         controller: ['$scope','$modalInstance',($scope,$modalInstance)->
                             $scope.editEntity =
-                                password : "test"
+                                password : ""
                             $scope.onCancel = ->
                                 $modalInstance.dismiss('cancel')
                             $scope.onSave = (_event,data)->

@@ -71,4 +71,7 @@ module.exports = {
                 res.json msg:"User not found",err:err
         )
 
+    ping: (req,res)->
+        console.log "ping from ", req.ip
+        return res.json "ping Ok"
 }
