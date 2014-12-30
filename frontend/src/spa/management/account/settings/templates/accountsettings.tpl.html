@@ -52,12 +52,7 @@
         <label for="country" class="col-lg-2 control-label">Country</label>
         <div class="col-lg-10">
             <!--<input type="text" class="form-control" placeholder="country" name="country" ng-model="user.country" required>-->
-               <select class="form-control" id="country" ng-model="user.country" required ng-options=" value.Country for (key,value) in countryList">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+               <select class="form-control" id="country" ng-model="user.country" required ng-options=" value.Country for (key,value) in countryList"> 
         </select>
             <div ng-show="registerForm.country.$dirty" ng-messages="registerForm.country.$error">
                 <div ng-message="required">

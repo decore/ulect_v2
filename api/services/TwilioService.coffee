@@ -13,6 +13,7 @@ Send Message
 ###
 exports.sendSMS =  (options,cb)->
     config = sails.config.twilio
+
     client = new twilio.RestClient(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
     ##TODO: add controll "options" parameter API key
     #console.log 'TwilioSrvice:sendSMS(',options,')'
@@ -136,7 +137,7 @@ exports.buyNumber  = (options,cb)->
 exports.transferPhoneNumber  = (options,cb)->
     ##NOTE: Master Account only
     config= sails.config.twilio
-    console.log config 
+    console.log config
     _options = {
         phoneNumber: options.phoneSid || ""
         accountSid: options.newAccountSid || ""

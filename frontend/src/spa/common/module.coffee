@@ -82,7 +82,7 @@ define  [
         $scope.sid = $stateParams.id
         $scope.isBusy = true
         if  $scope.activationstate
-            $http.put('/api/v1/activated').then(
+            $http.put('/api/v1').then(
                 (result)->
 
                 (err)->
