@@ -93,11 +93,13 @@ module.exports = {
                                     if err
                                         return res.json err
                                      ##send auto response
+
                                     _params =
                                         ##TODO: account sid req.token
                                         to : entity.client
                                         ## TODO: template  #%OPERATOR_NAME% is here to help you”
-                                        body: format "{OPERATOR_NAME} is here to help you", OPERATOR_NAME:"#{dialog.operator.firstname} #{dialog.operator.lastname}" # "Operator #{dialog.operator.firstname} #{dialog.operator.lastname} is here to help you"
+                                        body: format "{OPERATOR_NAME} is here to help you", {OPERATOR_NAME: dialog.operator.firstname+ " " + dialog.operator.lastname}
+                                        # "Operator #{dialog.operator.firstname} #{dialog.operator.lastname} is here to help you"
                                     TwilioService.sendSMS( _params, (err,message)->
                                         _.extend message , { dialog : dialog.id, operator: 0}
                                         if err

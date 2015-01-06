@@ -58,7 +58,7 @@ module.exports = {
             type: "string",
             enum: ['Administrator', 'Owner', 'Operator'],
             defaultsTo: 'Administrator'
-            //required: true
+                    //required: true
         },
         toJSON: function () {
             var obj = this.toObject();
@@ -71,8 +71,11 @@ module.exports = {
         country: {
             model: "Country",
             via: "ISO"
-        }
-        , APIkey: {
+        },
+        APIkey: {
+            type: "string"
+        },
+        APItoken: {
             type: "string"
         }
     },
@@ -85,8 +88,11 @@ module.exports = {
                     return next(err);
                 values.encryptedPassword = hash;
                 values.activated = false; //make sure nobody is creating a user with activate set to true, this is probably just for paranoia sake :)
-                values.activationToken = cryptoService.token(new Date().getTime() + values.email);
-                values.APIkey = cryptoService.genAPIkey(new Date().getTime() + values.email);
+                var _time = new Date().getTime();
+                values.activationToken = cryptoService.token(_time + values.email);
+                values.APIkey = cryptoService.genAPIkey(_time + values.email);
+                values.APItoken = sailsTokenAuth.issueToken({email: values.email, APIkey: values.APIkey});
+                //cryptoService.genAPIkey(new Date().getTime() + values.email);
                 next(null, values);
             });
         });
@@ -108,6 +114,8 @@ module.exports = {
                     next(null, values);
                 });
             });
+        } else {
+            next(null, values);
         }
     },
     //
@@ -119,10 +127,10 @@ module.exports = {
                             return cb(err);
                         console.log('create send -------');
                         sails.sockets.broadcast(values.AccountSid, 'operator', {verb: 'create', data: values, dt: new Date()});
-                        cb();
+                        cb(null, values);
                     });
         } else {
-            cb();
+            cb(null, values);
         }
     },
     //
@@ -134,10 +142,10 @@ module.exports = {
                             return cb(err);
                         console.log('update send -------');
                         sails.sockets.broadcast(values.AccountSid, 'operator', {verb: 'update', data: values, dt: new Date()});
-                        cb();
+                        cb(null, values);
                     });
         } else {
-            cb();
+            cb(null, values);
         }
     },
     //
