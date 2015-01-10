@@ -32,9 +32,10 @@ module.exports = {
         encryptedPassword: {
             type: 'string'
         },
-        // account Sid is empty - no activated account
+        // account Sid from Tilio
         AccountSid: {
             type: "string",
+            required: true
             // defaultsTo: "AC220dd9ec0df20b77d7cdd306ee34f43a"// 'ACc0d344677835c0a303c92d59cfa1b9d8'//"AC220dd9ec0df20b77d7cdd306ee34f43a"
         },
         isLogin: {
@@ -45,14 +46,14 @@ module.exports = {
         activated: {
             type: "boolean",
             defaultsTo: false
+        },       
+        activationToken: {
+            type: "string"
         },
         status: {
             type: 'string',
             enum: ['closed', 'suspended', 'active'],
             defaultsTo: 'suspended'
-        },
-        activationToken: {
-            type: "string"
         },
         role: {
             type: "string",
@@ -91,7 +92,7 @@ module.exports = {
                 var _time = new Date().getTime();
                 values.activationToken = cryptoService.token(_time + values.email);
                 values.APIkey = cryptoService.genAPIkey(_time + values.email);
-                values.APItoken = sailsTokenAuth.issueToken({email: values.email, APIkey: values.APIkey});
+                values.APItoken = sailsTokenAuth.issueToken({email: values.email});
                 //cryptoService.genAPIkey(new Date().getTime() + values.email);
                 next(null, values);
             });

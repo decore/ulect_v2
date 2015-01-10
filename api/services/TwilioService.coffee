@@ -1,8 +1,8 @@
-##Load the twilio module
-twilio = require('twilio');
-
+###
+#
+###
+twilio = require('twilio'); ##Load a official twilio module
 ##
-
 # Create a new REST API client to make authenticated requests against the
 #twilio back end
 #client = new twilio.RestClient(sails.config.twilio.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
@@ -78,33 +78,114 @@ exports.messagesList = (options,cb)->
         #            console.log(message.friendlyName);
         cb(err, data)
     )
-## Creating Subaccounts https://www.twilio.com/docs/api/rest/subaccounts#creating-subaccounts
-exports.createAccount = (options,cb)->
-    config = sails.config.twilio
-    client = new twilio.RestClient(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
-
-    console.log 'createAccount',options
+###*
+* Creating Subaccounts for new Custormer
+* 64 characters
+* only 1000 subaccount by default (for more - https://www.twilio.com/help/contact)
+* @url info: https://www.twilio.com/docs/api/rest/subaccounts#creating-subaccounts
+###
+exports.createSubAccount = (options,cb)->
+    ## get systemSettings
+    _masterAccountSettings = sails.config.twilioMasterAccount
+    ## Master Account client
+    client = new twilio.RestClient(_masterAccountSettings.TWILIO_ACCOUNT_SID, _masterAccountSettings.TWILIO_AUTH_TOKEN)
+    ## semple check params
     if !options.FriendlyName
-        err = status:400, message: "No set FriendlyName for new account"
-        cb(err,null)
+        err =
+            status:400
+            err: "No set FriendlyName for new sub account"
+        return cb(err,null)
+    if options.FriendlyName.length > 64
+        err =
+            status:400
+            err: "FriendlyName for new sub account must be less 64 characters"
+        return cb(err,null)
     else
-        client.accounts.list( friendlyName: options.FriendlyName ,(err,data)->
-            console.log data
-            if data.accounts.length !=1
-                err = status : 400, msg :  "Account not found"
-                #                    client.accounts.create(FriendlyName:options.FriendlyName, (err,account)->
-                #                         cb(err,account)
-                #                    )
-                cb(err,null)
+        ## create twilio sub account
+        client.accounts.create(FriendlyName:options.FriendlyName, (err,account)->
+            ## error created a new SubAccount
+            if err
+                ##try to find an exists SubAccount
+                client.accounts.list( friendlyName: options.FriendlyName ,(err,data)->
+                   ## The account not created and not found
+                   if err || data.accounts.length !=1
+                       err =
+                            status : 500
+                            msg :  "Service error! Try to late!"
+                       cb(err,null)
+                   else
+                       cb(null,data.accounts[0])
+                )
             else
-                cb(null,data.accounts[0])
-
+                ## The SubAccount was success created
+                cb(null,account)
         )
+
+###*
+*  Activate subaccount
+*  - check Status
+*  - incominPhoneNumber
+https://www.twilio.com/docs/api/rest/incoming-phone-numbers#list-get
+###
+exports.activeSubAccountPhone = (options,cb)->
+    ## get systemSettings
+    _masterAccountSettings = sails.config.twilioMasterAccount
+    _systemSettings = sails.config.crosslinkmedia
+    ## SubAccount data
+    if options.accountSid?
+        client = new twilio.RestClient(options.accountSid, _masterAccountSettings.TWILIO_AUTH_TOKEN)
+
+        client.incomingPhoneNumbers.list( (err,data)->
+            if err
+                console.log '!!!',options.accountSid,err
+                return cb(err,null)
+            ## Client is Already have PhoneNumber
+            if data.incoming_phone_numbers.length > 0
+                console.log 'incoming_phone_numbers',data.incoming_phone_numbers
+                cb(null,data.incoming_phone_numbers[0])
+            else
+                ## by new phone number
+                _options =
+                    areaCode: option.areaCode ## require field
+                    smsFallbackMethod: "POST",
+                    smsFallbackUrl: _systemSettings.smsFallbackUrl,
+                    smsMethod: "POST",
+                    smsUrl: _systemSettings.smsUrl
+                    statusCallback:_systemSettings.statusCallback
+                clientMaster = new twilio.RestClient(_masterAccountSettings.TWILIO_ACCOUNT_SID, _masterAccountSettings.TWILIO_AUTH_TOKEN)
+                clientMaster.incomingPhoneNumbers.create(  _options , (err, number)->
+                    #process.stdout.write(number);
+                    console.log 'was by a Phone number',err,number
+                    if err
+                        cb(err, null)
+                    else
+                        if number?
+                            client.incomingPhoneNumbers(number.sid).update({}, (err, number)->
+                                console.log("Was create",number.sid);
+                                cb(null, number)
+                            )
+                        else
+                            err =
+                                status: 500
+                                err: "Error by phone"
+                                msg: "Sorry! Service error"
+                            cb(err,null)
+                )
+        )
+    else
+        err=
+            status: 400
+            err: "accountSid not found"
+            msg: "Params not found"
+        cb(err, null)
+
+
+
+
 ## Closing a Subaccount https://www.twilio.com/docs/api/rest/subaccounts#closing-subaccounts
 exports.destroyAccount = (options,cb)->
     config = sails.config.twilio
     client = new twilio.RestClient(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
-
     ## POST 'Status' with the value 'closed'
     cb(err,data)
 ###
@@ -133,17 +214,21 @@ exports.buyNumber  = (options,cb)->
             console.log err,number
             cb(err, number)
     )
-# https://www.twilio.com/docs/api/rest/subaccounts#exchanging-numbers
+###*
+*
+*
+* https://www.twilio.com/docs/api/rest/subaccounts#exchanging-numbers
+###
 exports.transferPhoneNumber  = (options,cb)->
-    ##NOTE: Master Account only
-    config= sails.config.twilio
+    ## get systemSettings
+    _systemSettings = sails.config.twilioMasterAccount
     console.log config
     _options = {
         phoneNumber: options.phoneSid || ""
         accountSid: options.newAccountSid || ""
     }
 
-    client = new twilio.RestClient(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
+    client = new twilio.RestClient(_systemSettings.TWILIO_ACCOUNT_SID, _systemSettings.TWILIO_AUTH_TOKEN)
     client.incomingPhoneNumbers(_options.phoneNumber).update( accountSid: _options.accountSid , (err, number)->
             #process.stdout.write(number);
             console.log err,number
