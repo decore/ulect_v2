@@ -54,12 +54,12 @@ define(['cs!./common/index'], function (module) {
                     $location.url('');
                 });
             };
-            
+
             $scope.getApiKey = function () {
-               Auth.apikey().success(function (result) {
+                Auth.apikey().success(function (result) {
                     console.log(result);
                     //alert('Api key');
-                    prompt("API key",result.key);
+                    prompt("API key", result.key);
                 });
             };
         }]);
@@ -88,34 +88,42 @@ define(['cs!./common/index'], function (module) {
     //            
     //    }
     //    ]
-            
+
     //        )
-    module.controller('RegisterController', ["$scope", "$state", "Auth","$http", function ($scope, $state, Auth,$http) {
+    module.controller('RegisterController', ["$scope", "$state", "Auth", "$http","$log", function ($scope, $state, Auth, $http,$log) {
             //TODO: delete on production
-            
+            $scope.errors = [];
             $scope.user = {
-                companyname: '',//"Demo Company (at " + (new Date()).toISOString()+")",
-                email:'',// 'demo@demo.com',
+                companyname: '', //"Demo Company (at " + (new Date()).toISOString()+")",
+                email: '', // 'demo@demo.com',
                 country: "US",
-                firstname: '',//"Demo First Name (at " + (new Date()).toISOString()+")",
-                lastname: '',//"Demo Last Name (at " + (new Date()).toISOString()+")",
-                password: '',//"demo123456",
-                confirmPassword: '',//"demo123456",
-                phone:'',// "+19999999",
+                firstname: '', //"Demo First Name (at " + (new Date()).toISOString()+")",
+                lastname: '', //"Demo Last Name (at " + (new Date()).toISOString()+")",
+                password: '', //"demo123456",
+                confirmPassword: '', //"demo123456",
+                phone: '', // "+19999999",
                 role: "Administrator"
             };
             // ISO,Country,
             $scope.countryList = [];
-            $http.get('/countries.json').then(function(result){
-                 $scope.countryList = result.data;
+            $http.get('/countries.json').then(function (result) {
+                $scope.countryList = result.data;
             });
-            
-            $scope.register = function () {
-                Auth.register($scope.user).then(function (data) {
-                    $state.go('anon.activate');
-                });
+
+            $scope.register = function () { 
+                Auth.register($scope.user).then(
+                        function (data) {
+                            
+                            $state.go('anon.activate');
+                        }, 
+                        function (data) {                            
+                            $log.info(data, $scope.errors);
+                            $scope.errors = [data.data];
+                            $log.info($scope.errors);
+                        }       
+                );
             };
-            
+
         }]);
     //
     module.constant('AccessLevels', {
@@ -126,113 +134,113 @@ define(['cs!./common/index'], function (module) {
 
     module.constant('baseUrl', '/api/v1');
 
-    module.factory('Auth',['$http', 'LocalService', 'AccessLevels', '$location', function ($http, LocalService, AccessLevels,$location) {
-        return {
-            authorize: function (access) {
-                if (access === AccessLevels.user) {
-                    return this.isAuthenticated();
-                } else {
-                    return true;
-                }
-            },
-            isAuthenticated: function () {
-                return LocalService.get('auth_token');
-            },
-            login: function (credentials) {
-                var login = $http.post('/api/v1/auth/authenticate', credentials);
-                login.success(function (result) {
-                    LocalService.set('auth_token', JSON.stringify(result));
-                });
-                return login;
-            },
-            logout: function () {
-                // We must inform server 
-                console.log(this.isAuthenticated());
-                var register = $http.post('/api/v1/auth/logout', angular.fromJson(LocalService.get('auth_token')).user);
-                register.success(function (result) {
-                    LocalService.unset('auth_token');
-                });
-                return register;
-            },
-            register: function (formData) {
-                LocalService.unset('auth_token');
-                var register = $http.post('/api/v1/auth/register', formData);
-                register.success(function (result) {
-                    //$location.url('/')    
-                    //LocalService.set('auth_token', JSON.stringify(result));
-                });
-                return register;
-            },
-            activate: function (formData) {
-                LocalService.unset('auth_token');
-                var register = $http.post('/api/v1/auth/activate', formData);
-                register.success(function (result) {
-                    //$location.url('/')   
-                    LocalService.unset('auth_token'); 
-                    LocalService.set('auth_token', JSON.stringify(result));
-                });
-                return register;
-            },            
-            apikey:function () { 
-                var apikey = $http.get('/api/v1/apikey/'+ angular.fromJson(LocalService.get('auth_token')).user.id);
-                apikey.success(function (result) {
-                    console.log(result);
-                });
-                return apikey;
-            },
-            updatepassword: function (credentials) {
-                var updatepassword = $http.put('/api/v1/auth/updatepassword', credentials);
-                updatepassword.success(function (result) {
-                    LocalService.set('auth_token', JSON.stringify(result));
-                });
-                return updatepassword;
-            }
-        }
-    }])
-            .factory('AuthInterceptor',[ "$q", "$injector",function ($q, $injector) {
-                var LocalService = $injector.get('LocalService');
-                return {
-                    request: function (config) {
-                        var token;
-                        if (LocalService.get('auth_token')) {
-                            token = angular.fromJson(LocalService.get('auth_token')).token;
-                        }
-                        if (token) {
-                            config.headers.Authorization = 'Bearer ' + token;
-                        }
-                        return config;
-                    },
-                    responseError: function (response) {
-                        if (response.status === 401 || response.status === 403) {
-                            LocalService.unset('auth_token');
-                            $injector.get('$state').go('anon.login');
-                        }
-                        return $q.reject(response);
+    module.factory('Auth', ['$http', 'LocalService', 'AccessLevels', '$location', function ($http, LocalService, AccessLevels, $location) {
+            return {
+                authorize: function (access) {
+                    if (access === AccessLevels.user) {
+                        return this.isAuthenticated();
+                    } else {
+                        return true;
                     }
+                },
+                isAuthenticated: function () {
+                    return LocalService.get('auth_token');
+                },
+                login: function (credentials) {
+                    var login = $http.post('/api/v1/auth/authenticate', credentials);
+                    login.success(function (result) {
+                        LocalService.set('auth_token', JSON.stringify(result));
+                    });
+                    return login;
+                },
+                logout: function () {
+                    // We must inform server 
+                    console.log(this.isAuthenticated());
+                    var register = $http.post('/api/v1/auth/logout', angular.fromJson(LocalService.get('auth_token')).user);
+                    register.success(function (result) {
+                        LocalService.unset('auth_token');
+                    });
+                    return register;
+                },
+                register: function (formData) {
+                    LocalService.unset('auth_token');
+                    var register = $http.post('/api/v1/auth/register', formData);
+                    register.success(function (result) {
+                        //$location.url('/')    
+                        //LocalService.set('auth_token', JSON.stringify(result));
+                    });
+                    return register;
+                },
+                activate: function (formData) {
+                    LocalService.unset('auth_token');
+                    var register = $http.post('/api/v1/auth/activate', formData);
+                    register.success(function (result) {
+                        //$location.url('/')   
+                        LocalService.unset('auth_token');
+                        LocalService.set('auth_token', JSON.stringify(result));
+                    });
+                    return register;
+                },
+                apikey: function () {
+                    var apikey = $http.get('/api/v1/apikey/' + angular.fromJson(LocalService.get('auth_token')).user.id);
+                    apikey.success(function (result) {
+                        console.log(result);
+                    });
+                    return apikey;
+                },
+                updatepassword: function (credentials) {
+                    var updatepassword = $http.put('/api/v1/auth/updatepassword', credentials);
+                    updatepassword.success(function (result) {
+                        LocalService.set('auth_token', JSON.stringify(result));
+                    });
+                    return updatepassword;
                 }
-            }])
-            .config(["$httpProvider",function ($httpProvider) {
-                $httpProvider.interceptors.push('AuthInterceptor');
-            }]);
+            }
+        }])
+            .factory('AuthInterceptor', ["$q", "$injector", function ($q, $injector) {
+                    var LocalService = $injector.get('LocalService');
+                    return {
+                        request: function (config) {
+                            var token;
+                            if (LocalService.get('auth_token')) {
+                                token = angular.fromJson(LocalService.get('auth_token')).token;
+                            }
+                            if (token) {
+                                config.headers.Authorization = 'Bearer ' + token;
+                            }
+                            return config;
+                        },
+                        responseError: function (response) {
+                            if (response.status === 401 || response.status === 403) {
+                                LocalService.unset('auth_token');
+                                $injector.get('$state').go('anon.login');
+                            }
+                            return $q.reject(response);
+                        }
+                    }
+                }])
+            .config(["$httpProvider", function ($httpProvider) {
+                    $httpProvider.interceptors.push('AuthInterceptor');
+                }]);
     //======================Controllers
 
-    module.directive("compareTo",[ function() {
-    return {
-      require: "ngModel",
-      scope: {
-        otherModelValue: "=compareTo"
-      },
-      link: function(scope, element, attributes, ngModel) {
+    module.directive("compareTo", [function () {
+            return {
+                require: "ngModel",
+                scope: {
+                    otherModelValue: "=compareTo"
+                },
+                link: function (scope, element, attributes, ngModel) {
 
-        ngModel.$validators.compareTo = function(modelValue) {
-          return modelValue == scope.otherModelValue;
-        };
+                    ngModel.$validators.compareTo = function (modelValue) {
+                        return modelValue == scope.otherModelValue;
+                    };
 
-        scope.$watch("otherModelValue", function() {
-          ngModel.$validate();
-        });
-      }
-    };
-  }]);
+                    scope.$watch("otherModelValue", function () {
+                        ngModel.$validate();
+                    });
+                }
+            };
+        }]);
     return module;
 });
