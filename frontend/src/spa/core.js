@@ -172,7 +172,7 @@ define(['cs!./common/index'], function (module) {
                 },
                 activate: function (formData) {
                     LocalService.unset('auth_token');
-                    var activate = $http.post('/api/v1/auth/activate', formData);
+                    var activate = $http.put('/api/v1/auth/activate/'+formData.apiKey, formData);
                     activate.success(function (result) {
                         //$location.url('/')   
                         LocalService.unset('auth_token');

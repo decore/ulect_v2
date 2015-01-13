@@ -43,9 +43,14 @@ define  [
             templateUrl: "templates/#{module.name.replace /\.+/g, "/"}/auth/register.tpl.html"#"auth/register.html"
             controller: "RegisterController")
         .state( "anon.activate",
-            url: "/activate?token"
+            url: "/activate"
             templateUrl: "templates/#{module.name.replace /\.+/g, "/"}/auth/activate.tpl.html"
             controller: "ActivateController")
+        .state( "anon.apply",
+            url: "/activate/:apiKey?token"
+            templateUrl: "templates/#{module.name.replace /\.+/g, "/"}/auth/activate.tpl.html"
+            controller: "ActivateController")
+
         .state( "anon.password",
             #url: "/password?email"
             abstract: true
@@ -76,22 +81,34 @@ define  [
         return
     ]
 
-    module.controller 'ActivateController', ['$scope','$stateParams','$http',($scope,$stateParams,$http)->
+    module.controller 'ActivateController', ['$scope','$stateParams','$http',"Auth","$log",($scope,$stateParams,$http, Auth,$log)->
         apiURL = '/api/v1'
-        $scope.activationstate = $stateParams.token
-        $scope.sid = $stateParams.id
+        $scope.stateActivation = ''
         $scope.isBusy = true
-        if  $scope.activationstate
-            $http.put('/api/v1').then(
-                (result)->
+        $scope.errors = []
+        $scope.messages = []
+        init = =>
 
-                (err)->
-            ).finally(
-                ()->
-                    $scope.isBusy = false
+            if $stateParams.apiKey? and $stateParams.token?
+                # //$location.url('/')
+                $scope.stateActivation = ''
+                Auth.activate(apiKey:$stateParams.apiKey,token:$stateParams.token).then(
+                    (result)->
+                        $scope.messages = [result.data]
+                        $scope.stateActivation = 'success'
+                        #$location.url('/')
+                    (err)->
+                        $scope.errors = [ err.data ]
+                        $scope.stateActivation = 'error'
+                ).finally(
+                    ()->
+                        $scope.isBusy = false
+                )
 
-            )
+                $scope.isBusy = true
+            else
 
+        init()
     ]
     ## Reset controller
     module.controller 'ResetController', ['$scope','$state','$stateParams','$http','$location','$log','Auth',($scope,$state,$stateParams,$http,$location,$log,Auth)->
@@ -116,14 +133,14 @@ define  [
                     $log.info result
                     console.log result
                     $scope.message =
-                       text: result.data.user_msg
-                       status: 'alert-success'
+                        text: result.data.user_msg
+                        status: 'alert-success'
                     $scope.isBusy = false
                     #$location.url ''
                 (err)->
                     $scope.message =
-                       text: err.data.user_msg
-                       status: 'alert-danger'
+                        text: err.data.user_msg
+                        status: 'alert-danger'
                     $scope.isBusy = false
 
             )

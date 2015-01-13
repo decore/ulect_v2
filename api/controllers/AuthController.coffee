@@ -75,28 +75,24 @@ module.exports = {
                         err: "forbidden"
                     )
                 unless valid
-                    res.json 401,
+                    return res.json 401,
                         err: "invalid username or password"
                 else
                     user.isLogin = true
                     user.save()
                     #TODO: FIX FIND PHONE
-                    Profile.findOne().where( 'owner.AccountSid':user.AccountSid).populate('owner').exec(
-                        (err, profile)->
-                            console.log profile,user.AccountSid
-                            if err or !!!profile
-                                _phoneNumber='no phone'
+                    #Profile.findOne().where( 'owner.AccountSid':user.AccountSid).populate('owner').exec(
+                    TwlPhoneNumber.findOne().where(accountSid: user.AccountSid).exec(
+                        (err, phoneNumber)->
+                            if err or !phoneNumber?
+                                _phoneNumber= 'error find phone'
                             else
-                               _phoneNumber = profile.phoneNumber
+                                _phoneNumber = phoneNumber.phoneNumber
 
-                            res.json
-
+                            return res.json
                                 user: _.extend user.toJSON(),phoneNumber: _phoneNumber
                                 token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
                     )
-                return
-            return
-        return
     ##TODO: delete
     _register : (req, res) ->
         console.log _params = req.params.all()
@@ -176,31 +172,31 @@ module.exports = {
         )
         return
     ## activate account and create
-    activate: (req,res)->
-        #account.sid
-        params = req.params.all()
-        sails.log.debug('activation action');
-        User.findOne( {id: params.id, activationToken: params.token}, (err, user)->
-            ##
-            if err
-                sails.log.debug(err);
-                res.json 'err',err
-            else
-                if !user
-                    res.status 404
-                    res.json msg:'user not fount'
-                else
-                    TwilioService.createSubAccount(FriendlyName:user.email,(err,account)->
-                        if err
-                            res.status err.status
-                            res.json err
-                        else
-                            user.AccountSid = account.sid
-                            user.status = account.status
-                            res.json user
-                    )
-                    #res.json user
-        )
+    #    activate: (req,res)->
+    #        #account.sid
+    #        params = req.params.all()
+    #        sails.log.debug('activation action');
+    #        User.findOne( {id: params.id, activationToken: params.token}, (err, user)->
+    #            ##
+    #            if err
+    #                sails.log.debug(err);
+    #                res.json 'err',err
+    #            else
+    #                if !user
+    #                    res.status 404
+    #                    res.json msg:'user not fount'
+    #                else
+    #                    TwilioService.createSubAccount(FriendlyName:user.email,(err,account)->
+    #                        if err
+    #                            res.status err.status
+    #                            res.json err
+    #                        else
+    #                            user.AccountSid = account.sid
+    #                            user.status = account.status
+    #                            res.json user
+    #                    )
+    #                    #res.json user
+    #        )
         #        ##Activate the user that was requested.
         #        token = cryptoService.token(req.param('token'))
         #        sails.log.debug('token',token);
@@ -309,7 +305,7 @@ module.exports = {
         console.log req.params.all(),req.token
         token =req.token
         if !req.token
-            return res.json(400, {err: 'Token verify error'});
+            return res.json(400, {  err: "Auth error",msg:'Token verify error'});
         _email = token.email
         console.log token
         #password: "test"

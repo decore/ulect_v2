@@ -95,14 +95,14 @@ define(['domReady!', 'angular', 'core','page','sails-io',  'angular-bootstrap','
                                 if (((_ref1 = rejection.data) != null ? _ref1.error : void 0) != null) {
                                     NotificationService.error("Server error", rejection.data.error);
                                 }
-                                   if (((_ref1 = rejection.data) != null ? _ref1.err : void 0) != null) {
-                                    NotificationService.error("Server error", rejection.data.err.summary);
-                                }
+//                                if (((_ref1 = rejection.data) != null ? _ref1.err : void 0) != null) {
+//                                    NotificationService.error("Server error", rejection.data.err.summary);
+//                                }
                                 if (((_ref2 = rejection.data) != null ? _ref2.msg : void 0) != null) {
-                                    NotificationService.error("Server error", rejection.data.msg);
+                                    //NotificationService.error("Server error", rejection.data.msg);
                                     //$location.path('/login');
                                     //$window.location.reload(); // redirect to login page
-                                    $window.location = '/login';
+                                    //$window.location = '/login';
                                 }
                             }
                             return $q.reject(rejection);
