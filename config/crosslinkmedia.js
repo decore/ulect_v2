@@ -3,10 +3,10 @@
  */
 
 module.exports.crosslinkmedia = {
-    siteURL: 'https://3c59e40c.ngrok.com', 
-    statusCallback: 'https://3c59e40c.ngrok.com/api/v1/messages/status', 
-    smsUrl: "https://3c59e40c.ngrok.com/api/v1/messages",
-    smsFallbackUrl: "https://3c59e40c.ngrok.com/api/v1/messages/fallback"
+    siteURL: 'http://newspaper-plan.cloudapp.net:3000/', 
+    statusCallback: 'http://newspaper-plan.cloudapp.net:3000/api/v1/messages/status', 
+    smsUrl: "http://newspaper-plan.cloudapp.net:3000/api/v1/messages",
+    smsFallbackUrl: "http://newspaper-plan.cloudapp.net:3000/api/v1/messages/fallback"
 }
 //NOTE:
 module.exports.twilioMasterAccount = {
