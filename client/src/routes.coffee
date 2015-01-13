@@ -1,3 +1,5 @@
-ngModule = require './main'
+#ngModule = require './main'
 
-console.log 
+module.exports = {
+    init: -> alert ''
+}

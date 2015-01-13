@@ -2,21 +2,24 @@ path = require 'path'
 webpack = require 'webpack'
 
 srcPath =  path.join(__dirname,'src')
-distPath = path.join(__dirname,'../assets/public')
+distPath = path.join(__dirname,'./../assets/public')
 vendorsRoot = path.join(__dirname,'bower_components')
 
+#publicURL = "ht"
 module.exports = {
     # webpack-dev-server options used in gulpfile
     # https://github.com/webpack/webpack-dev-server
     contentBase: srcPath# "#{__dirname}/src/"  #TODO:delete "#{srcPath}" #./public"
+    ## or: contentBase:  "http://localhost:1337/"#"http://localhost/",
     cache: true
     # The entry point
     entry:
-        #auth:  "#{srcPath}/auth/index.coffee"
+        auth:   "#{srcPath}/auth/index.coffee"
         bundle:  "#{srcPath}/main.coffee"
+
     output:
         path:  "#{distPath}/"
-        publicPath: 'public/'
+        publicPath: "http://localhost:1337/"#'public/' ##
         filename: "[name].js"
         chunkFilename: "[id].bundle.js"
         sourceMapFilename: '[file].map'
@@ -72,6 +75,7 @@ module.exports = {
         #    'angular': 'exports?window.angular!bower/angular'
         #new webpack.ProvidePlugin
         #    'angular-ui-router': 'exports?window.angular-ui-router!bower/angular-ui-router'
+        #    new webpack.CommonsChunkPlugin("init.js")
     ]
 
 }

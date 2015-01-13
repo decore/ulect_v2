@@ -1,27 +1,27 @@
 conf = #require './appconfig'
   appName: "demoApp"
 angular = require 'angular'
-uiRouter = require 'angularUiRouter'  
+uiRouter = require 'angularUiRouter'
 #auth = require('./auth/index')
 #console.log auth
 # angular is required globally
 myApp = angular.module conf.appName, [
-    uiRouter 
+    uiRouter
     require('./common/index')['name']
   ]#,auth]
-  
- 
-  .run [-> 
-	   console.log 'run'
-  ] 
-  ## 
-  # $stateProvider
-  ##   
-  .config [ '$stateProvider',($stateProvider)->
-    
 
-  ]   
-  
+
+  .run [->
+	   console.log 'run'
+  ]
+  ##
+  # $stateProvider
+  ##
+  .config [ '$stateProvider',($stateProvider)->
+
+
+  ]
+
 angular.bootstrap(document.getElementsByTagName('html'), [myApp['name'],
         ->
             console.info('The following is required if you want AngularJS Scenario tests to work');
@@ -33,4 +33,4 @@ angular.bootstrap(document.getElementsByTagName('html'), [myApp['name'],
     ]);
 angular.resumeBootstrap(); #//https://docs.angularjs.org/guide/bootstrap & http://stackoverflow.com/questions/25668958/angular-is-missing-resumebootstrap-function
 
-module.exports = myApp
+module.exports = {}#myApp
