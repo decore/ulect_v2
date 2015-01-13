@@ -258,12 +258,12 @@ module.exports = {
                         format 'Hello! <br/>'+ #"{USERNAME},"+
                             "You use the password reset. If you have forgotten your password, click on the link to reset your password: <br/><br/>"+
                             '<a href="{LINKVERIFICATE}">{LINKVERIFICATE}</a>'+
-                            "<br/>If you do not need to reset the password, please ignore this letter."+
+                            "<br/>If you do not need to reset the password, please ignore this letter.",{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/reset-verification?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email,expiresInMinutes: 60,issue:issueDate)}
                             #                            "Someone has asked to reset the password for your account.<br/>" +
                             #                            "If you did not request a password reset, you can disregard this email."+
                             #                            "No changes have been made to your account."+
                             #                            "<br/>To reset your password, follow this link (or paste into your browser):<br/>"+
-                            "{LINKVERIFICATE}",{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/reset-verification?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email,expiresInMinutes: 60,issue:issueDate)}
+                            #"{LINKVERIFICATE}",{ USERNAME: user.username ,LINKVERIFICATE: crosslinkmedia.siteURL+"/reset-verification?token="+sailsTokenAuth.issueToken(sid: user.id,email:user.email,expiresInMinutes: 60,issue:issueDate)}
                     text: 'Password reset'
                     (err)->
                         #                // If you need to wait to find out if the email was sent successfully,
@@ -282,7 +282,6 @@ module.exports = {
         now = moment().utc()
         if !req.param('token')
             return res.json(400, {err: 'No Authorization token was found'});
-
         sailsTokenAuth.verifyToken(req.param('token'), (err, token)->
             if err
                 return res.json(400, {err: 'Token verify error'});
@@ -294,11 +293,16 @@ module.exports = {
                     res.status 500
                     res.json err
                 else
-
-                    #user.save(
-                    res.json
-                        user: user
-                        token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
+                    user.activated == true if user.activated == false
+                    user.save((err)->
+                        if err
+                            res.status = 500
+                            return res.json err:err,msg:"Service error"
+                        else
+                            res.json
+                                user: user
+                                token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
+                    )
             )
         )
     changePassword:(req,res)->
