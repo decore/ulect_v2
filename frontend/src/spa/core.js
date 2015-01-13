@@ -96,7 +96,7 @@ define(['cs!./common/index'], function (module) {
             $scope.user = {
                 companyname: '', //"Demo Company (at " + (new Date()).toISOString()+")",
                 email: '', // 'demo@demo.com',
-                country: "US",
+                isoCountry: "US",
                 firstname: '', //"Demo First Name (at " + (new Date()).toISOString()+")",
                 lastname: '', //"Demo Last Name (at " + (new Date()).toISOString()+")",
                 password: '', //"demo123456",
@@ -112,8 +112,7 @@ define(['cs!./common/index'], function (module) {
 
             $scope.register = function () { 
                 Auth.register($scope.user).then(
-                        function (data) {
-                            
+                        function (data) {                            
                             $state.go('anon.activate');
                         }, 
                         function (data) {                            
@@ -173,13 +172,13 @@ define(['cs!./common/index'], function (module) {
                 },
                 activate: function (formData) {
                     LocalService.unset('auth_token');
-                    var register = $http.post('/api/v1/auth/activate', formData);
-                    register.success(function (result) {
+                    var activate = $http.post('/api/v1/auth/activate', formData);
+                    activate.success(function (result) {
                         //$location.url('/')   
                         LocalService.unset('auth_token');
                         LocalService.set('auth_token', JSON.stringify(result));
                     });
-                    return register;
+                    return activate;
                 },
                 apikey: function () {
                     var apikey = $http.get('/api/v1/apikey/' + angular.fromJson(LocalService.get('auth_token')).user.id);

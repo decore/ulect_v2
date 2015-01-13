@@ -44,25 +44,17 @@
         </div>
     </div>
     <!-- //company name-->
-
-
     <!-- country-->
     <div class="form-group"> 
         <label for="country" class="col-lg-2 control-label">Country</label>
-        <div class="col-lg-10">
-            <!--<input type="text" class="form-control" placeholder="country" name="country" ng-model="user.country" required>-->
-
-            <select class="form-control" id="country" ng-model="user.country" required ng-options="value.ISO as  value.Country group by value['Type of number'] for (key,value) in countryList| filter:{'SMS Enabled':'Yes'}">
-           
-            </select>
-<!--            <select class="form-control" id="country" ng-model="user.country" required ng-options="value.ISO as  value.Country for (key,value) in countryList | filter:{'SMS Enabled':'Yes','Type of number':'Mobile'}">
-            </select>-->
+        <div class="col-lg-10"> 
+            <select class="form-control" id="country" ng-model="user.isoCountry" required ng-options="value.ISO as  value.Country group by value['Type of number'] for (key,value) in countryList| filter:{'SMS Enabled':'Yes'}">
+            </select> 
             <div ng-show="registerForm.country.$dirty" ng-messages="registerForm.country.$error" class="text-warning">
                 <div ng-message="required">
                     Select country 
                 </div>
             </div>
-
         </div>
     </div>
     <!-- //country -->
