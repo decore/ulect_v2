@@ -13,6 +13,7 @@ module.exports = {
     ###
     create :(req, res, next) ->
         console.log 'Conversations:setOperator', req.token
+        _token = req.token
         email = req.param("email")
         firstname = req.param("firstname")
         lastname = req.param("lastname")
@@ -33,70 +34,66 @@ module.exports = {
         #        unless city
         #            req.flash "error", "Error.Registration.City.Missing"
         #            return next(new Error("No city support was entered."))
-        User.create
-            #username: username
-            firstname: firstname
-            lastname: lastname
-            password: password
-            email: email
-            AccountSid: req.token.AccountSid
-            role: 'Operator' ##NOTE: hardcode role name 'Operator'
-        , (err, user) ->
-            if err
-                if err.code is "E_VALIDATION"
-                    if err.invalidAttributes.email
-                        req.flash "error", "Error.Passport.Email.Exists"
-                    else
-                        req.flash "error", "Error.Passport.User.Exists"
-                return next(err)
-            #            Passport.create
-            #                protocol: "local"
-            #                password: password
-            #                user: user.id
-            #            , (err, passport) ->
-            #                if err
-            #                    req.flash "error", "Error.Passport.Password.Invalid"  if err.code is "E_VALIDATION"
-            #                    return user.destroy((destroyErr) ->
-            #                        next destroyErr or err
-            #                        return
-            #                    )
-            #                #next null, user
-            #                return res.json(user,201)
-            #            return
-            ##
-            Email.send(
-                to: [
-                    name: user.username
-                    email: user.email
-                ]
-                subject: 'Operator Registration CrosLinkMedia(SMSChat)'
-                html:
-                    'You was registered as Operator in CrosLinkMedia(SMSChat)<br/>'+
-                    "login: #{user.email} <br/>"+
-                    "password: #{password}"
-                text: 'Registration Operator CrosLinkMedia'
-                (err)->
-                    #                // If you need to wait to find out if the email was sent successfully,
-                    #                // or run some code once you know one way or the other, here's where you can do that.
-                    #                // If `err` is set, the send failed.  Otherwise, we're good!
-                    console.log 'is send for '+ user.email , err
+        User.findOne(id: _token.sid,).exec(
+          (err, userCustomer)->
+                if err
+                    res.status 500
+                    ##TODO: client validation message
+                    return res.json
+                        msg: "Operation access error"
+                        err:err
+
+                User.create
+                    #username: username
+                    firstname: firstname
+                    lastname: lastname
+                    password: password
+                    email: email
+                    AccountSid: userCustomer.AccountSid
+                    role: 'Operator' ##NOTE: hardcode role name 'Operator'
+                , (err, user) ->
                     if err
-                        res.status 418
-                        user.destroy((destroyErr) ->
-                                    next destroyErr or err
-                                    return
+                        if err.code is "E_VALIDATION"
+                            if err.invalidAttributes.email
+                                req.flash "error", "Error.Passport.Email.Exists"
+                            else
+                                req.flash "error", "Error.Passport.User.Exists"
+                        return next(err)
+                    ##
+                    Email.send(
+                        to: [
+                            name: user.username
+                            email: user.email
+                        ]
+                        subject: 'Operator Registration CrosLinkMedia(SMSChat)'
+                        html:
+                            'You was registered as Operator in CrosLinkMedia(SMSChat)<br/>'+
+                            "login: #{user.email} <br/>"+
+                            "password: #{password}"
+                        text: 'Registration Operator CrosLinkMedia'
+                        (err)->
+                            if err
+                                res.status 418
+                                user.destroy((destroyErr) ->
+                                            next destroyErr or err
+                                            return
+                                )
+                                return res.json msg: "email not send",err:err
+                            ## Activated user account
+                            user.activated = true
+                            user.save(
+                                (err)->
+                                    if err
+                                        res.status 500
+                                        user.destroy()
+                                        return res.json
+                                            err: err
+                                            msg: "Error: Update error "
+                                    res.status 201
+                                    return res.json  user.toJSON()
+                            )
                         )
-                        return res.json msg: "email not send",err
-                    user.activated = true
-                    user.save()
-                    return res.json(user,201)
-                )
-            #return res.json(user,201)
-        return
-
-
-
-
+        )
     ##active operators list
     ###
     Operators list
