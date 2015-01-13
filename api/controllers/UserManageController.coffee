@@ -66,7 +66,8 @@ module.exports = {
                                         (err, user)->
                                             if err
                                                 res.status err.status
-                                                return res.json  err: err
+                                                ##TODO: Client validation message
+                                                return res.json  err: err, msg: "Registration error"
                                             if user
                                                 console.log 'user.username'
                                                 #delete user.username
@@ -116,11 +117,11 @@ module.exports = {
                             )
                         )
                 )
-                res.status 400
-                return res.json {
-                    err: "Debug"
-                    msg: "Debug"
-                }
+    #                res.status 400
+    #                return res.json {
+    #                    err: "Debug"
+    #                    msg: "Debug"
+    #                }
         )
     ###*
     * API - Customer Registration
