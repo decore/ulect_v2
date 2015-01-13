@@ -6,11 +6,16 @@
  */
 
 module.exports = {
-    schemas:true,    
+    schemas: true,
     attributes: {
         owner: {
             model: 'User',
             via: 'id',
+            required: true
+        },
+        accountSid: {
+            model: 'TwlAccount',
+            via: 'sid',
             required: true
         },
         companyname: "string",
@@ -18,17 +23,25 @@ module.exports = {
             model: 'Country',
             via: 'ISO'
         },
-        countryISO:  {
-            type:"string"
+        isoCountry: {
+            type: "string",
+        },
+        countryISO: {
+            type: "string"
         },
         phone: {
-            type:"string"
+            type: "string"
         },
-        phoneNumber:{
-            type:"string",
-            defaultsTo:"+18303550804"
-        }
-        
+        phoneNumber: { 
+            model: 'TwlPhoneNumber',
+            via: 'sid'   
+        },
+        toJSON: function () {
+            var obj = this.toObject();
+              
+             
+            return obj;
+        },
     }
 };
 

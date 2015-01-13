@@ -1,0 +1,24 @@
+{
+  "name": "client_smschatclm",
+  "version": "1.0.0",
+  "description": "Client SPA for SMSchat CrossLinkMedia",
+  "main": "gulp.js",
+  "scripts": {
+    "start": "gulp",
+    "build": "gulp --production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nikolay Gerzhan <nikolay.gerzhan@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "coffee-script": "^1.8.0",
+    "gulp": "^3.8.10",
+    "webpack": "^1.4.15",
+    "webpack-dev-server": "^1.7.0",
+    "coffee-loader": "^0.7.2",
+    "exports-loader": "^0.6.2",
+    "json-loader": "^0.5.1",
+    "minimist": "^1.1.0",
+    "ng-annotate-webpack-plugin": "^0.1.2"
+  }
+}

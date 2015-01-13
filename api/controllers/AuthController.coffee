@@ -190,7 +190,7 @@ module.exports = {
                     res.status 404
                     res.json msg:'user not fount'
                 else
-                    TwilioService.createAccount(FriendlyName:user.email,(err,account)->
+                    TwilioService.createSubAccount(FriendlyName:user.email,(err,account)->
                         if err
                             res.status err.status
                             res.json err

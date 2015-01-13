@@ -37,11 +37,11 @@ module.exports = {
      * `config/ssl` and dumped your certificate/key files there:               *
      ***************************************************************************/
 
-    // ssl: {
-    //   ca: require('fs').readFileSync(__dirname + './ssl/my_apps_ssl_gd_bundle.crt'),
-    //   key: require('fs').readFileSync(__dirname + './ssl/my_apps_ssl.key'),
-    //   cert: require('fs').readFileSync(__dirname + './ssl/my_apps_ssl.crt')
-    // },
+// ssl: {
+//   ca: require('fs').readFileSync(__dirname + './ssl/my_apps_ssl_gd_bundle.crt'),
+//   key: require('fs').readFileSync(__dirname + './ssl/my_apps_ssl.key'),
+//   cert: require('fs').readFileSync(__dirname + './ssl/my_apps_ssl.crt')
+// },
 
     /***************************************************************************
      * The `port` setting determines which TCP port your app will be           *
@@ -59,7 +59,7 @@ module.exports = {
      * to 80 (http://) or 443 (https://) if you have an SSL certificate        *
      ***************************************************************************/
 
-    // port: process.env.PORT || 1337,
+// port: process.env.PORT || 1337,
 
     /***************************************************************************
      * The runtime "environment" of your Sails app is either typically         *
@@ -92,18 +92,29 @@ module.exports = {
     //        MANDRILL_FROM_EMAIL: 'nikolay.gerzhan@gmail.com'
     //    }
     //    ,
-    //    // Master Account web application
-    //    twilio: {
-    //        TWILIO_ACCOUNT_SID: 'ACc0d344677835c0a303c92d59cfa1b9d8',
-    //        TWILIO_AUTH_TOKEN: 'e6dc7e7cceed05eedf5e644975cab642',
-    //        TWILIO_NUMBER: '+18303550804',
-    //        StatusCallback: 'http://newspaper-plan.cloudapp.net:3000/api/v1/messages/status'
-    //    }
     // Master Account web application
-    twilio: {
-        TWILIO_ACCOUNT_SID: 'ACc0d344677835c0a303c92d59cfa1b9d8',
-        TWILIO_AUTH_TOKEN: 'e6dc7e7cceed05eedf5e644975cab642',
-        TWILIO_NUMBER: '+18303550804',
-        StatusCallback: 'http://newspaper-plan.cloudapp.net:3000/api/v1/messages/status'
+//        twilio: {
+//            TWILIO_ACCOUNT_SID: 'ACc0d344677835c0a303c92d59cfa1b9d8',
+//            TWILIO_AUTH_TOKEN:'e6dc7e7cceed05eedf5e644975cab642',// 'f2a5bb0ca0a61bfd45ca1714502f37a9',//
+//            TWILIO_NUMBER: '+18303550804',
+//            statusCallback: 'https://3c59e40c.ngrok.com/api/v1/messages/status', 
+//            smsUrl: "https://3c59e40c.ngrok.com/api/v1/messages",
+//            smsFallbackUrl: "https://3c59e40c.ngrok.com/api/v1/messages/fallback"
+//        }
+    
+    crosslinkmedia: {
+        siteURL: 'https://3c59e40c.ngrok.com',
+        statusCallback: 'https://3c59e40c.ngrok.com/api/v1/messages/status',
+        smsUrl: "https://3c59e40c.ngrok.com/api/v1/messages",
+        smsFallbackUrl: "https://3c59e40c.ngrok.com/api/v1/messages/fallback"
+    },
+// Master Account Develop web application
+    twilioMasterAccoint: {
+        TWILIO_ACCOUNT_SID: 'AC220dd9ec0df20b77d7cdd306ee34f43a',
+        TWILIO_AUTH_TOKEN: 'f702406810816dab63eb2fe7e5001961',
+        TWILIO_NUMBER: '+16505675330',
+        statusCallback: 'https://3c59e40c.ngrok.com/api/v1/messages/status',
+        smsUrl: "https://3c59e40c.ngrok.com/api/v1/messages",
+        smsFallbackUrl: "https://3c59e40c.ngrok.com/api/v1/messages/fallback"
     }
 };
