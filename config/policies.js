@@ -34,7 +34,8 @@ module.exports.policies = {
     },
     ConversationsController: {
         '*': true, //TODO: change this rule 
-        setOperator: ['tokenAuth']
+        setOperator: ['tokenAuth'],
+        find: ['tokenAuth']
     },
     OperatorsController: {
         '*': ['tokenAuth']

@@ -25,7 +25,7 @@ module.exports = function(req, res, next) {
     if (err) return res.json(401, {err: 'The token is not valid'});
 
     req.token = token;
-
+    
     next();
   });
 };
