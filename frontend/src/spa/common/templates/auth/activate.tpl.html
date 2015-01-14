@@ -7,11 +7,10 @@
         
         <div ng-switch-when="'success'"> 
             <label ng-show="isBusy" class="label label-warning">Please waite...</label>
-            <!--<label ng-show="!isBusy" class="label label-success">Registration complete success</label>-->
-            
-            <label ng-show="!isBusy" class="label label-warning">NO MONEY - NO REGISTRATION </label>
+            <!--<label ng-show="!isBusy" class="label label-success">Registration complete success</label>--> 
             <!--<label ng-show="!isBusy" class="label label-success">Registration complete success</label>-->
         </div>   
+        <p ng-switch-default> Please check your email for activate account   </p>
 <!--    <div class="form-group"> 
         <label for="firstname" class="col-lg-2 control-label">First name</label>
         <div class="col-lg-10">

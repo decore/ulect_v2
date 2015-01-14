@@ -20,16 +20,11 @@ module.exports = {
             ng_spa_name: 'debug'
     ## operator chat room
     chatroom: (req,res)->
-
-        ##TODO: use real information about user
-        Users.findOne(id:1).exec(
-          (err, user )->
-            if err
-                user={}
+            ##TODO: use real information about user
             return res.view
-                user: user
+                user: req.user 
                 ng_spa_name: 'chatroom'
-        )
+
     management: (req,res)->
         res.view 'pages/home',
             user: req.user

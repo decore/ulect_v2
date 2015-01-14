@@ -15,8 +15,7 @@ module.exports = {
         },
         accountSid: {
             model: 'TwlAccount',
-            via: 'sid',
-            required: true
+            via: 'sid'            
         },
         companyname: "string",
         country: {

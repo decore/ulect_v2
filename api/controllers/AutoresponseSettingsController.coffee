@@ -31,17 +31,17 @@ module.exports = {
                         res.status err.status
                         res.json err
                     else
-                        if params?.A1?
-                            settings.A1 =  params.A1
-                        if params?.A2?
-                            settings.A2 =  params.A2
+                        if params?.AR1?
+                            settings.AR1 =  params.A1
+                        if params?.AR2?
+                            settings.AR2 =  params.A2
                         settings.save(
                             (err)->
                               if err
                                     res.json err
                               else
                                 res.json settings
-                        ) 
+                        )
             )
 
 }

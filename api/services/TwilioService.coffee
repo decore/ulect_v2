@@ -196,23 +196,22 @@ exports.activeSubAccountPhone = (options,cb)->
     _masterAccountSettings = sails.config.twilioMasterAccount
     _systemSettings = sails.config.crosslinkmedia
     ## SubAccount data
-    console.log "TEST PARAM  ======", options
     if options.accountSid? and options.authToken?
-
-        client = new twilio.RestClient(options.accountSid, options.authToken)
-
+        client = new twilio.RestClient(options.accountSid, options.authToken) 
         client.incomingPhoneNumbers.list( (err,data)->
             console.log "incomingPhoneNumbers ======", err,data
             if err
                 console.log '!!!',options.accountSid,err
                 return cb(err,null)
-            ## Client is Already have PhoneNumber
+            ##NOTE: Client is Already have PhoneNumber -
             if data.incoming_phone_numbers.length > 0
                 console.log 'incoming_phone_numbers',data.incoming_phone_numbers
                 cb(null,data.incoming_phone_numbers[0])
             else
-                ## by new phone number
+
+                ## options for buy new phone number
                 _options =
+
                     areaCode: options.areaCode ## require field
                     smsFallbackMethod: "POST",
                     smsFallbackUrl: _systemSettings.smsFallbackUrl,

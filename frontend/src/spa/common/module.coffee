@@ -84,14 +84,14 @@ define  [
     module.controller 'ActivateController', ['$scope','$stateParams','$http',"Auth","$log",($scope,$stateParams,$http, Auth,$log)->
         apiURL = '/api/v1'
         $scope.stateActivation = ''
-        $scope.isBusy = true
+
         $scope.errors = []
         $scope.messages = []
         init = =>
-
             if $stateParams.apiKey? and $stateParams.token?
                 # //$location.url('/')
                 $scope.stateActivation = ''
+                $scope.isBusy = true
                 Auth.activate(apiKey:$stateParams.apiKey,token:$stateParams.token).then(
                     (result)->
                         $scope.messages = [result.data]
@@ -105,9 +105,8 @@ define  [
                         $scope.isBusy = false
                 )
 
-                $scope.isBusy = true
             else
-
+                $scope.isBusy = false
         init()
     ]
     ## Reset controller
