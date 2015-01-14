@@ -124,7 +124,7 @@ module.exports = {
             paginateCriteria.page =  _get_params.page if !!_get_params.page
             paginateCriteria.limit =  _get_params.limit if !!_get_params.limit
             _sort = JSON.parse(_get_params.sort) if !!_get_params.sort
-            console.log _sort
+            console.log _sort , 'ddd'
             User.count(role:'Operator').exec(
                 (error, count)->
                     if (error)

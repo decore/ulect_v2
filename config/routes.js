@@ -36,18 +36,18 @@ module.exports.routes = {
     'get /register': 'PagesController.spi',
     'get /login': 'PagesController.spi',
     'get /activate?': 'PagesController.spi',
-    
+
     'get /activate/:apiKey?': 'PagesController.spi',
-      
+
     'get /reset-password?': 'PagesController.spi',
     'get /reset-verification?': 'PagesController.spi',
-    
+
     'get /account/activate?': 'AuthController.activate',
-    
+
     '/chatroom': 'PagesController.chatroom',
     '/management': 'PagesController.management',
     '/management/operators': 'PagesController.management',
-     
+
     '/management/account/profile': 'PagesController.management',
     '/management/account/:id?': 'PagesController.management',
     /***************************************************************************
@@ -70,35 +70,35 @@ module.exports.routes = {
     },
     /***
      * API routes
-     * 
-     */ 
+     *
+     */
     //  send messages
     'post /api/v1/messages': {
         controller: 'MessagesController',
         action: 'newMessage',
         locals: {layout: 'layout'}
-        //TODO: add API keys controll 
+        //TODO: add API keys controll
     },
     // calback for send messages
     'post /api/v1/messages/status': {
         controller: 'MessagesController',
         action: 'statusMessage',
         locals: {layout: 'layout'}
-        //TODO: add API keys controll 
+        //TODO: add API keys controll
     },
     // messages from client
     'post /api/v1/messages/client/:number': {
         controller: 'MessagesController',
         action: 'clientMessage',
         locals: {layout: 'layout'}
-        //TODO: add API keys controll 
+        //TODO: add API keys controll
     },
     // save fatal error send as messages
     'post /api/v1/messages/client/fallback': {
         controller: 'FallbackMessageController',
         action: 'create',
         locals: {layout: 'layout'}
-        //TODO: add API keys controll 
+        //TODO: add API keys controll
     },
     /***
      * Auth API
@@ -107,7 +107,7 @@ module.exports.routes = {
     'POST /api/v1/auth/authenticate': 'AuthController.authenticate',
     'POST /api/v1/auth/logout': 'AuthController.logout',
     'POST /api/v1/auth/forgotpassword': 'AuthController.forgotpassword',
-    'POST /api/v1/auth/updatepassword': 'AuthController.updatepassword',
+    'PUT /api/v1/auth/updatepassword': 'AuthController.updatepassword',
     //    'PUT /api/v1/auth/activate': 'AuthController.updatepassword',
     'put /api/v1/auth/activate/:apiKey?':'UserManageController.activate',
     /**
@@ -123,12 +123,12 @@ module.exports.routes = {
         controller: 'OperatorsController',
         action: 'find',
         locals: {layout: 'layout'}
-    }, 
+    },
     'get /api/v1/operators/:id': 'OperatorsController.find',
     'post /api/v1/operators': 'OperatorsController.create',
     'put /api/v1/operators/:id': 'OperatorsController.update',
     'delete /api/v1/operators/:id': 'OperatorsController.destroy',
-    
+
     //
     'get /api/v1/apikey/:id': 'AuthController.apikey',
     'get /api/v1/account/settings': 'AutoresponseSettingsController.getSettings',

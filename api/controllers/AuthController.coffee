@@ -7,37 +7,7 @@ secret = 'ewfn09qu43f09qfj94qf*&H#(R';
 format = require("string-template")
 moment = require('moment');
 module.exports = {
-    #login: (req,res)->
-    #    res.json "ok"
-    #    login: (req, res) ->
-    #        passport.authenticate("local", (err, user, info) ->
-    #
-    #            if (err) or (not user)
-    #                res.send
-    #                    success: false
-    #                    message: "invalidPassword"
-    #
-    #                return
-    #            else
-    #                if err
-    #                    res.send
-    #                        success: false
-    #                        message: "unknownError"
-    #                        error: err
-    #
-    #                else
-    #                    token = jwt.sign(user, secret,
-    #                        expiresInMinutes: 60 * 24
-    #                    )
-    #                    res.send
-    #                        success: true
-    #                        user: user
-    #                        token: token
-    #
-    #            return
-    #        ) req, res
-    #        return
-
+    ##
     logout: (req, res) ->
         console.log 'logout'
         req.logout()
@@ -93,12 +63,7 @@ module.exports = {
                                 user: _.extend user.toJSON(),phoneNumber: _phoneNumber
                                 token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
                     )
-    ##TODO: delete
-    _register : (req, res) ->
-        console.log _params = req.params.all()
-        return res.json
-            user: {id:20}
-            token: sailsTokenAuth.issueToken(sid: 20 ,AccountSid:'',role:'Administrator')
+
     ## API call - Customer Registration
     register : (req, res) ->
         crosslinkmedia = sails.config.crosslinkmedia
@@ -171,51 +136,7 @@ module.exports = {
                 return
         )
         return
-    ## activate account and create
-    #    activate: (req,res)->
-    #        #account.sid
-    #        params = req.params.all()
-    #        sails.log.debug('activation action');
-    #        User.findOne( {id: params.id, activationToken: params.token}, (err, user)->
-    #            ##
-    #            if err
-    #                sails.log.debug(err);
-    #                res.json 'err',err
-    #            else
-    #                if !user
-    #                    res.status 404
-    #                    res.json msg:'user not fount'
-    #                else
-    #                    TwilioService.createSubAccount(FriendlyName:user.email,(err,account)->
-    #                        if err
-    #                            res.status err.status
-    #                            res.json err
-    #                        else
-    #                            user.AccountSid = account.sid
-    #                            user.status = account.status
-    #                            res.json user
-    #                    )
-    #                    #res.json user
-    #        )
-        #        ##Activate the user that was requested.
-        #        token = cryptoService.token(req.param('token'))
-        #        sails.log.debug('token',token);
-        #        #        User.update( {id: params.id, activationToken: params.token }, { activated: true} , (err, user)->
-        #        #            ##Error handling
-        #        #            if (err)
-        #        #              sails.log.debug(err);
-        #        #              res.send(500, err);
-        #        #             # Updated users successfully!
-        #        #            else
-        #        #              sails.log.debug("User activated:", user);
-        #        #              #res.redirect('/');
-        #        #              return res.json  req.params.all()
-        #        #        )
-        #        cryptoService.compare('test', token, (err,res)->
-        #                sails.log.debug('compate=',res);
-        #
-        #        )
-        #        return res.json  token, req.params.all()
+
     ## get API key
     apikey: (req,res)->
         User.findOne(id:req.token.sid ).exec(
@@ -284,9 +205,13 @@ module.exports = {
             return res.json(400, {err: 'No Authorization token was found'});
         sailsTokenAuth.verifyToken(req.param('token'), (err, token)->
             if err
-                return res.json(400, {err: 'Token verify error'});
+                return res.json(400, {msg: "Token verify error" ,err: 'Token verify error'});
             _email = token.email
-            console.log token
+            _password = req.param("password")
+            passwordConfirm = req.param("passwordConfirm")
+
+            if passwordConfirm != _password
+              return res.json(400, user_msg: "Password and password confirm not equal ")
 
             User.findOneByEmail(_email, (err,user)->
                 if err
@@ -294,27 +219,24 @@ module.exports = {
                     res.json err
                 else
                     user.activated == true if user.activated == false
+                    user.isLogin = true
+                    user.password = _password
                     user.save((err)->
                         if err
                             res.status = 500
                             return res.json err:err,msg:"Service error"
                         else
-                            res.json
+                            return res.json
                                 user: user
                                 token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
                     )
             )
         )
     changePassword:(req,res)->
-        console.log req.params.all(),req.token
         token =req.token
         if !req.token
             return res.json(400, {  err: "Auth error",msg:'Token verify error'});
         _email = token.email
-        console.log token
-        #password: "test"
-        #passwordConfirm: "ss"
-        #passwordOld:
         email = req.param("email")
         password = req.param("password")
         passwordOld = req.param("passwordOld")
