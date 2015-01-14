@@ -188,10 +188,10 @@ module.exports = {
                                                             err:err
                                                             msg: "Activation faild."
                                                             return res.json err
-                                                        if err or !phoneNumber?
+                                                        if err or !twlPhoneNumber.phoneNumber?
                                                             _phoneNumber= 'error find phone'
                                                         else
-                                                            _phoneNumber = phoneNumber.phoneNumber
+                                                            _phoneNumber = twlPhoneNumber.phoneNumber
 
                                                         return res.json
                                                             user: _.extend user.toJSON(),phoneNumber: _phoneNumber
