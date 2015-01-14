@@ -76,13 +76,14 @@ module.exports = {
                     res.status 500
                     return res.json err
                 if !entity
-                    return res.json err:msg:"Conversation not found"
+                    return res.json err:"Conversation not found",msg:"Conversation not found"
                 ## check current operator
                 if entity.operator?
                     ##TODO: delete dublicate call
                     Conversations.findOne(id:_id).populate('operator').exec(
                         (err, dialog)->
                             if err
+                                res.status 500
                                 return res.json err
                             return res.json dialog
                         )
@@ -97,31 +98,80 @@ module.exports = {
                             Conversations.findOne(id:_id).populate('operator').exec(
                                 (err, dialog)->
                                     if err
+                                        res.status 500
                                         return res.json err
                                         ##send auto response
-
                                     _params =
                                         ##TODO: account sid req.token
                                         to : entity.client
                                         ## TODO: template  #%OPERATOR_NAME% is here to help you”
                                         body: format "{OPERATOR_NAME} is here to help you", {OPERATOR_NAME: dialog.operator.firstname+ " " + dialog.operator.lastname}
                                         # "Operator #{dialog.operator.firstname} #{dialog.operator.lastname} is here to help you"
-                                    TwilioService.sendSMS( _params, (err,message)->
-                                        _.extend message , { dialog : dialog.id, operator: 0}
-                                        if err
+
+                                    User.findOne(id:_token.sid).exec((err,currentUser)->
+                                        #console.log "currentUser ",currentUser
+                                        if err or !currentUser
                                             res.status 500
-                                            return res.json err
-                                        Messages.create(message).exec(
-                                            (err,entity)->
-                                                #if err
-                                                #    res.status 500
-                                                #    return res.json err
-                                                #if !entity
-                                                #    res.status 418
-                                                #    return res.json err
-                                                #return res.json entity
+                                            return res.json err: "User not found", msg: "Service error"
+
+                                        TwlAccount.findOne(sid:currentUser.AccountSid).exec((err,twlAccount)->
+                                            if err or !twlAccount
+                                                 res.status 500
+                                                 return res.json msg: "Service error"
+                                            _params.AccountSid = currentUser.AccountSid
+                                            _params.authToken= twlAccount.authToken
+                                            #console.log "TwlAccount ",_params
+                                            TwlPhoneNumber.findOne(accountSid:currentUser.AccountSid).exec((err,twlPhone)->
+                                                console.log "twlPhone ",twlPhone
+                                                if err or !twlPhone
+                                                   res.status 500
+                                                   return res.json err:"Phone no exists",msg: "Service error"
+                                                _params.from =  twlPhone.phoneNumber
+                                                console.log "TwlPhoneNumber ",_params
+                                                TwilioService.sendSMS( _params, (err,message)->
+                                                    _.extend message , { dialog : dialog.id, operator: 0}
+                                                    console.log 'is send message', message
+                                                    ##TODO: replace demo operator
+                                                    _.extend message , { dialog : dialog.id, operator: 0 }
+                                                    console.log 'is extend message===', message
+                                                    if err
+                                                        res.status 500
+                                                        return res.json err
+
+                                                    Messages.create(message).exec(
+                                                        (err,entity)->
+                                                            if err
+                                                                res.status 500
+                                                                return res.json err
+                                                            if !entity
+                                                                res.status 418
+                                                                return res.json err
+                                                            dialog.save()
+                                                            return res.json entity
+
+                                                    )
+                                                )
+                                            )
                                         )
-                                    )
+                                    )#->User.findOne
+
+
+                                    #                                    TwilioService.sendSMS( _params, (err,message)->
+                                    #                                        _.extend message , { dialog : dialog.id, operator: 0}
+                                    #                                        if err
+                                    #                                            res.status 500
+                                    #                                            return res.json err
+                                    #                                        Messages.create(message).exec(
+                                    #                                            (err,entity)->
+                                    #                                                #if err
+                                    #                                                #    res.status 500
+                                    #                                                #    return res.json err
+                                    #                                                #if !entity
+                                    #                                                #    res.status 418
+                                    #                                                #    return res.json err
+                                    #                                                #return res.json entity
+                                    #                                        )
+                                    #                                    )
 
                                     ##TODO: delete dublicate call
                                     return res.json dialog
