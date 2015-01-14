@@ -14,8 +14,8 @@ Send Message
 exports.sendSMS =  (options,cb)->
     ##
     config = sails.config.twilio
-
-    client = new twilio.RestClient(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
+    client = new twilio.RestClient(options.AccountSid, options.authToken)
+    #client = new twilio.RestClient(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
     ##TODO: add controll "options" parameter API key
     #console.log 'TwilioSrvice:sendSMS(',options,')'
     if options.body
@@ -27,9 +27,10 @@ exports.sendSMS =  (options,cb)->
         cb(error,null)
     sms_messages_options =
         to: options.to#'+79832877503'#'+79504328892'#
-        from: config.TWILIO_NUMBER
+        from: options.from #config.TWILIO_NUMBER
         body: options.body #'Hi from Nikolay :) and Twilio'
-        StatusCallback: config.StatusCallback ##NOTE: web-application settings for get information about changes a status of SMS
+        #StatusCallback: config.StatusCallback ##NOTE: web-application settings for get information about changes a status of SMS
+        
     ## Pass in parameters to the REST API using an object literal notation. The
     ## REST client will handle authentication and response serialzation for you.
 
@@ -197,7 +198,7 @@ exports.activeSubAccountPhone = (options,cb)->
     _systemSettings = sails.config.crosslinkmedia
     ## SubAccount data
     if options.accountSid? and options.authToken?
-        client = new twilio.RestClient(options.accountSid, options.authToken) 
+        client = new twilio.RestClient(options.accountSid, options.authToken)
         client.incomingPhoneNumbers.list( (err,data)->
             console.log "incomingPhoneNumbers ======", err,data
             if err

@@ -225,6 +225,7 @@ define(['cs!./common/index'], function (module) {
                 }])
             .config(["$httpProvider", function ($httpProvider) {
                     $httpProvider.interceptors.push('AuthInterceptor');
+                    //$sailsSocketProvider.interceptors.push('mySocketInterceptor');http://balderdashy.github.io/angularSails/#/api/ngsails.$sailsSocket
                 }]);
     //======================Controllers
 

@@ -223,7 +223,7 @@ module.exports = {
                     user.password = _password
                     user.save((err)->
                         if err
-                            res.status = 500
+                            res.status 500
                             return res.json err:err,msg:"Service error"
                         else
                             return res.json

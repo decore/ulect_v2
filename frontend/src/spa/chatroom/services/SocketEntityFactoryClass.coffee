@@ -82,7 +82,8 @@ define [],->
                     console.log 'event update operator ',msg
                     _.extend _.find(_operatorsList, id: msg.data.id) ,  msg.data
             return
-
+        $sailsSocket.on 'connect', (data)->
+            alert ''
 
 
         _loadMessages = ()->

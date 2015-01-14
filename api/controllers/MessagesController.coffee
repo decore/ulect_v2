@@ -17,16 +17,16 @@ module.exports = {
 
     ## method add(send) new message (POST request)
     newMessage: (req,res)->
+        _token = req.token
         _params = req.params.all()
         ##TODO: API key controll
         ##TODO: API SID controll
-        console.log '===> newMessages',_params
+        console.log '===> newMessages',_params,_token
         if !_params.dialog?
             res.status 500
             return res.json err:msg:"dialog id must be send"
         Conversations.findOne(id:_params.dialog, isactive:true ).exec(
             (err,dialog)->
-
                 if err
                     return res.json err
                 if !dialog
@@ -34,29 +34,52 @@ module.exports = {
                     return res.json err:msg:"Dialog not found or not active"
                 _params.to = dialog.client
 
-                console.log "TO SEND params ",_params
-                TwilioService.sendSMS( _params, (err,message)->
-                    console.log 'is send message', message
-                    ##TODO: replace demo operator
-                    _.extend message , { dialog : dialog.id, operator: req.token.sid }
-                    console.log 'is extend message===', message
-                    if err
+                console.log "TO SEND params ",_params,dialog
+                User.findOne(id:_token.sid).exec((err,currentUser)->
+                    #console.log "currentUser ",currentUser
+                    if err or !currentUser
                         res.status 500
-                        return res.json err
-                    dialog.isWaitAnswer = false
-                    Messages.create(message).exec(
-                        (err,entity)->
-                            if err
-                                res.status 500
-                                return res.json err
-                            if !entity
-                                res.status 418
-                                return res.json err
-                            dialog.save()
-                            return res.json entity
+                        return res.json err: "User not found", msg: "Service error"
 
+                    TwlAccount.findOne(sid:currentUser.AccountSid).exec((err,twlAccount)->
+                        if err or !twlAccount
+                             res.status 500
+                             return res.json msg: "Service error"
+                        _params.AccountSid = currentUser.AccountSid
+                        _params.authToken= twlAccount.authToken
+                        #console.log "TwlAccount ",_params
+                        TwlPhoneNumber.findOne(accountSid:currentUser.AccountSid).exec((err,twlPhone)->
+                            console.log "twlPhone ",twlPhone
+                            if err or !twlPhone
+                               res.status 500
+                               return res.json err:"Phone no exists",msg: "Service error"
+                            _params.from =  twlPhone.phoneNumber
+                            console.log "TwlPhoneNumber ",_params
+                            TwilioService.sendSMS( _params, (err,message)->
+                                console.log 'is send message', message
+                                ##TODO: replace demo operator
+                                _.extend message , { dialog : dialog.id, operator: req.token.sid }
+                                console.log 'is extend message===', message
+                                if err
+                                    res.status 500
+                                    return res.json err
+                                dialog.isWaitAnswer = false
+                                Messages.create(message).exec(
+                                    (err,entity)->
+                                        if err
+                                            res.status 500
+                                            return res.json err
+                                        if !entity
+                                            res.status 418
+                                            return res.json err
+                                        dialog.save()
+                                        return res.json entity
+
+                                )
+                            )
+                        )
                     )
-                )
+                )#->User.findOne
         )
     ## calback url for status send SMS
     statusMessage:  (req,res)->
@@ -132,7 +155,7 @@ module.exports = {
                             if err
                                _params.to = dialog.client
 
-                    #        
+                    #
                     #
                     #                            _params=item.msgs[0]
                     #

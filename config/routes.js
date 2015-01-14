@@ -93,6 +93,12 @@ module.exports.routes = {
         locals: {layout: 'layout'}
         //TODO: add API keys controll
     },
+   // messages from client
+    'post /api/v1/messages/client': {
+        controller: 'MessagesController',
+        action: 'clientMessage',
+        locals: {layout: 'layout'}        
+    },    
     // save fatal error send as messages
     'post /api/v1/messages/client/fallback': {
         controller: 'FallbackMessageController',
