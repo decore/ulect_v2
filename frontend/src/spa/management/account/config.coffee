@@ -30,6 +30,7 @@ define [
             controller: ["$scope","$modal","$http","CurrentUserService",($scope,$modal,$http,CurrentUserService)->
                 apiURL = '/api/v1'
                 currentUser = CurrentUserService.user
+                $scope.user = CurrentUserService.user
                 $scope.profile = {}
                 $http.get('/api/v1/account/profile/'+currentUser().id).then(
                     (result)->

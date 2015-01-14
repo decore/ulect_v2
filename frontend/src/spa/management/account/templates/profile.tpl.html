@@ -1,77 +1,83 @@
 <!-- template "operators.tpl.html"-->
 <section>
-   <h2 class="text text-center">My Profile settings</h2>
-  
-   <button type="button" class="btn btn-sm btn-link pull-right" ng-click="onChangePassword($event)">Change password</button>
-   
-   <form name="registerForm" ng-submit="onSave($event,profile)" loading-container="isBusy" class="form-signin form-horizontal col-sm-8 col-sm-offset-2" novalidate>  
-   
-       <h3 class="text text-left text-info">Contact Information</h3>
-    <div class="form-group"> 
-        <label for="firstname" class="col-lg-2 control-label">First name</label>
-        <div class="col-lg-10">
-            <input type="text" class="form-control" placeholder="First name" name="firstname" ng-model="profile.owner.firstname" required>
-            <div ng-show="registerForm.firstname.$dirty" ng-messages="registerForm.firstname.$error">
-                <div ng-message="required">
-                    Enter First name
+    <h2 class="text text-center">My Account</h2>
+
+    <button type="button" class="btn btn-sm btn-link pull-right" ng-click="onChangePassword($event)">Change password</button>
+
+    <form name="registerForm" ng-submit="onSave($event, profile)" loading-container="isBusy" class="form-signin form-horizontal col-sm-8 col-sm-offset-2" novalidate>  
+
+        <h3 class="text text-left text-info">Contact Information</h3>
+        <div class="form-group"> 
+            <label for="firstname" class="col-lg-2 control-label">First name</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" placeholder="First name" name="firstname" ng-model="profile.owner.firstname" required>
+                <div ng-show="registerForm.firstname.$dirty" ng-messages="registerForm.firstname.$error" class="text-warning">
+                    <div ng-message="required">
+                        Enter First name
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="form-group"> 
-        <label for="firstname" class="col-lg-2 control-label">Last name</label>
-        <div class="col-lg-10">
-            <input type="text" class="form-control" placeholder="Last name" name="lastname" ng-model="profile.owner.lastname" required>
-            <div ng-show="registerForm.lastname.$dirty" ng-messages="registerForm.lastname.$error">
-                <div ng-message="required">
-                    Enter Last name
+        <div class="form-group"> 
+            <label for="firstname" class="col-lg-2 control-label">Last name</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" placeholder="Last name" name="lastname" ng-model="profile.owner.lastname" required>
+                <div ng-show="registerForm.lastname.$dirty" ng-messages="registerForm.lastname.$error" class="text-warning">
+                    <div ng-message="required">
+                        Enter Last name
+                    </div>
+
                 </div>
+            </div>
+        </div>
+        <!-- company name-->
+        <div class="form-group"> 
+            <label for="companyname" class="col-lg-2 control-label">Company name</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" placeholder="Company name" name="companyname" ng-model="profile.companyname" required>
+                <div ng-show="registerForm.companyname.$dirty" ng-messages="registerForm.companyname.$error" class="text-warning">
+                    <div ng-message="required">
+                        Enter Company name
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group"> 
+            <label for="phone" class="col-lg-2 control-label">Contact phone</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" placeholder="phone number like +1 (234) 5689 901 " name="phone" ng-model="profile.phone" required 
+                       ng-pattern="/\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*(\d{1,2})$/">
+                <div ng-show="registerForm.phone.$dirty" ng-messages="registerForm.phone.$error" class="text-warning">
+                    <div ng-message="required">
+                        Enter phone
+                    </div>      
+                    <div ng-message="pattern">
+                        Please enter a valid phone number.
+                    </div>    
+                </div>       
 
             </div>
         </div>
-    </div>
-    <!-- company name-->
-    <div class="form-group"> 
-        <label for="companyname" class="col-lg-2 control-label">Company name</label>
-        <div class="col-lg-10">
-            <input type="text" class="form-control" placeholder="Company name" name="companyname" ng-model="profile.companyname" required>
-            <div ng-show="registerForm.companyname.$dirty" ng-messages="registerForm.companyname.$error">
-                <div ng-message="required">
-                    Enter Company name
-                </div>
+        <div class="form-group"> 
+            <label for="phone" class="col-lg-2 control-label">SMS chat phone</label>
+            <div class="col-lg-10">
+                <p>{{ user().phoneNumber}}</p> 
+            </div>
+        </div>
+        <div class="form-group"> 
+            <label for="phone" class="col-lg-2 control-label">API key</label>
+            <div class="col-lg-10">
+                <p>{{user().APIkey}}</p> 
+            </div>
+        </div>
 
-            </div>
-        </div>
-    </div>
-      <div class="form-group"> 
-        <label for="phone" class="col-lg-2 control-label">Contact phone</label>
-        <div class="col-lg-10">
-            <input type="text" class="form-control" placeholder="phone" name="phone" ng-model="profile.phone" required>
-            <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.phone.$error">
-                <div ng-message="required">
-                    Enter phone
-                </div>          
-            </div>
-        </div>
-    </div>
-     <div class="form-group"> 
-        <label for="phone" class="col-lg-2 control-label">SMS chat phone</label>
-        <div class="col-lg-10">
-            <p>{{ profile.phoneNumber}}</p>
-<!--            <input type="text" class="form-control" placeholder="phone" name="phone" ng-model="profile.phoneNumber" required>
-            <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.phone.$error">
-                <div ng-message="required">
-                    Enter phone
-                </div>          
-            </div>-->
-        </div>
-    </div>
-    
-      <div class="modal-footer"> 
-            <button type="submit" class="btn btn-primary btn_save" ng-disabled="registerForm.$invalid&&!EditForm.$pristin">Save changes</button>
+
+        <div class="modal-footer"> 
+            <button type="submit" class="btn btn-primary btn_save" ng-disabled="registerForm.$invalid && !EditForm.$pristin">Save changes</button>
             <!--<button type="button" class="btn btn-default btn_save" ng-disabled="!EditForm.$pristine" ng-click="onSetNewPassword(editEntity)" ng-if="editEntity.userId">Set new password</button>-->
             <!--<button type="button" class="btn btn-default btn_cancel" ng-click="onCancel()">Cancel</button>-->
         </div>
-   </form>
+    </form>
 </section>
 <!-- //template "operators.tpl.html"-->

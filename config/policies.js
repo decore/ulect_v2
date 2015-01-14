@@ -49,8 +49,12 @@ module.exports.policies = {
     AutoresponseSettingsController: {
         '*': true, //TODO: change this rule 
         getSettings: ['tokenAuth'],
-        saveSettings: ['tokenAuth'],
-      
+        saveSettings: ['tokenAuth']      
+    },
+    ProfileController: {
+        '*': true, //TODO: change this rule 
+        getProfile: ['tokenAuth'],
+        saveProfile: ['tokenAuth']      
     }
     /***************************************************************************
      *                                                                          *

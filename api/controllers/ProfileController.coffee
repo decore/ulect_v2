@@ -3,6 +3,7 @@
 ###
 module.exports = {
     getProfile: (req,res)->
+        _token = req.token
         id= req.param('id')
         Profile.findOne(owner:id).populate('owner').exec(
             (err,profile)->
@@ -11,8 +12,11 @@ module.exports = {
                 else
                     res.json profile
         )
+
+
     saveProfile : (req,res)->
         id= req.param('id')
+
         params = req.params.all()
 
         if _.isObject params.owner
