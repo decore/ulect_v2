@@ -10,118 +10,6 @@ validateRegistrationData = (model = {},cb)->
         console.log '---', item,key
     cb(null,model)
 module.exports = {
-    _register : (req, res) ->
-        ## systemSettings
-        _systemSettings = sails.config.crosslinkmedia
-        _issueDate = moment().utc().format()
-        _params = req.params.all()
-        console.log _params
-        #        validateRegistrationData _params, (err,model)->
-        #            console.log
-        ## create a Twilio SubAccount
-        ## required param FriendlyName
-        TwilioService.createSubAccount(FriendlyName:_params.email, (err,accountTwilio)->
-            console.log err,accountTwilio
-            ##
-            if err
-                res.status 400
-                err =
-                    err: "API service error"
-                    msg: "Sorry! API call error"
-                return res.json err
-
-            else
-                delete accountTwilio.subresourceUris
-                delete accountTwilio.subresource_uris
-                TwlAccount.findOrCreate(sid: accountTwilio.sid, accountTwilio, (err, twlAccount)->
-                    if err
-                        console.log "ERROR CREATE ", err
-                        res.status = 500
-                        err=
-                            err: "Service error"
-                            msg: "Service error"
-                        return res.json err
-                    else
-                        ## Create Addres on Twilio
-                        TwilioService.createOrUpdateAddress(twlAccount, _params.isoCountry, (err,address)->
-                            ## Save Address in system
-                            TwlAddress.findOrCreate(sid: address.sid, address, (err, twlAddress)->
-                                if err
-                                    ## Address not save Twilio Regustration Faild
-                                    err =
-                                        err: "API call error"
-                                        msg: "Sorry! Registration is faild!"
-                                    res.status = 500
-                                    return res.json err
-                                else
-                                    User.create(
-                                        AccountSid: accountTwilio.sid
-                                        email: _params.email
-                                        password: _params.password
-                                        firstname:  _params.firstname
-                                        lastname:  _params.lastname
-                                        isLogin: false ##TODO: change this. Make user isLogin after login
-                                    ).exec(
-                                        (err, user)->
-                                            if err
-                                                res.status err.status
-                                                ##TODO: Client validation message
-                                                return res.json  err: err, msg: "Registration error"
-                                            if user
-                                                console.log 'user.username'
-                                                #delete user.username
-                                                delete user.password
-                                                _params.owner = user.id
-                                                if _params.country?
-                                                    _params.country = ISO:_params.ISO, Country:_params.Country
-
-                                                Profile.create(_params).exec(
-                                                    (err,profile)->
-                                                        #console.log profile
-                                                        ##
-                                                        if err
-                                                            console.log 'profile err',err
-                                                            User.destroy(user)
-                                                            res.status 500 #err.status
-                                                            return res.json err
-                                                        else
-                                                            Email.send(
-                                                                to: [
-                                                                    name: _params.username
-                                                                    email: _params.email
-                                                                ]
-                                                                subject: 'Confirm Email address to complete registration' ##CrosLinkMedia SMSChat
-                                                                html:
-                                                                    format 'Hello! <br>'+
-                                                                    'You have registered on the site CLM.com. In order to complete the registration of your account at this Email address, click on the link:<br/><br/>'+
-                                                                    '<a href="{LINKVERIFICATE}">{LINKVERIFICATE}</a>'+
-                                                                    '<br> If you did not register on the site CLM.com, please ignore this letter.',{ USERNAME: user.username ,LINKVERIFICATE: _systemSettings.siteURL+"/activate/"+user.APIkey+"?token="+user.activationToken}
-                                                                text: 'You need confirm registration '
-                                                                (err)->
-                                                                    #                // If you need to wait to find out if the email was sent successfully,
-                                                                    #                // or run some code once you know one way or the other, here's where you can do that.
-                                                                    #                // If `err` is set, the send failed.  Otherwise, we're good!
-                                                                    console.log 'is send OK or' , err
-                                                                    ##TODO: create logger errors send emain (table in DB for resending)
-                                                                    if err
-                                                                        res.status 418
-                                                                    return res.json msg: "is send"
-                                                            )
-                                                            res.status 201
-                                                            return res.json
-                                                                user: user
-                                                                token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
-                                                )
-                                    )
-                            )
-                        )
-                )
-    #                res.status 400
-    #                return res.json {
-    #                    err: "Debug"
-    #                    msg: "Debug"
-    #                }
-        )
     ###*
     * API - Customer Registration
     ###
@@ -168,6 +56,7 @@ module.exports = {
             password: _params.password
             firstname:  _params.firstname
             lastname:  _params.lastname
+            role: "Administrator"
             isLogin: false ##TODO: change this. Make user isLogin after login
         ).exec(
             (err, user)->

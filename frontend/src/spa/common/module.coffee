@@ -106,6 +106,7 @@ define  [
                 )
 
             else
+                $scope.stateActivation = 'info'
                 $scope.isBusy = false
         init()
     ]

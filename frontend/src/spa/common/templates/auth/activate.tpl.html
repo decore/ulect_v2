@@ -3,14 +3,14 @@
     <alert class="alert" ng-repeat="error in errors" type="danger">{{error.msg}}</alert>
     <alert class="success" ng-repeat="message in messages" type="info">{{message.msg}}</alert>
     <section ng-switch='stateActivation'>        
-        <p ng-switch-when="''" > Please wait...   </p>     
+        <p ng-switch-when=""> Please wait...   </p>     
         
-        <div ng-switch-when="'success'"> 
+        <div ng-switch-when="success"> 
             <label ng-show="isBusy" class="label label-warning">Please waite...</label>
             <!--<label ng-show="!isBusy" class="label label-success">Registration complete success</label>--> 
             <!--<label ng-show="!isBusy" class="label label-success">Registration complete success</label>-->
         </div>   
-        <p ng-switch-default> Please check your email for activate account   </p>
+        <p ng-switch-when="info" ng-hide="isBusy"> Please check your email for activate account   </p>
 <!--    <div class="form-group"> 
         <label for="firstname" class="col-lg-2 control-label">First name</label>
         <div class="col-lg-10">

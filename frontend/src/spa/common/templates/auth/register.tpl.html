@@ -1,4 +1,4 @@
-<form name="registerForm" class="form-signin form-horizontal col-sm-8 col-sm-offset-2" novalidate>  
+<form name="registerForm" class="form-signin form-horizontal col-sm-8 col-sm-offset-2" novalidate loading-container="isBusy">  
     <legend>Registration</legend> 
     <alert class="alert" ng-repeat="error in errors" type="danger">{{error.msg}}</alert>
     <!--    <div class="form-group">
@@ -76,11 +76,15 @@
     <div class="form-group"> 
         <label for="phone" class="col-lg-2 control-label">Contact phone</label>
         <div class="col-lg-10">
-            <input type="text" class="form-control" placeholder="phone" name="phone" ng-model="user.phone" required>
-            <div ng-show="registerForm.email.$dirty" ng-messages="registerForm.phone.$error" class="text-warning">
+            <input type="text" class="form-control" placeholder="phone number like +1 (234) 5689 901 " name="phone" ng-model="user.phone" required 
+                   ng-pattern="/\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*(\d{1,2})$/" ngpattern="/^\d{0,9}(\.\d{1,9})?$/" >
+            <div ng-show="registerForm.phone.$dirty" ng-messages="registerForm.phone.$error" class="text-warning">
                 <div ng-message="required">
                     Enter phone
-                </div>          
+                </div>      
+                <div ng-message="pattern">
+                    Please enter a valid phone number.
+                </div>    
             </div>
         </div>
     </div>

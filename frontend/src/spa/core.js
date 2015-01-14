@@ -92,6 +92,7 @@ define(['cs!./common/index'], function (module) {
     //        )
     module.controller('RegisterController', ["$scope", "$state", "Auth", "$http","$log", function ($scope, $state, Auth, $http,$log) {
             //TODO: delete on production
+            $scope.isBusy = true;
             $scope.errors = [];
             $scope.user = {
                 companyname: '', //"Demo Company (at " + (new Date()).toISOString()+")",
@@ -107,15 +108,19 @@ define(['cs!./common/index'], function (module) {
             // ISO,Country,
             $scope.countryList = [];
             $http.get('/countries.json').then(function (result) {
+                $scope.isBusy = false;
                 $scope.countryList = result.data;
             });
-
+            
             $scope.register = function () { 
+                $scope.isBusy = true;
                 Auth.register($scope.user).then(
-                        function (data) {                            
+                        function (data) {        
+                            $scope.isBusy = false;
                             $state.go('anon.activate');
                         }, 
-                        function (data) {                            
+                        function (data) {    
+                            $scope.isBusy = false;
                             $log.info(data, $scope.errors);
                             $scope.errors = [data.data];
                             $log.info($scope.errors);
