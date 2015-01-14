@@ -179,7 +179,7 @@ module.exports = {
                                                         return res.json err
                                                     ## ACTIVATION WORKFLOW SUCCESS
                                                     user.activated = true
-                                                    user.AccoutSid = twlAccount.sid
+                                                    user.AccountSid = twlAccount.sid
                                                     ##TODO: Profile update
                                                     _params.phoneNumber = twlPhoneNumber.sid
                                                     user.save((err)->
