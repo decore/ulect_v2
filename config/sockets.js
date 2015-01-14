@@ -24,9 +24,16 @@ module.exports.sockets = {
 
         // By default, do nothing.
 
-        sails.sockets.subscribeToFirehose(socket);
-
-        sails.sockets.join(socket, "AC220dd9ec0df20b77d7cdd306ee34f43a");
+        //sails.sockets.subscribeToFirehose(socket);
+        console.log('session',session);
+        TwlAccount.find().exec(function(err,accounts){
+           _.forEach(accounts, function(account){ 
+                sails.sockets.join(socket, account.sid);
+                //console.log('account==',account);
+            });
+        }       
+        );
+        //sails.sockets.join(socket, "AC220dd9ec0df20b77d7cdd306ee34f43a");
         //sails.sockets.join(socket, "ACc0d344677835c0a303c92d59cfa1b9d8"); //Brad account for deploy
         // console.log('on connection ',socket.id, 'join "AC220dd9ec0df20b77d7cdd306ee34f43a"');
 
