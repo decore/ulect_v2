@@ -25,7 +25,7 @@ module.exports = {
       res.status 418
       res.json msg: "Type settings error"
     else
-      AutoresponseSettings.findOne({AccountSid: token.AccountSid}).exec(
+      AutoresponseSettings.findOrCreate({AccountSid: token.AccountSid}).exec(
         (err, settings)->
           if err
             res.status err.status
@@ -38,7 +38,10 @@ module.exports = {
             settings.save(
               (err)->
                 if err
-                  res.json err
+                  res.status 500
+                  res.json
+                    err: err
+                    msg: "Service err"
                 else
                   res.json settings
             )
