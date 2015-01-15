@@ -35,11 +35,11 @@ module.exports = {
                 msg: "Sorry, but email must be less 64 charatees"
             )
 
-        if _params.companyname.length == 0
-            return res.json(400,
-                err: "Sorry, but Company name must be less 64 charatees"
-                msg: "Sorry, but Company name must be less 64 charatees"
-            )
+        #        if _params.companyname.length == 0
+        #            return res.json(400,
+        #                err: "Sorry, but Company name must be less 64 charatees"
+        #                msg: "Sorry, but Company name must be less 64 charatees"
+        #            )
         #        companyname: "Nikolay Gerzhan"
         #
         #        isoCountry: "US"
@@ -62,8 +62,18 @@ module.exports = {
         ).exec(
             (err, user)->
                 if err
+                    _msg = req.__("ERROR:SERVICE:DEFAULT")
+                    if err.code is "E_VALIDATION"
+                        if err.invalidAttributes?.email?
+                            _.forEach err.invalidAttributes.email , (item)->
+                                _msg = req.__("ERROR:VALIDATION:EMAIL:EXISTS", item.value) if item.rule is "unique"
+                        else
+                            req.flash "error", "Error.Passport.User.Exists"
+                            _msg= "Please, check fields"
                     res.status err.status
-                    return res.json  err: err
+                    return res.json
+                        err: err
+                        msg: _msg
                 if user
                     delete user.password
                     _params.owner = user.id
@@ -73,6 +83,8 @@ module.exports = {
                             ##
                             if err
                                 console.log 'profile err',err
+
+
                                 User.destroy(user)
                                 res.status 500 #err.status
                                 return res.json err

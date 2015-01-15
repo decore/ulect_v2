@@ -1,4 +1,7 @@
 {
 	"Welcome": "Welcome",
-	"A brand new app.": "A brand new app."
+	"A brand new app.": "A brand new app.",
+        "ERROR:SERVICE:DEFAULT":"Service error",
+        "ERROR:VALIDATION:EMAIL:EXISTS": "Email %s is already registered"
+        
 }
