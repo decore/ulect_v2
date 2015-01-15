@@ -98,7 +98,7 @@ module.exports = {
         });
     },
     beforeUpdate: function (values, next) {
-        console.log("Before update");
+        console.log("Before update",values);
         if (values.password) {
             bcrypt.genSalt(10, function (err, salt) {
                 if (err)

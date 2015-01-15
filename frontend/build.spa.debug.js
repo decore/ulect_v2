@@ -25,7 +25,7 @@
     },
     out: './../assets/js/spa/debug.js'
     //out: './../../.tmp/public/js/spa/chatroom.js'
-    , optimize: 'none'//'uglify2'//'none'
+    , optimize: 'uglify2'// 'none'//'uglify2'//'none'
     , uglify2: {
         'screw-ie8': true,
         compress: {

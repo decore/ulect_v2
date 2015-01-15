@@ -197,7 +197,10 @@ module.exports = {
                             res.json user_msg: format "An email has been sent to {EMAIL} with further instructions on resetting your password.",EMAIL:user.email
                 )
         )
-    ##
+    ###*
+    * Update User password
+    ###
+
     updatepassword:(req,res)->
         token = req.param('token')
         now = moment().utc()
@@ -211,7 +214,7 @@ module.exports = {
             passwordConfirm = req.param("passwordConfirm")
 
             if passwordConfirm != _password
-              return res.json(400, user_msg: "Password and password confirm not equal ")
+              return res.json(400, msg: "Password and password confirm not equal ")
 
             User.findOneByEmail(_email, (err,user)->
                 if err
@@ -232,52 +235,59 @@ module.exports = {
                     )
             )
         )
+    ###*
+    * function changePassword User Password
+    ###
     changePassword:(req,res)->
-        token =req.token
-        if !req.token
-            return res.json(400, {  err: "Auth error",msg:'Token verify error'});
-        _email = token.email
+        _token = req.token
+        if !_token
+            res.status 400
+            return res.json { err: "Auth error",msg:'Token verify error'}
         email = req.param("email")
         password = req.param("password")
         passwordOld = req.param("passwordOld")
         passwordConfirm = req.param("passwordConfirm")
         if not passwordOld or not password
-            return res.json(400,
-                user_msg: "Password is required"
-            )
-        if passwordConfirm != password
-            return res.json(400,
-                user_msg: "Password and passwordConfirm not equal "
-            )
+            res.status 400
+            return res.json
+                err: "Password is required"
+                msg: "Password and password confirm not equal "
 
-        User.findOne id:token.sid , (err, user) ->
+        if passwordConfirm != password
+            res.status 400
+            return res.json
+                err: "Password and passwordConfirm not equal "
+                msg: "Password and passwordConfirm not equal "
+
+        User.findOne id:_token.sid , (err, user) ->
             console.log user
             unless user
-                return res.json(400,
-                    user_msg: "invalid password "+token.sid
-                )
+                res.status 404
+                return res.json
+                    msg: "Use  password "
+
             #if user.activated == false
             #    return res.json 403, err: "Account not activated"
 
             User.validPassword passwordOld, user, (err, valid) ->
                 console.log err,valid
                 if err
+                    res.status 500
                     return res.json err
                 unless valid
-                    res.json 400,
-                        user_msg: "invalid password"
-                else
-                    user.isLogin = true
-                    user.save(password:password)
+                    res.status 400
                     res.json
-                        user: user.toJSON()
-                        token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
+                        msg: "Invalid old password"
+                else
+                    user.password = password
+                    user.save((err)->
+                        if err
+                            res.status 500
+                            return res.json err
+                        return res.json
+                            msg: "Password change success"
+                            user: user.toJSON()
+                            token: sailsTokenAuth.issueToken(sid: user.id,AccountSid:user.AccountSid,role:user.role)
+                    )
 
-                return
-            return
-        return
-        #res.status 501
-        #res.json
-        #    user_msg: "ERROR"
-        #    token: req.token
 }

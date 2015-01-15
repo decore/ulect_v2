@@ -47,7 +47,9 @@ define [
                         templateUrl: "templates/#{namespace.replace /\.+/g, "/"}/form.changepassword.tpl.html"
                         controller: ['$scope','$modalInstance',($scope,$modalInstance)->
                             $scope.editEntity =
+                                passwordOld: ""
                                 password : ""
+                                passwordConfirm: ""
                             $scope.onCancel = ->
                                 $modalInstance.dismiss('cancel')
                             $scope.onSave = (_event,data)->
@@ -55,14 +57,22 @@ define [
                                 $scope.isBusy = true
                                 $http.put(apiURL+'/account/changepassword',data).then(
                                     (result)->
-                                        $modalInstance.close()
-                                    (err)->
-                                       $scope.isBusy = false
-                                       if err.data?.user_msg?
+                                        $scope.isBusy = false
+                                        #$modalInstance.close()
                                         $scope.message =
-                                            text : err.data.user_msg
-                                            status: 'label-danger'
-                                        #$modalInstance.dismiss()
+                                            text : result.data.msg
+                                            status: 'label-success'
+                                        $scope.editEntity =
+                                            passwordOld: ""
+                                            password : ""
+                                            passwordConfirm: ""
+                                    (err)->
+                                        $scope.isBusy = false
+                                        if err.data?.msg?
+                                            $scope.message =
+                                                text : err.data.msg
+                                                status: 'label-danger'
+                                            #$modalInstance.dismiss()
                                 )
                         ]
                     )

@@ -9,6 +9,7 @@ validateRegistrationData = (model = {},cb)->
     _.forEach model, (item,key)->
         console.log '---', item,key
     cb(null,model)
+
 module.exports = {
     ###*
     * API - Customer Registration

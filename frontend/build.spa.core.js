@@ -63,7 +63,7 @@
     //out: './js/spa/core.js'
      dir: './js/spa'
     //out: './../../.tmp/public/js/spacore.js'
-    , optimize: 'none'
+    , optimize: 'uglify2'// 'none'
     , uglify2: {
         'screw-ie8': true,
         compress: {
