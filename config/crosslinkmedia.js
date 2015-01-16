@@ -6,7 +6,7 @@ module.exports.crosslinkmedia = {
     siteURL: 'http://newspaper-plan.cloudapp.net:3000', 
     statusCallback: 'http://newspaper-plan.cloudapp.net:3000/api/v1/messages/status', 
     smsUrl: "http://newspaper-plan.cloudapp.net:3000/api/v1/messages/client",
-    smsFallbackUrl: "http://newspaper-plan.cloudapp.net:3000/api/v1/messages/fallback"
+    smsFallbackUrl: "http://newspaper-plan.cloudapp.net:3000/api/v1/messages/client/fallback"
 }
 //NOTE:
 module.exports.twilioMasterAccount = {

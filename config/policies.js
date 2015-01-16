@@ -27,10 +27,11 @@ module.exports.policies = {
 
     '*': true,
     AuthController: {
-        'apikey': ['tokenAuth'],
-        'changePassword': ['tokenAuth'],
-        'updatepassword': true, //NOTE: token key control in controller 
-        '*': true
+        '*': true,
+        apikey: ['tokenAuth'],
+        changePassword: ['tokenAuth'],
+        updatepassword: true //NOTE: token key control in controller 
+        
     },
     ConversationsController: {
         '*': true, //TODO: change this rule 
@@ -42,9 +43,9 @@ module.exports.policies = {
     },
     MessagesController: {
         '*': ['tokenAuth'],
-        'clientMessage': true,
-        'statusMessage': true,
-        'autosendSMS': true
+        clientMessage: true,
+        statusMessage: true,
+        autosendSMS: true
     },
     AutoresponseSettingsController: {
         '*': true, //TODO: change this rule 
