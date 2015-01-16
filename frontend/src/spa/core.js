@@ -19,6 +19,46 @@ define(['cs!./common/index'], function (module) {
                         $window.location = unfoundState.to.replace(/\.+/g, "/");
                     });
         }]);
+//    module.run(['$location','$window','$state',function($location,$window,$state){
+//           $location.url('/asdf');
+//            console.log('go home');
+//            $window.$state = $state;
+//            $window.$location = $location;
+//            
+//    }])
+//    module.config(['$urlRouterProvider', function ($urlRouterProvider) {
+//            
+//            $urlRouterProvider.rule(function ($injector, $location) {
+//             
+//                var path = $location.path();
+//                   console.log('rule path',path);
+//                if(path=='/' && !$injector.get('CurrentUserService').user().role  ){
+//                    alert($injector.get('CurrentUserService').user().role);
+//                }
+//            });
+//            $urlRouterProvider.otherwise(function ($injector, $location) {
+//                console.log($injector.get('$state').$current); //.go('anon.login');
+//                console.log($location.url());
+//                console.log($injector.get('CurrentUserService').user().role)
+//                _role = $injector.get('CurrentUserService').user().role;
+//
+//                if (_role === 'Administrator') {
+//                    $injector.get('$state').go('user.management')
+//                } else {
+//                    if (_role === 'Operator') {
+//                        $injector.get('$state').go('user.chatroom')
+//                        //$location.url('/chatroom');
+//                    }
+//                }
+//                if (!_role) {
+//                    //$location.url('/login');
+//                    $injector.get('$state').go('anon.login');
+//                }
+// 
+//              
+//
+//            });
+//        }]);
     module.factory('LocalService', [function () {
             return {
                 get: function (key) {
@@ -90,7 +130,7 @@ define(['cs!./common/index'], function (module) {
     //    ]
 
     //        )
-    module.controller('RegisterController', ["$scope", "$state", "Auth", "$http","$log", function ($scope, $state, Auth, $http,$log) {
+    module.controller('RegisterController', ["$scope", "$state", "Auth", "$http", "$log", function ($scope, $state, Auth, $http, $log) {
             //TODO: delete on production
             $scope.isBusy = true;
             $scope.errors = [];
@@ -111,20 +151,20 @@ define(['cs!./common/index'], function (module) {
                 $scope.isBusy = false;
                 $scope.countryList = result.data;
             });
-            
-            $scope.register = function () { 
+
+            $scope.register = function () {
                 $scope.isBusy = true;
                 Auth.register($scope.user).then(
-                        function (data) {        
+                        function (data) {
                             $scope.isBusy = false;
                             $state.go('anon.activate');
-                        }, 
-                        function (data) {    
+                        },
+                        function (data) {
                             $scope.isBusy = false;
                             $log.info(data, $scope.errors);
                             $scope.errors = [data.data];
                             $log.info($scope.errors);
-                        }       
+                        }
                 );
             };
 
@@ -177,7 +217,7 @@ define(['cs!./common/index'], function (module) {
                 },
                 activate: function (formData) {
                     LocalService.unset('auth_token');
-                    var activate = $http.put('/api/v1/auth/activate/'+formData.apiKey, formData);
+                    var activate = $http.put('/api/v1/auth/activate/' + formData.apiKey, formData);
                     activate.success(function (result) {
                         //$location.url('/')   
                         LocalService.unset('auth_token');

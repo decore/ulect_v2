@@ -61,10 +61,10 @@ requirejs.config({
         },
         // Sails 10.~ socket io ng Module
         'ngsails.io': {
-            'deps': ['sails-io', 'angular'],
+            deps: [ 'sails-io', 'angular'],
         },
         'sails-io': {// Sails 10. SDK
-            'exports': 'io'
+            exports: 'io'
         },
         'angular-dialog-service': {
             deps: ['angular', 'angular-sanitize', 'dialogs-translation']

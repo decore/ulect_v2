@@ -52,7 +52,7 @@ define [],->
         )
         ##
         $sailsSocket.subscribe 'messages',(msg)->
-            console.log '  get on controller', msg
+            console.log 'get on controller', msg
             if msg.verb == "create"
                 console.log '-=-',_conversationList
                 (_.find(_conversationList, id: msg.data.dialog)).msgs.push msg.data
@@ -82,9 +82,6 @@ define [],->
                     console.log 'event update operator ',msg
                     _.extend _.find(_operatorsList, id: msg.data.id) ,  msg.data
             return
-        $sailsSocket.on 'connect', (data)->
-            alert ''
-
 
         _loadMessages = ()->
             return $sailsSocket.get(Entity_API_Url).then( (res)->

@@ -2,7 +2,7 @@
  * bootstraps angular onto the window.document node
  * 
  */
-define(['domReady!', 'angular', 'core','page','sails-io',  'angular-bootstrap','angular-ui-router','angular-animate', "angular-messages", 'angularjs-toaster', 'angular-sanitize','angular-resource'], function (document, angular, core, page) {
+define(['domReady!', 'angular', 'core','page',  'angular-bootstrap','angular-ui-router','angular-animate', "angular-messages", 'angularjs-toaster', 'angular-sanitize','angular-resource'], function (document, angular, core, page) {
     'use strict';
     console.log(core["name"]);
     var app_init = angular.module('spaApp', [core["name"],page['name'], 'toaster' ]); 

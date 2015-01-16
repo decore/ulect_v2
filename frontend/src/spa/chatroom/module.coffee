@@ -44,7 +44,7 @@ define [
             templateUrl:"templates/#{module.name.replace /\.+/g, "/"}/index.tpl.html" # "user/profile.tpl.html"
             controller:MainControllerClass# "Main_#{namespaces.module.name.replace /\.+/g, "_"}_Controller"#"MessagesController"
 
-        $urlRouterProvider.otherwise "/"
+        #$urlRouterProvider.otherwise "/"
         return
     ]
 

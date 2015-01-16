@@ -77,7 +77,7 @@ define  [
             #                templateUrl: "user/profile.tpl.html"
             #                controller: "MessagesController"
 
-        $urlRouterProvider.otherwise "/"
+        #$urlRouterProvider.otherwise "/"
         return
     ]
 
