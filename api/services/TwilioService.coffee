@@ -30,7 +30,7 @@ exports.sendSMS =  (options,cb)->
         from: options.from #config.TWILIO_NUMBER
         body: options.body #'Hi from Nikolay :) and Twilio'
         #StatusCallback: config.StatusCallback ##NOTE: web-application settings for get information about changes a status of SMS
-        
+
     ## Pass in parameters to the REST API using an object literal notation. The
     ## REST client will handle authentication and response serialzation for you.
 
@@ -301,4 +301,20 @@ exports.transferPhoneNumber  = (options,cb)->
         #process.stdout.write(number);
         console.log err,number
         cb(err, number)
+    )
+exports.getTwlAccountData  = (options,cb)->
+    console.log(options);
+    TwlAccount.findOne(sid:options.AccountSid).then(
+        (twlAccount)->
+            twlPhoneNumber =   TwlPhoneNumber.findOne(accountSid: twlAccount.sid).then(
+                (_phone)-> return _phone
+            )
+            return [twlAccount,twlPhoneNumber]
+    ).spread(
+        (account,phone)->
+           console.log account, phone
+           cb(null, AccountSid: account.sid, authToken: account.authToken, phoneNumber:phone.phoneNumber )
+    ).fail(
+        (err)->
+            cb(err,null)
     )

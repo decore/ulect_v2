@@ -115,6 +115,32 @@ module.exports = {
     clientMessage: (req,res)->
         _params = req.params.all()
         console.log 'client send as messages',_params
+        Conversations.findOne( {AccountSid:_params.AccountSid,client:_params.From,isactive:true},(err,existDialog)->
+                    if !existDialog
+                        TwilioService.getTwlAccountData(AccountSid:_params.AccountSid, (err, subAccountData)->
+                            if !err
+                                AutoresponseSettings.findOne(AccountSid:subAccountData.AccountSid).exec(
+                                    (err, _autoresponseSettings)->
+                                        _text = _autoresponseSettings.AR1
+                                        TwilioService.sendSMS(AccountSid:subAccountData.AccountSid, authToken:subAccountData.authToken , from:subAccountData.phoneNumber, to:'+79832877503', body:_text,(err, sendSMS)->
+                                            if !err
+                                                res.json sendSMS
+                                                Messages.create(sendSMS,(err,savedMessage)->
+                                                    #if err
+                                                    #    return res.json err
+                                                    #if !savedMessage
+                                                    #    res.status 418
+                                                    #    return res.json {message:"Ooops! SMS information not saved"}
+
+                                                    #return res.json savedMessage
+
+                                                )
+                                            #else
+                                            #    res.json err
+                                        )
+                                )
+                            )
+                )
         Conversations.findOrCreate({AccountSid:_params.AccountSid,client:_params.From,isactive:true},{client:_params.From, AccountSid:_params.AccountSid,isWaitAnswer:true}).exec(
             (err,dialog)->
                 if err
@@ -132,7 +158,6 @@ module.exports = {
                     ##sails.sockets.broadcast(savedMessage.AccountSid,'messages',  {data: savedMessage });
                     dialog.save()
                     return res.json savedMessage
-
                 )
         )
     ## auto send sms waiting clients
