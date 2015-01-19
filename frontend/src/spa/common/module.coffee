@@ -32,8 +32,13 @@ define  [
             data:
                 access: AccessLevels.anon
         ).state("anon.home",
-            url: "/"
+            url: "/home"
             templateUrl: "templates/#{module.name.replace /\.+/g, "/"}/home.tpl.html"#"home.html"
+            resolve:
+                route: ->
+                    alert ''
+                    console.log 'resolve route'
+                    return true
         ).state("anon.login",
             url: "/login"
             templateUrl:"templates/#{module.name.replace /\.+/g, "/"}/auth/login.tpl.html"# "auth/login.html"

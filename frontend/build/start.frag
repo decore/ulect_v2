@@ -32,8 +32,8 @@ var __indexOf = Array.prototype.indexOf || function(item) {
     return -1;
 };
 
-//console.log = function(){};
-//console.warn = function(){};
+console.log = function(){};
+console.warn = function(){};
 /**
  * A module representing a Admin Relevano.
  * @module RelevanoAdmin

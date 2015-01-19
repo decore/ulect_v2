@@ -32,8 +32,8 @@ var __indexOf = Array.prototype.indexOf || function(item) {
     return -1;
 };
 
-//console.log = function(){};
-//console.warn = function(){};
+console.log = function(){};
+console.warn = function(){};
 /**
  * A module representing a Admin Relevano.
  * @module RelevanoAdmin
@@ -9157,8 +9157,15 @@ define('cs!common/module',['angular', 'cs!./namespaces', 'cs!dialogService/index
           access: AccessLevels.anon
         }
       }).state("anon.home", {
-        url: "/",
-        templateUrl: "templates/" + (module.name.replace(/\.+/g, "/")) + "/home.tpl.html"
+        url: "/home",
+        templateUrl: "templates/" + (module.name.replace(/\.+/g, "/")) + "/home.tpl.html",
+        resolve: {
+          route: function() {
+            alert('');
+            console.log('resolve route');
+            return true;
+          }
+        }
       }).state("anon.login", {
         url: "/login",
         templateUrl: "templates/" + (module.name.replace(/\.+/g, "/")) + "/auth/login.tpl.html",
@@ -9342,6 +9349,9 @@ define('core',['cs!./common/index'], function (module) {
             });
         }]);
     module.run(['$rootScope', '$location', '$window', function ($rootScope, $location, $window) {
+            //            $rootScope.$on('$stateChangeStart', function (event, next) {
+            //                console.log('',next);                
+            //            });
             // somewhere else
             $rootScope.$on('$stateNotFound',
                     function (event, unfoundState, fromState, fromParams) {
@@ -9352,46 +9362,55 @@ define('core',['cs!./common/index'], function (module) {
                         $window.location = unfoundState.to.replace(/\.+/g, "/");
                     });
         }]);
-//    module.run(['$location','$window','$state',function($location,$window,$state){
-//           $location.url('/asdf');
-//            console.log('go home');
-//            $window.$state = $state;
-//            $window.$location = $location;
-//            
-//    }])
-//    module.config(['$urlRouterProvider', function ($urlRouterProvider) {
-//            
-//            $urlRouterProvider.rule(function ($injector, $location) {
-//             
-//                var path = $location.path();
-//                   console.log('rule path',path);
-//                if(path=='/' && !$injector.get('CurrentUserService').user().role  ){
-//                    alert($injector.get('CurrentUserService').user().role);
-//                }
-//            });
-//            $urlRouterProvider.otherwise(function ($injector, $location) {
-//                console.log($injector.get('$state').$current); //.go('anon.login');
-//                console.log($location.url());
-//                console.log($injector.get('CurrentUserService').user().role)
-//                _role = $injector.get('CurrentUserService').user().role;
-//
-//                if (_role === 'Administrator') {
-//                    $injector.get('$state').go('user.management')
-//                } else {
-//                    if (_role === 'Operator') {
-//                        $injector.get('$state').go('user.chatroom')
-//                        //$location.url('/chatroom');
-//                    }
-//                }
-//                if (!_role) {
-//                    //$location.url('/login');
-//                    $injector.get('$state').go('anon.login');
-//                }
-// 
-//              
-//
-//            });
-//        }]);
+
+
+    module.run(['$location', '$window', '$state','$injector', function ($location, $window, $state,$injector) {
+            //$location.url('/');
+            console.log('go home');
+            $window.$state = $state;
+            $window.$location = $location;
+             var path = $location.path();
+            var _role = $injector.get('CurrentUserService').user().role;
+             if (path==='/'||path==='')
+                if (_role === 'Administrator') {
+                    //$injector.get('$state').go('user.management')
+                    // $window.location = unfoundState.to.replace(/\.+/g, "/"); 
+                     $injector.get('$window').location = '/management/operators';
+                
+                } else {
+                    if (_role === 'Operator') {
+                       // $injector.get('$state').go('user.chatroom')
+                        //$location.url('/chatroom');
+                         $injector.get('$window').location = '/chatrooms';// unfoundState.to.replace(/\.+/g, "/");
+                    }
+                }
+                if (!_role) {
+                    //$location.url('/login');
+                    $injector.get('$state').go('anon.login');
+                }
+        }]);
+    module.config(['$urlRouterProvider', function ($urlRouterProvider) {  
+            $urlRouterProvider.otherwise(function ($injector, $location) {
+                console.log($injector.get('$state').$current); //.go('anon.login');
+                console.log($location.url());
+                console.log($injector.get('CurrentUserService').user().role);
+                _role = $injector.get('CurrentUserService').user().role; 
+                if (_role === 'Administrator') {
+                    //$injector.get('$state').go('user.management')
+                    // $window.location = unfoundState.to.replace(/\.+/g, "/"); 
+                     $injector.get('$window').location = '/management/operators';
+                } else {
+                    if (_role === 'Operator') {
+                       // $injector.get('$state').go('user.chatroom')  //$location.url('/chatroom');
+                         $injector.get('$window').location = '/chatroom'; 
+                    }
+                }
+                if (!_role) {                   
+                    //$injector.get('$state').go('anon.login'); //$location.url('/login');
+                    $injector.get('$window').location = '/login'; 
+                } 
+            });
+        }]);
     module.factory('LocalService', [function () {
             return {
                 get: function (key) {
@@ -9453,16 +9472,7 @@ define('core',['cs!./common/index'], function (module) {
                 });
             };
         }]);
-    //    module.factory('CountriesFactory',['$http', function($http){
-    //        return {
-    //            list: _l
-    //            
-    //        }
-    //            
-    //    }
-    //    ]
 
-    //        )
     module.controller('RegisterController', ["$scope", "$state", "Auth", "$http", "$log", function ($scope, $state, Auth, $http, $log) {
             //TODO: delete on production
             $scope.isBusy = true;
