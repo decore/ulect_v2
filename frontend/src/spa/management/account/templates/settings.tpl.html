@@ -2,9 +2,9 @@
 <section >
     <h2 class="text text-center">Auto Response Messages</h2>
     <form name="settingAR1Form" class="form-signin col-sm-10 col-sm-offset-1" novalidate  loading-container="isBusy || isBusy1">
-        <h3 class="text text-center">AR1 - One Minute Auto Response</h3>
+        <h3 class="text text-center">AR1 - Initial</h3>
 
-        <div class="form-group"> 
+        <div class="form-group">
             <!--<label for="firstname" class="col-lg-2 control-label">First name</label>-->
             <div class="col-lg-12">
                 <input type="text" class="form-control"  name="AR1" ng-model="settings.AR1" required>
@@ -18,8 +18,8 @@
         <button type="button" class="btn btn-sm btn-primary center-block" ng-click="onSaveSettingA1($event, settings.AR1)" ng-disabled="settingAR2Form.$invalid">Update Message</button>
     </form>
     <form name="settingAR2Form" class="form-signin col-sm-10 col-sm-offset-1" novalidate  loading-container="isBusy||isBusy2">
-        <h3 class="text text-center">AR2 - Two Minute Auto Response</h3>
-        <div class="form-group"> 
+        <h3 class="text text-center">AR2 - Regular</h3>
+        <div class="form-group">
             <!--<label for="firstname" class="col-lg-2 control-label">Last name</label>-->
             <div class="col-lg-12">
                 <input type="text" class="form-control"  name="AR2" ng-model="settings.AR2" required>
