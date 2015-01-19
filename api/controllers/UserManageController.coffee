@@ -20,20 +20,59 @@ module.exports = {
         _issueDate = moment().utc().format()
         _params = req.params.all()
         #TODO: Do some validation on the input
-        if _params.password isnt _params.confirmPassword
+        #firstname
+        if !_params.firstname
             return res.json(400,
-                err: "Password doesn't match"
+              err: "First name doesn't set"
+              msg: "First name doesn't set"
             )
+        #lastname
+        if !_params.lastname
+            return res.json(400,
+              err: "Last name doesn't set"
+              msg: "Last name doesn't set"
+            )
+        #company name
+        if !_params.companyname
+            return res.json(400,
+              err: "Company name doesn't set"
+              msg: "Company name doesn't set"
+            )
+        #email
         if !_params.email
-            return res.json(400,
-                err: "Email doesn't set"
-                msg: "Email doesn't set"
-            )
+          return res.json(400,
+            err: "Email doesn't set"
+            msg: "Email doesn't set"
+          )
         if _params.email.length > 64
+          return res.json(400,
+            err: "Sorry, but email must be less 64 characters"
+            msg: "Sorry, but email must be less 64 characters"
+          )
+        if _params.email
+          regExpEmail = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
+          if !regExpEmail.test(_params.email)
             return res.json(400,
-                err: "Sorry, but email must be less 64 charatees"
-                msg: "Sorry, but email must be less 64 charatees"
+              err: "Sorry, but email contains incorrect format"
+              msg: "Sorry, but email contains incorrect format"
             )
+        #Contact phone
+        if !_params.phone
+            return res.json(400,
+              err: "Contact phone doesn't set"
+              msg: "Contact phone doesn't set"
+            )
+        #password
+        if _params.password isnt _params.confirmPassword
+          return res.json(400,
+            err: "Password doesn't match"
+            msg: "Password doesn't match"
+          )
+        if !_params.password
+          return res.json(400,
+            err: "Password doesn't set"
+            msg: "Password doesn't set"
+          )
 
         #        if _params.companyname.length == 0
         #            return res.json(400,
