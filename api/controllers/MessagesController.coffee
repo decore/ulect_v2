@@ -115,14 +115,21 @@ module.exports = {
     clientMessage: (req,res)->
         _params = req.params.all()
         console.log 'client send as messages',_params
+        ##NOTE: find is active conversation
         Conversations.findOne( {AccountSid:_params.AccountSid,client:_params.From,isactive:true},(err,existDialog)->
+                    ##if conversation not exist - send AR1
                     if !existDialog
                         TwilioService.getTwlAccountData(AccountSid:_params.AccountSid, (err, subAccountData)->
                             if !err
                                 AutoresponseSettings.findOne(AccountSid:subAccountData.AccountSid).exec(
                                     (err, _autoresponseSettings)->
-                                        _text = _autoresponseSettings.AR1
-                                        TwilioService.sendSMS(AccountSid:subAccountData.AccountSid, authToken:subAccountData.authToken , from:subAccountData.phoneNumber, to:'+79832877503', body:_text,(err, sendSMS)->
+                                        _sendParam =
+                                            AccountSid: subAccountData.AccountSid
+                                            authToken:  subAccountData.authToken
+                                            from:       subAccountData.phoneNumber
+                                            to:         _params.From
+                                            body:       _autoresponseSettings.AR1
+                                        TwilioService.sendSMS( _sendParam,(err, sendSMS)->
                                             if !err
                                                 res.json sendSMS
                                                 Messages.create(sendSMS,(err,savedMessage)->
