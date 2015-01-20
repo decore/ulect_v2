@@ -43,16 +43,16 @@ module.exports = {
 
                     TwlAccount.findOne(sid:currentUser.AccountSid).exec((err,twlAccount)->
                         if err or !twlAccount
-                             res.status 500
-                             return res.json msg: "Service error"
+                            res.status 500
+                            return res.json msg: "Service error"
                         _params.AccountSid = currentUser.AccountSid
                         _params.authToken= twlAccount.authToken
                         #console.log "TwlAccount ",_params
                         TwlPhoneNumber.findOne(accountSid:currentUser.AccountSid).exec((err,twlPhone)->
                             console.log "twlPhone ",twlPhone
                             if err or !twlPhone
-                               res.status 500
-                               return res.json err:"Phone no exists",msg: "Service error"
+                                res.status 500
+                                return res.json err:"Phone no exists",msg: "Service error"
                             _params.from =  twlPhone.phoneNumber
                             console.log "TwlPhoneNumber ",_params
                             TwilioService.sendSMS( _params, (err,message)->
@@ -115,49 +115,52 @@ module.exports = {
     clientMessage: (req,res)->
         _params = req.params.all()
         console.log 'client send as messages',_params
+        ##NOTE: find is active conversation
+
+
         Conversations.findOne( {AccountSid:_params.AccountSid,client:_params.From,isactive:true},(err,existDialog)->
-                    if !existDialog
-                        TwilioService.getTwlAccountData(AccountSid:_params.AccountSid, (err, subAccountData)->
-                            if !err
-                                AutoresponseSettings.findOne(AccountSid:subAccountData.AccountSid).exec(
-                                    (err, _autoresponseSettings)->
-                                        _text = _autoresponseSettings.AR1
-                                        TwilioService.sendSMS(AccountSid:subAccountData.AccountSid, authToken:subAccountData.authToken , from:subAccountData.phoneNumber, to:'+79832877503', body:_text,(err, sendSMS)->
+            if !err
+                Conversations.findOrCreate({AccountSid:_params.AccountSid,client:_params.From,isactive:true},{client:_params.From, AccountSid:_params.AccountSid,isWaitAnswer:true}).exec(
+                    (err,dialog)->
+                        if err
+                            return res.json err
+                        console.log "findeOrCreate Conversations(Dialog)",dialog
+                        dialog.isWaitAnswer = true
+                        _params.dialog = dialog.id
+                        Messages.create(_params,(err,savedMessage)->
+                            if err
+                                return res.json err
+                            if !savedMessage
+                                res.status 418
+                                return res.json {message:"Ooops! SMS information not saved"}
+                            ## send information all subscibers  how work
+                            ##sails.sockets.broadcast(savedMessage.AccountSid,'messages',  {data: savedMessage });
+                            dialog.save(
+                                (err)->
+                                    if !err and !existDialog
+                                        ##if conversation not exist - send AR1
+                                        TwilioService.getTwlAccountData(AccountSid:_params.AccountSid, (err, subAccountData)->
                                             if !err
-                                                res.json sendSMS
-                                                Messages.create(sendSMS,(err,savedMessage)->
-                                                    #if err
-                                                    #    return res.json err
-                                                    #if !savedMessage
-                                                    #    res.status 418
-                                                    #    return res.json {message:"Ooops! SMS information not saved"}
-
-                                                    #return res.json savedMessage
-
+                                                AutoresponseSettings.findOne(AccountSid:subAccountData.AccountSid).exec(
+                                                    (err, _autoresponseSettings)->
+                                                        _sendParam =
+                                                            AccountSid: subAccountData.AccountSid
+                                                            authToken:  subAccountData.authToken
+                                                            from:       subAccountData.phoneNumber
+                                                            to:         _params.From
+                                                            body:       _autoresponseSettings.AR1
+                                                        TwilioService.sendSMS( _sendParam,(err, autoresponseSMS)->
+                                                            if !err
+                                                                ##res.json sendSMS
+                                                                autoresponseSMS.dialog = dialog.id
+                                                                Messages.create(autoresponseSMS,(err,savedMessage)->
+                                                                )
+                                                        )
                                                 )
-                                            #else
-                                            #    res.json err
                                         )
-                                )
                             )
-                )
-        Conversations.findOrCreate({AccountSid:_params.AccountSid,client:_params.From,isactive:true},{client:_params.From, AccountSid:_params.AccountSid,isWaitAnswer:true}).exec(
-            (err,dialog)->
-                if err
-                    return res.json err
-                console.log "findeOrCreate Conversations(Dialog)",dialog
-                dialog.isWaitAnswer = true
-                _params.dialog = dialog.id
-                Messages.create(_params,(err,savedMessage)->
-                    if err
-                        return res.json err
-                    if !savedMessage
-                        res.status 418
-                        return res.json {message:"Ooops! SMS information not saved"}
-                    ## send information all subscibers  how work
-                    ##sails.sockets.broadcast(savedMessage.AccountSid,'messages',  {data: savedMessage });
-                    dialog.save()
-                    return res.json savedMessage
+                            return res.json savedMessage
+                        )
                 )
         )
     ## auto send sms waiting clients
@@ -166,9 +169,9 @@ module.exports = {
         _criteriesMsgs =
             limit: 1
             sort : 'createdAt desc'
-#            where: {
-#                operator: null
-#            }
+        #            where: {
+        #                operator: null
+        #            }
         Conversations.find(isactive: true,isWaitAnswer: true).populate("msgs",_criteriesMsgs).exec(
             (err, conversations)->
                 if err
@@ -178,7 +181,7 @@ module.exports = {
                     AutoresponseSettings.findOne(AccountSid:item.msgs[0].AccountSid).exec(
                         (err,settings)->
                             if err
-                               _params.to = dialog.client
+                                _params.to = dialog.client
 
                     #
                     #
@@ -207,7 +210,7 @@ module.exports = {
                     #
                     #                                )
                     #                            )
-                            res.json conversations
+                        res.json conversations
                     )
         )
 

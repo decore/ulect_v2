@@ -1,16 +1,6 @@
 ###
 module and class dependecies
-###
-#_dependencies = [
-#    'angular'
-#    'cs!./namespaces'
-#    'cs!dialogService/index'
-#    'cs!./loadingContainer/index'
-#    'angular-ui-router'
-#    ]
-###
-
-###
+### 
 define  [
     'angular'
     'cs!./namespaces'
@@ -34,11 +24,6 @@ define  [
         ).state("anon.home",
             url: "/home"
             templateUrl: "templates/#{module.name.replace /\.+/g, "/"}/home.tpl.html"#"home.html"
-            resolve:
-                route: ->
-                    alert ''
-                    console.log 'resolve route'
-                    return true
         ).state("anon.login",
             url: "/login"
             templateUrl:"templates/#{module.name.replace /\.+/g, "/"}/auth/login.tpl.html"# "auth/login.html"

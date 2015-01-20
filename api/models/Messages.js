@@ -45,33 +45,17 @@ module.exports = {
 
                     cb();
                 });
-    },
-//    beforeValidate: function (values, cb) {
-//        console.log('===beforeValidate==message ', values);
-//        if (values.Account_sid){
-//            values.AccountSid  = values.Account_sid;
-//            delete values.Account_sid;
-//        }
-//        if (values.body){
-//            values.Body  = values.body;
-//            delete values.body;
-//        }
-//        
-//        cb();
-//    },
-    // 
+    }, 
     beforeCreate: function (values, cb) {
         //console.log('beforeCreate: values', values);
         cb();
     },
     afterCreate: function (values, cb) {
-        sails.sockets.broadcast(values.AccountSid, 'messages', {verb:'create',data: values});
-        //sails.sockets.broadcast(values.account_sid, 'messages:create', {data: values});
+        sails.sockets.broadcast(values.AccountSid, 'messages', {verb:'create',data: values}); 
         cb();
     },
     afterUpdate: function (values, cb) {
-        sails.sockets.broadcast(values.AccountSid, 'messages', {verb:'update',data: values});
-        //console.log('Messages:afterUpdate: values', values);
+        sails.sockets.broadcast(values.AccountSid, 'messages', {verb:'update',data: values}); 
         cb();
     }
 
