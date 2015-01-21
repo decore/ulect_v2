@@ -103,7 +103,7 @@ define(['cs!./common/index'], function (module) {
 
             $scope.logout = function () {
                 Auth.logout().success(function (result) {
-                    $location.url('');
+                    $location.url('/');
                 });
             };
 
