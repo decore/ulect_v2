@@ -84,7 +84,13 @@ module.exports.bootstrap = function (cb) {
             var processors = Jobs._processors;
             Jobs = kue.createQueue();
             Jobs._processors = processors;
-            console.log('===============================');
+            //Jobs.promote(); //https://github.com/LearnBoost/kue#delayed-jobs
+//            setInterval(
+//                function () {
+//                     //console.log('===============================');
+//                     Jobs.promote(); 
+//                },1000);
+           
             cb();
         }
 
@@ -96,6 +102,8 @@ module.exports.bootstrap = function (cb) {
         // If this is a worker instance, execute startWorker
         // callback to skip starting the server
         if (sails.config.worker) {
+//            var kue = require('kue');
+//               kue.app.listen(3000);
                 console.log('===StartWorker');
             return startWorker();
         }

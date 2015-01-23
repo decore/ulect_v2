@@ -27,12 +27,12 @@ module.exports = {
 //        
 //    },
     beforeValidation: function (values, cb) {
-        if (values.Account_sid){
-            values.AccountSid  = values.Account_sid;
+        if (values.Account_sid) {
+            values.AccountSid = values.Account_sid;
             delete values.Account_sid;
         }
-        if (values.body){
-            values.Body  = values.body;
+        if (values.body) {
+            values.Body = values.body;
             delete values.body;
         }
         User.findOne({id: values.operator}).exec(
@@ -45,17 +45,23 @@ module.exports = {
 
                     cb();
                 });
-    }, 
+    },
     beforeCreate: function (values, cb) {
         //console.log('beforeCreate: values', values);
         cb();
     },
     afterCreate: function (values, cb) {
-        sails.sockets.broadcast(values.AccountSid, 'messages', {verb:'create',data: values}); 
+        sails.sockets.broadcast(values.AccountSid, 'messages', {verb: 'create', data: values});
+        Jobs.create('checkAutoSendAR2sms', values).delay(5000).priority('high').save(
+                function (err) {
+                    console.log("task 'checkAutoSendAR2sms' err is ", err);
+                }
+        );
+        Jobs.promote();
         cb();
     },
     afterUpdate: function (values, cb) {
-        sails.sockets.broadcast(values.AccountSid, 'messages', {verb:'update',data: values}); 
+        sails.sockets.broadcast(values.AccountSid, 'messages', {verb: 'update', data: values});
         cb();
     }
 

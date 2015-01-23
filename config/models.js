@@ -19,5 +19,6 @@ module.exports.models = {
   ***************************************************************************/
 
   //connection: 'smschatclmBD',
+  connection: 'smschatclmMysqlDB',
   migrate:"alter"
 };

@@ -119,6 +119,7 @@ module.exports = {
 
 
         Conversations.findOne( {AccountSid:_params.AccountSid,client:_params.From,isactive:true},(err,existDialog)->
+            _delayTimeMS = 30000
             if !err
                 Conversations.findOrCreate({AccountSid:_params.AccountSid,client:_params.From,isactive:true},{client:_params.From, AccountSid:_params.AccountSid,isWaitAnswer:true}).exec(
                     (err,dialog)->
@@ -139,25 +140,32 @@ module.exports = {
                                 (err)->
                                     if !err and !existDialog
                                         ##if conversation not exist - send AR1
-                                        TwilioService.getTwlAccountData(AccountSid:_params.AccountSid, (err, subAccountData)->
-                                            if !err
-                                                AutoresponseSettings.findOne(AccountSid:subAccountData.AccountSid).exec(
-                                                    (err, _autoresponseSettings)->
-                                                        _sendParam =
-                                                            AccountSid: subAccountData.AccountSid
-                                                            authToken:  subAccountData.authToken
-                                                            from:       subAccountData.phoneNumber
-                                                            to:         _params.From
-                                                            body:       _autoresponseSettings.AR1
-                                                        TwilioService.sendSMS( _sendParam,(err, autoresponseSMS)->
-                                                            if !err
-                                                                ##res.json sendSMS
-                                                                autoresponseSMS.dialog = dialog.id
-                                                                Messages.create(autoresponseSMS,(err,savedMessage)->
-                                                                )
-                                                        )
-                                                )
-                                        )
+                                        Jobs.create('autoSendAR1',savedMessage).priority('high').save()
+                                    else
+                                        ##if conversation is exist - send AR2
+                                        if !err
+                                            Jobs.create('autoSendAR2',savedMessage).delay(_delayTimeMS).priority('high').save()
+
+                                        #                                        TwilioService.getTwlAccountData(AccountSid:_params.AccountSid, (err, subAccountData)->
+                                        #                                            if !err
+                                        #                                                AutoresponseSettings.findOne(AccountSid:subAccountData.AccountSid).exec(
+                                        #                                                    (err, _autoresponseSettings)->
+                                        #                                                        _sendParam =
+                                        #                                                            AccountSid: subAccountData.AccountSid
+                                        #                                                            authToken:  subAccountData.authToken
+                                        #                                                            from:       subAccountData.phoneNumber
+                                        #                                                            to:         _params.From
+                                        #                                                            body:       _autoresponseSettings.AR1
+                                        #                                                        TwilioService.sendSMS( _sendParam,(err, autoresponseSMS)->
+                                        #                                                            if !err
+                                        #                                                                ##res.json sendSMS
+                                        #                                                                autoresponseSMS.dialog = dialog.id
+                                        #                                                                Messages.create(autoresponseSMS,(err,savedMessage3)->
+                                        #                                                                )
+                                        #                                                        )
+                                        #
+                                        #                                                )
+                                        #                                        )
                             )
                             return res.json savedMessage
                         )

@@ -42,7 +42,7 @@ module.exports.policies = {
         '*': ['tokenAuth']
     },
     MessagesController: {
-        '*': ['tokenAuth'],
+        '*': true,// ['tokenAuth'],
         clientMessage: true,
         statusMessage: true,
         autosendSMS: true
